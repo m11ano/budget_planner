@@ -1,0 +1,27 @@
+backend_app:
+    name: backend
+    version: 1.0.0
+    base:
+        start_timeout_sec: 30
+        stop_timeout_sec: 15
+        is_prod: false
+        use_fx_logger: true
+        use_logger: true
+        log_sql_queries: true
+        log_http: true
+    grpc:
+        port: 50051
+        log_queries: true
+
+postgres:
+    max_attempts: 5
+    attempt_sleep_seconds: 1
+    migrations_path: migrations/sql
+    master:
+        dsn:
+
+auth:
+    access_token_lifetime_sec: 900
+    refresh_token_lifetime_hours: 720
+    jwt_access_secret:
+    jwt_refresh_secret:
