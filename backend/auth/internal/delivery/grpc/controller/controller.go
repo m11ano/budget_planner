@@ -6,7 +6,7 @@ import (
 	"github.com/m11ano/budget_planner/backend/auth/internal/app/config"
 	authUC "github.com/m11ano/budget_planner/backend/auth/internal/domain/auth/usecase"
 	"github.com/m11ano/budget_planner/backend/auth/pkg/backoff"
-	desc "github.com/m11ano/budget_planner/backend/auth/pkg/proto_pb/service"
+	desc "github.com/m11ano/budget_planner/backend/auth/pkg/proto_pb/auth_service"
 	"google.golang.org/grpc"
 )
 

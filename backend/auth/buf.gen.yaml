@@ -1,5 +1,8 @@
 version: v2
 
+inputs:
+    - directory: auth/api
+
 managed:
     enabled: true
     disable:
@@ -12,22 +15,22 @@ managed:
 
 plugins:
     - local: protoc-gen-go
-      out: pkg/proto_pb
+      out: auth/pkg/proto_pb
       opt: paths=source_relative
 
     - local: protoc-gen-go-grpc
-      out: pkg/proto_pb
+      out: auth/pkg/proto_pb
       opt: paths=source_relative
 
     - local: protoc-gen-validate
-      out: pkg/proto_pb
+      out: auth/pkg/proto_pb
       opt:
           - lang=go
           - paths=source_relative
 
     - local: protoc-gen-grpc-gateway
-      out: pkg/proto_pb
+      out: auth/pkg/proto_pb
       opt: paths=source_relative
 
     - local: protoc-gen-openapiv2
-      out: pkg/proto_pb
+      out: auth/pkg/proto_pb

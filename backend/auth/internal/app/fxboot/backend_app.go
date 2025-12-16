@@ -127,7 +127,7 @@ func BackendAppInitInvoke(
 				}
 			}
 
-			// Запускаем http
+			// Запускаем grpc сервер
 			if in.Cfg.BackendApp.GRPC.Port > 0 {
 				in.Logger.InfoContext(ctx, "starting gRPC server", slog.Int("port", in.Cfg.BackendApp.GRPC.Port))
 				go func() {

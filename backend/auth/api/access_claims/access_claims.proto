@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package access_claims.v1;
+
+message AccessClaims {
+  string account_id = 1;
+  string session_id = 2;
+  map<string, string> meta = 3;
+}

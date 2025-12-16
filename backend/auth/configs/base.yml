@@ -1,5 +1,5 @@
 backend_app:
-    name: backend
+    name: auth
     version: 1.0.0
     base:
         start_timeout_sec: 30

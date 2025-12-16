@@ -1,0 +1,36 @@
+version: v2
+
+inputs:
+    - directory: auth/api
+
+managed:
+    enabled: true
+    disable:
+        - module: buf.build/googleapis/googleapis
+        - module: buf.build/bufbuild/validate
+
+    override:
+        - file_option: go_package_prefix
+          value: github.com/m11ano/budget_planner/backend/gateway/pkg/proto_pb
+
+plugins:
+    - local: protoc-gen-go
+      out: gateway/pkg/proto_pb
+      opt: paths=source_relative
+
+    - local: protoc-gen-go-grpc
+      out: gateway/pkg/proto_pb
+      opt: paths=source_relative
+
+    - local: protoc-gen-validate
+      out: gateway/pkg/proto_pb
+      opt:
+          - lang=go
+          - paths=source_relative
+
+    - local: protoc-gen-grpc-gateway
+      out: gateway/pkg/proto_pb
+      opt: paths=source_relative
+
+    - local: protoc-gen-openapiv2
+      out: gateway/pkg/proto_pb

@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/m11ano/budget_planner/backend/auth/internal/domain/auth/entity"
 	"github.com/m11ano/budget_planner/backend/auth/pkg/auth"
-	authpb "github.com/m11ano/budget_planner/backend/auth/pkg/proto_pb/claims"
+	authpb "github.com/m11ano/budget_planner/backend/auth/pkg/proto_pb/access_claims"
 )
 
 func (uc *UsecaseImpl) makeRefreshClaims(session *entity.Session) *entity.SessionRefreshClaims {

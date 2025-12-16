@@ -3,7 +3,7 @@ package auth
 import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	authpb "github.com/m11ano/budget_planner/backend/auth/pkg/proto_pb/claims"
+	authpb "github.com/m11ano/budget_planner/backend/auth/pkg/proto_pb/access_claims"
 )
 
 type SessionAccessClaims struct {

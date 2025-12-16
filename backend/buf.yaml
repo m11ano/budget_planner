@@ -1,0 +1,8 @@
+version: v2
+
+modules:
+    - path: auth/api
+
+deps:
+    - buf.build/googleapis/googleapis
+    - buf.build/bufbuild/validate
