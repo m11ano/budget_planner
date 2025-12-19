@@ -13,6 +13,8 @@ import (
 type BudgetListOptions struct {
 	FilterAccountID  *uuid.UUID
 	FilterPeriod     *civil.Date
+	FilterPeriodFrom *civil.Date
+	FilterPeriodTo   *civil.Date
 	FilterCategoryID *uint64
 	Sort             []uctypes.SortOption[BudgetListOptionsSortField]
 }

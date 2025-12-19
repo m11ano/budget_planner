@@ -7,11 +7,19 @@ import "google/protobuf/timestamp.proto";
 service Ledger {
   rpc ListCategories (ListCategoriesRequest) returns (ListCategoriesResponse);
 
+  rpc ListTransactions (ListTransactionsRequest) returns (ListTransactionsResponse);
+
+  rpc GetTransaction (GetTransactionRequest) returns (GetTransactionResponse);
+
   rpc AddTransaction (AddTransactionRequest) returns (AddTransactionResponse);
 
   rpc PatchTransaction (PatchTransactionRequest) returns (PatchTransactionResponse);
 
   rpc DeleteTransaction (DeleteTransactionRequest) returns (DeleteTransactionResponse);
+  
+  rpc ListBudgets (ListBudgetsRequest) returns (ListBudgetsResponse);
+
+  rpc GetBudget (GetBudgetRequest) returns (GetBudgetResponse);
 
   rpc AddBudget (AddBudgetRequest) returns (AddBudgetResponse);
 
@@ -64,6 +72,27 @@ message ListCategoriesResponse {
   repeated Category items = 1;
 }
 
+message ListTransactionsRequest {
+  int32 limit = 1;
+  int64 offset = 2;
+  optional Date filter_occurred_on_from = 3;
+  optional Date filter_occurred_on_to = 4;
+}
+
+message ListTransactionsResponse {
+  repeated Transaction items = 1;
+  int64 total = 2;
+}
+
+message GetTransactionRequest {
+  string id = 1;
+}
+
+message GetTransactionResponse {
+  Transaction item = 1;
+}
+
+
 message AddTransactionRequest {
   bool is_income = 1;
   string amount = 2;
@@ -94,6 +123,27 @@ message DeleteTransactionRequest {
 
 message DeleteTransactionResponse {}
 
+
+message ListBudgetsRequest {
+  int32 limit = 1;
+  int64 offset = 2;
+  optional DateMonth filter_period_from = 3;
+  optional DateMonth filter_period_to = 4;
+}
+
+message ListBudgetsResponse {
+  repeated Budget items = 1;
+  int64 total = 2;
+}
+
+message GetBudgetRequest {
+  string id = 1;
+}
+
+message GetBudgetResponse {
+  Budget item = 1;
+}
+
 message AddBudgetRequest {
   DateMonth period = 1;
   int64 category_id = 2;
@@ -119,6 +169,4 @@ message DeleteBudgetRequest {
   string id = 1;
 }
 
-message DeleteBudgetResponse {
-  Budget item = 1;
-}
+message DeleteBudgetResponse {}

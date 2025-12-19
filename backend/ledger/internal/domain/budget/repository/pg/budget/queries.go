@@ -38,6 +38,14 @@ func (r *Repository) buildWhereForList(listOptions *usecase.BudgetListOptions, w
 		where = append(where, squirrel.Eq{"category_id": *listOptions.FilterCategoryID})
 	}
 
+	if listOptions.FilterPeriodFrom != nil {
+		where = append(where, squirrel.GtOrEq{"period": *listOptions.FilterPeriodFrom})
+	}
+
+	if listOptions.FilterPeriodTo != nil {
+		where = append(where, squirrel.LtOrEq{"period": *listOptions.FilterPeriodTo})
+	}
+
 	return where
 }
 

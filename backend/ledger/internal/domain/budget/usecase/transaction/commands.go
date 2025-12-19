@@ -156,7 +156,6 @@ func (uc *UsecaseImpl) PatchTransactionByDTO(
 				WithDetail("last_updated_at", false, transaction.UpdatedAt)
 		}
 
-		// categoryChanged := false
 		if in.CategoryID != nil {
 			_, err := uc.categoryRepo.FindOneByID(ctx, *in.CategoryID, nil)
 			if err != nil {
@@ -166,19 +165,10 @@ func (uc *UsecaseImpl) PatchTransactionByDTO(
 				return err
 			}
 
-			// if transaction.CategoryID != *in.CategoryID {
-			// 	categoryChanged = true
-			// }
-
 			transaction.CategoryID = *in.CategoryID
 		}
 
-		// periodChanged := false
 		if in.OccurredOn != nil {
-			// if transaction.OccurredOn.Month != in.OccurredOn.Month || transaction.OccurredOn.Year != in.OccurredOn.Year {
-			// 	periodChanged = true
-			// }
-
 			err := transaction.SetOccuredOn(*in.OccurredOn)
 			if err != nil {
 				return err
@@ -228,13 +218,6 @@ func (uc *UsecaseImpl) PatchTransactionByDTO(
 							return err
 						}
 					}
-
-					// if !categoryChanged && !periodChanged {
-					// 	balance, err = balance.Add(transaction.Amount.Neg())
-					// 	if err != nil {
-					// 		return err
-					// 	}
-					// }
 
 					if balance.Cmp(budget.Amount.Neg()) == -1 {
 						return appErrors.Chainf(appErrors.ErrBadRequest.WithHints("budget limit exceeded"), "%s.%s", uc.pkg, op)

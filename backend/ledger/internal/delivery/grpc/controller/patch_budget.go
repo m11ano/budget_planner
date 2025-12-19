@@ -70,18 +70,7 @@ func (c *controller) PatchBudget(ctx context.Context, req *desc.PatchBudgetReque
 	}
 
 	out := &desc.PatchBudgetResponse{
-		Item: &desc.Budget{
-			Id:        itemDTO.Budget.ID.String(),
-			AccountId: itemDTO.Budget.AccountID.String(),
-			Amount:    itemDTO.Budget.Amount.String(),
-			Period: &desc.DateMonth{
-				Year:  int32(itemDTO.Budget.Period.Year),
-				Month: int32(itemDTO.Budget.Period.Month),
-			},
-			CategoryId: int64(itemDTO.Budget.CategoryID),
-			CreatedAt:  toProtoTimestamp(&itemDTO.Budget.CreatedAt),
-			UpdatedAt:  toProtoTimestamp(&itemDTO.Budget.UpdatedAt),
-		},
+		Item: BudgetToProto(itemDTO),
 	}
 
 	return out, nil

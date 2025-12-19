@@ -974,6 +974,551 @@ var _ interface {
 	ErrorName() string
 } = ListCategoriesResponseValidationError{}
 
+// Validate checks the field values on ListTransactionsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListTransactionsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListTransactionsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListTransactionsRequestMultiError, or nil if none found.
+func (m *ListTransactionsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListTransactionsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Limit
+
+	// no validation rules for Offset
+
+	if m.FilterOccurredOnFrom != nil {
+
+		if all {
+			switch v := interface{}(m.GetFilterOccurredOnFrom()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListTransactionsRequestValidationError{
+						field:  "FilterOccurredOnFrom",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListTransactionsRequestValidationError{
+						field:  "FilterOccurredOnFrom",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetFilterOccurredOnFrom()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListTransactionsRequestValidationError{
+					field:  "FilterOccurredOnFrom",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.FilterOccurredOnTo != nil {
+
+		if all {
+			switch v := interface{}(m.GetFilterOccurredOnTo()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListTransactionsRequestValidationError{
+						field:  "FilterOccurredOnTo",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListTransactionsRequestValidationError{
+						field:  "FilterOccurredOnTo",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetFilterOccurredOnTo()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListTransactionsRequestValidationError{
+					field:  "FilterOccurredOnTo",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListTransactionsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListTransactionsRequestMultiError is an error wrapping multiple validation
+// errors returned by ListTransactionsRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ListTransactionsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListTransactionsRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListTransactionsRequestMultiError) AllErrors() []error { return m }
+
+// ListTransactionsRequestValidationError is the validation error returned by
+// ListTransactionsRequest.Validate if the designated constraints aren't met.
+type ListTransactionsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListTransactionsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListTransactionsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListTransactionsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListTransactionsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListTransactionsRequestValidationError) ErrorName() string {
+	return "ListTransactionsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListTransactionsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListTransactionsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListTransactionsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListTransactionsRequestValidationError{}
+
+// Validate checks the field values on ListTransactionsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListTransactionsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListTransactionsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListTransactionsResponseMultiError, or nil if none found.
+func (m *ListTransactionsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListTransactionsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetItems() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListTransactionsResponseValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListTransactionsResponseValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListTransactionsResponseValidationError{
+					field:  fmt.Sprintf("Items[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return ListTransactionsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListTransactionsResponseMultiError is an error wrapping multiple validation
+// errors returned by ListTransactionsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type ListTransactionsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListTransactionsResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListTransactionsResponseMultiError) AllErrors() []error { return m }
+
+// ListTransactionsResponseValidationError is the validation error returned by
+// ListTransactionsResponse.Validate if the designated constraints aren't met.
+type ListTransactionsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListTransactionsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListTransactionsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListTransactionsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListTransactionsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListTransactionsResponseValidationError) ErrorName() string {
+	return "ListTransactionsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListTransactionsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListTransactionsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListTransactionsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListTransactionsResponseValidationError{}
+
+// Validate checks the field values on GetTransactionRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetTransactionRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetTransactionRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetTransactionRequestMultiError, or nil if none found.
+func (m *GetTransactionRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetTransactionRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return GetTransactionRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetTransactionRequestMultiError is an error wrapping multiple validation
+// errors returned by GetTransactionRequest.ValidateAll() if the designated
+// constraints aren't met.
+type GetTransactionRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetTransactionRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetTransactionRequestMultiError) AllErrors() []error { return m }
+
+// GetTransactionRequestValidationError is the validation error returned by
+// GetTransactionRequest.Validate if the designated constraints aren't met.
+type GetTransactionRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetTransactionRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetTransactionRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetTransactionRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetTransactionRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetTransactionRequestValidationError) ErrorName() string {
+	return "GetTransactionRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetTransactionRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetTransactionRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetTransactionRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetTransactionRequestValidationError{}
+
+// Validate checks the field values on GetTransactionResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetTransactionResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetTransactionResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetTransactionResponseMultiError, or nil if none found.
+func (m *GetTransactionResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetTransactionResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetItem()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetTransactionResponseValidationError{
+					field:  "Item",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetTransactionResponseValidationError{
+					field:  "Item",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetItem()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetTransactionResponseValidationError{
+				field:  "Item",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetTransactionResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetTransactionResponseMultiError is an error wrapping multiple validation
+// errors returned by GetTransactionResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetTransactionResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetTransactionResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetTransactionResponseMultiError) AllErrors() []error { return m }
+
+// GetTransactionResponseValidationError is the validation error returned by
+// GetTransactionResponse.Validate if the designated constraints aren't met.
+type GetTransactionResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetTransactionResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetTransactionResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetTransactionResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetTransactionResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetTransactionResponseValidationError) ErrorName() string {
+	return "GetTransactionResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetTransactionResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetTransactionResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetTransactionResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetTransactionResponseValidationError{}
+
 // Validate checks the field values on AddTransactionRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1730,6 +2275,549 @@ var _ interface {
 	ErrorName() string
 } = DeleteTransactionResponseValidationError{}
 
+// Validate checks the field values on ListBudgetsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListBudgetsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListBudgetsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListBudgetsRequestMultiError, or nil if none found.
+func (m *ListBudgetsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListBudgetsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Limit
+
+	// no validation rules for Offset
+
+	if m.FilterPeriodFrom != nil {
+
+		if all {
+			switch v := interface{}(m.GetFilterPeriodFrom()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListBudgetsRequestValidationError{
+						field:  "FilterPeriodFrom",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListBudgetsRequestValidationError{
+						field:  "FilterPeriodFrom",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetFilterPeriodFrom()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListBudgetsRequestValidationError{
+					field:  "FilterPeriodFrom",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.FilterPeriodTo != nil {
+
+		if all {
+			switch v := interface{}(m.GetFilterPeriodTo()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListBudgetsRequestValidationError{
+						field:  "FilterPeriodTo",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListBudgetsRequestValidationError{
+						field:  "FilterPeriodTo",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetFilterPeriodTo()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListBudgetsRequestValidationError{
+					field:  "FilterPeriodTo",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListBudgetsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListBudgetsRequestMultiError is an error wrapping multiple validation errors
+// returned by ListBudgetsRequest.ValidateAll() if the designated constraints
+// aren't met.
+type ListBudgetsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListBudgetsRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListBudgetsRequestMultiError) AllErrors() []error { return m }
+
+// ListBudgetsRequestValidationError is the validation error returned by
+// ListBudgetsRequest.Validate if the designated constraints aren't met.
+type ListBudgetsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListBudgetsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListBudgetsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListBudgetsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListBudgetsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListBudgetsRequestValidationError) ErrorName() string {
+	return "ListBudgetsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListBudgetsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListBudgetsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListBudgetsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListBudgetsRequestValidationError{}
+
+// Validate checks the field values on ListBudgetsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListBudgetsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListBudgetsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListBudgetsResponseMultiError, or nil if none found.
+func (m *ListBudgetsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListBudgetsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetItems() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListBudgetsResponseValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListBudgetsResponseValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListBudgetsResponseValidationError{
+					field:  fmt.Sprintf("Items[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return ListBudgetsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListBudgetsResponseMultiError is an error wrapping multiple validation
+// errors returned by ListBudgetsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type ListBudgetsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListBudgetsResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListBudgetsResponseMultiError) AllErrors() []error { return m }
+
+// ListBudgetsResponseValidationError is the validation error returned by
+// ListBudgetsResponse.Validate if the designated constraints aren't met.
+type ListBudgetsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListBudgetsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListBudgetsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListBudgetsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListBudgetsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListBudgetsResponseValidationError) ErrorName() string {
+	return "ListBudgetsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListBudgetsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListBudgetsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListBudgetsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListBudgetsResponseValidationError{}
+
+// Validate checks the field values on GetBudgetRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *GetBudgetRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetBudgetRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetBudgetRequestMultiError, or nil if none found.
+func (m *GetBudgetRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetBudgetRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return GetBudgetRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetBudgetRequestMultiError is an error wrapping multiple validation errors
+// returned by GetBudgetRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetBudgetRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetBudgetRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetBudgetRequestMultiError) AllErrors() []error { return m }
+
+// GetBudgetRequestValidationError is the validation error returned by
+// GetBudgetRequest.Validate if the designated constraints aren't met.
+type GetBudgetRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetBudgetRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetBudgetRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetBudgetRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetBudgetRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetBudgetRequestValidationError) ErrorName() string { return "GetBudgetRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetBudgetRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetBudgetRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetBudgetRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetBudgetRequestValidationError{}
+
+// Validate checks the field values on GetBudgetResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *GetBudgetResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetBudgetResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetBudgetResponseMultiError, or nil if none found.
+func (m *GetBudgetResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetBudgetResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetItem()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetBudgetResponseValidationError{
+					field:  "Item",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetBudgetResponseValidationError{
+					field:  "Item",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetItem()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetBudgetResponseValidationError{
+				field:  "Item",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetBudgetResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetBudgetResponseMultiError is an error wrapping multiple validation errors
+// returned by GetBudgetResponse.ValidateAll() if the designated constraints
+// aren't met.
+type GetBudgetResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetBudgetResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetBudgetResponseMultiError) AllErrors() []error { return m }
+
+// GetBudgetResponseValidationError is the validation error returned by
+// GetBudgetResponse.Validate if the designated constraints aren't met.
+type GetBudgetResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetBudgetResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetBudgetResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetBudgetResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetBudgetResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetBudgetResponseValidationError) ErrorName() string {
+	return "GetBudgetResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetBudgetResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetBudgetResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetBudgetResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetBudgetResponseValidationError{}
+
 // Validate checks the field values on AddBudgetRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -2395,35 +3483,6 @@ func (m *DeleteBudgetResponse) validate(all bool) error {
 	}
 
 	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetItem()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, DeleteBudgetResponseValidationError{
-					field:  "Item",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, DeleteBudgetResponseValidationError{
-					field:  "Item",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetItem()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DeleteBudgetResponseValidationError{
-				field:  "Item",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
 
 	if len(errors) > 0 {
 		return DeleteBudgetResponseMultiError(errors)

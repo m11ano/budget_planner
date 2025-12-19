@@ -133,6 +133,12 @@
       }
     },
     "v1DeleteBudgetResponse": {
+      "type": "object"
+    },
+    "v1DeleteTransactionResponse": {
+      "type": "object"
+    },
+    "v1GetBudgetResponse": {
       "type": "object",
       "properties": {
         "item": {
@@ -140,8 +146,29 @@
         }
       }
     },
-    "v1DeleteTransactionResponse": {
-      "type": "object"
+    "v1GetTransactionResponse": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/v1Transaction"
+        }
+      }
+    },
+    "v1ListBudgetsResponse": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Budget"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
     },
     "v1ListCategoriesResponse": {
       "type": "object",
@@ -152,6 +179,22 @@
             "type": "object",
             "$ref": "#/definitions/v1Category"
           }
+        }
+      }
+    },
+    "v1ListTransactionsResponse": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Transaction"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

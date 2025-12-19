@@ -11,8 +11,10 @@ import (
 )
 
 type TransactionListOptions struct {
-	FilterAccountID *uuid.UUID
-	Sort            []uctypes.SortOption[TransactionListOptionsSortField]
+	FilterAccountID      *uuid.UUID
+	FilterOccurredOnFrom *civil.Date
+	FilterOccurredOnTo   *civil.Date
+	Sort                 []uctypes.SortOption[TransactionListOptionsSortField]
 }
 
 type TransactionListOptionsSortField string

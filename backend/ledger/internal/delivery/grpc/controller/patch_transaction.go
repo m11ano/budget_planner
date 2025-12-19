@@ -77,21 +77,7 @@ func (c *controller) PatchTransaction(
 	}
 
 	out := &desc.PatchTransactionResponse{
-		Item: &desc.Transaction{
-			Id:        itemDTO.Transaction.ID.String(),
-			AccountId: itemDTO.Transaction.AccountID.String(),
-			IsIncome:  itemDTO.Transaction.IsIncome,
-			Amount:    itemDTO.Transaction.Amount.String(),
-			OccurredOn: &desc.Date{
-				Year:  int32(itemDTO.Transaction.OccurredOn.Year),
-				Month: int32(itemDTO.Transaction.OccurredOn.Month),
-				Day:   int32(itemDTO.Transaction.OccurredOn.Day),
-			},
-			CategoryId:  int64(itemDTO.Transaction.CategoryID),
-			Description: itemDTO.Transaction.Description,
-			CreatedAt:   toProtoTimestamp(&itemDTO.Transaction.CreatedAt),
-			UpdatedAt:   toProtoTimestamp(&itemDTO.Transaction.UpdatedAt),
-		},
+		Item: TransactionToProto(itemDTO),
 	}
 
 	return out, nil

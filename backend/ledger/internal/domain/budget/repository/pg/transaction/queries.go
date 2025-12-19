@@ -32,6 +32,14 @@ func (r *Repository) buildWhereForList(listOptions *usecase.TransactionListOptio
 		where = append(where, squirrel.Eq{"account_id": *listOptions.FilterAccountID})
 	}
 
+	if listOptions.FilterOccurredOnFrom != nil {
+		where = append(where, squirrel.GtOrEq{"occurred_on": *listOptions.FilterOccurredOnFrom})
+	}
+
+	if listOptions.FilterOccurredOnTo != nil {
+		where = append(where, squirrel.LtOrEq{"occurred_on": *listOptions.FilterOccurredOnTo})
+	}
+
 	return where
 }
 
