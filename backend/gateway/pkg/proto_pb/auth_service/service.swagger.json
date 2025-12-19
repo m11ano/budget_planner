@@ -62,14 +62,6 @@
         }
       }
     },
-    "v1GetAccountByIDResponse": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "$ref": "#/definitions/v1Account"
-        }
-      }
-    },
     "v1LoginResponse": {
       "type": "object",
       "properties": {
@@ -106,6 +98,14 @@
         },
         "accessJwt": {
           "type": "string"
+        }
+      }
+    },
+    "v1WhoIAmResponse": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/v1Account"
         }
       }
     }

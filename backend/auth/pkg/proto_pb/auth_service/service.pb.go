@@ -445,27 +445,26 @@ func (x *RefreshResponse) GetTokens() *Tokens {
 	return nil
 }
 
-type GetAccountByIDRequest struct {
+type WhoIAmRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AccountId     string                 `protobuf:"bytes,1,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetAccountByIDRequest) Reset() {
-	*x = GetAccountByIDRequest{}
+func (x *WhoIAmRequest) Reset() {
+	*x = WhoIAmRequest{}
 	mi := &file_auth_service_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetAccountByIDRequest) String() string {
+func (x *WhoIAmRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetAccountByIDRequest) ProtoMessage() {}
+func (*WhoIAmRequest) ProtoMessage() {}
 
-func (x *GetAccountByIDRequest) ProtoReflect() protoreflect.Message {
+func (x *WhoIAmRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_auth_service_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -477,39 +476,32 @@ func (x *GetAccountByIDRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetAccountByIDRequest.ProtoReflect.Descriptor instead.
-func (*GetAccountByIDRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use WhoIAmRequest.ProtoReflect.Descriptor instead.
+func (*WhoIAmRequest) Descriptor() ([]byte, []int) {
 	return file_auth_service_service_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *GetAccountByIDRequest) GetAccountId() string {
-	if x != nil {
-		return x.AccountId
-	}
-	return ""
-}
-
-type GetAccountByIDResponse struct {
+type WhoIAmResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Account       *Account               `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetAccountByIDResponse) Reset() {
-	*x = GetAccountByIDResponse{}
+func (x *WhoIAmResponse) Reset() {
+	*x = WhoIAmResponse{}
 	mi := &file_auth_service_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetAccountByIDResponse) String() string {
+func (x *WhoIAmResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetAccountByIDResponse) ProtoMessage() {}
+func (*WhoIAmResponse) ProtoMessage() {}
 
-func (x *GetAccountByIDResponse) ProtoReflect() protoreflect.Message {
+func (x *WhoIAmResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_auth_service_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -521,12 +513,12 @@ func (x *GetAccountByIDResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetAccountByIDResponse.ProtoReflect.Descriptor instead.
-func (*GetAccountByIDResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use WhoIAmResponse.ProtoReflect.Descriptor instead.
+func (*WhoIAmResponse) Descriptor() ([]byte, []int) {
 	return file_auth_service_service_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *GetAccountByIDResponse) GetAccount() *Account {
+func (x *WhoIAmResponse) GetAccount() *Account {
 	if x != nil {
 		return x.Account
 	}
@@ -535,7 +527,6 @@ func (x *GetAccountByIDResponse) GetAccount() *Account {
 
 type LogoutRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -568,13 +559,6 @@ func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use LogoutRequest.ProtoReflect.Descriptor instead.
 func (*LogoutRequest) Descriptor() ([]byte, []int) {
 	return file_auth_service_service_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *LogoutRequest) GetSessionId() string {
-	if x != nil {
-		return x.SessionId
-	}
-	return ""
 }
 
 type LogoutResponse struct {
@@ -646,21 +630,17 @@ const file_auth_service_service_proto_rawDesc = "" +
 	"\vrefresh_jwt\x18\x01 \x01(\tR\n" +
 	"refreshJwt\"B\n" +
 	"\x0fRefreshResponse\x12/\n" +
-	"\x06tokens\x18\x01 \x01(\v2\x17.auth_service.v1.TokensR\x06tokens\"6\n" +
-	"\x15GetAccountByIDRequest\x12\x1d\n" +
-	"\n" +
-	"account_id\x18\x01 \x01(\tR\taccountId\"L\n" +
-	"\x16GetAccountByIDResponse\x122\n" +
-	"\aaccount\x18\x01 \x01(\v2\x18.auth_service.v1.AccountR\aaccount\".\n" +
-	"\rLogoutRequest\x12\x1d\n" +
-	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"\x10\n" +
-	"\x0eLogoutResponse2\x9b\x03\n" +
+	"\x06tokens\x18\x01 \x01(\v2\x17.auth_service.v1.TokensR\x06tokens\"\x0f\n" +
+	"\rWhoIAmRequest\"D\n" +
+	"\x0eWhoIAmResponse\x122\n" +
+	"\aaccount\x18\x01 \x01(\v2\x18.auth_service.v1.AccountR\aaccount\"\x0f\n" +
+	"\rLogoutRequest\"\x10\n" +
+	"\x0eLogoutResponse2\x83\x03\n" +
 	"\x04Auth\x12O\n" +
 	"\bRegister\x12 .auth_service.v1.RegisterRequest\x1a!.auth_service.v1.RegisterResponse\x12F\n" +
 	"\x05Login\x12\x1d.auth_service.v1.LoginRequest\x1a\x1e.auth_service.v1.LoginResponse\x12L\n" +
-	"\aRefresh\x12\x1f.auth_service.v1.RefreshRequest\x1a .auth_service.v1.RefreshResponse\x12a\n" +
-	"\x0eGetAccountByID\x12&.auth_service.v1.GetAccountByIDRequest\x1a'.auth_service.v1.GetAccountByIDResponse\x12I\n" +
+	"\aRefresh\x12\x1f.auth_service.v1.RefreshRequest\x1a .auth_service.v1.RefreshResponse\x12I\n" +
+	"\x06WhoIAm\x12\x1e.auth_service.v1.WhoIAmRequest\x1a\x1f.auth_service.v1.WhoIAmResponse\x12I\n" +
 	"\x06Logout\x12\x1e.auth_service.v1.LogoutRequest\x1a\x1f.auth_service.v1.LogoutResponseB\xd4\x01\n" +
 	"\x13com.auth_service.v1B\fServiceProtoP\x01ZVgithub.com/m11ano/budget_planner/backend/auth/pkg/proto_pb/auth_service;auth_servicev1\xa2\x02\x03AXX\xaa\x02\x0eAuthService.V1\xca\x02\x0eAuthService\\V1\xe2\x02\x1aAuthService\\V1\\GPBMetadata\xea\x02\x0fAuthService::V1b\x06proto3"
 
@@ -678,33 +658,33 @@ func file_auth_service_service_proto_rawDescGZIP() []byte {
 
 var file_auth_service_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_auth_service_service_proto_goTypes = []any{
-	(*Tokens)(nil),                 // 0: auth_service.v1.Tokens
-	(*Account)(nil),                // 1: auth_service.v1.Account
-	(*RegisterRequest)(nil),        // 2: auth_service.v1.RegisterRequest
-	(*RegisterResponse)(nil),       // 3: auth_service.v1.RegisterResponse
-	(*LoginRequest)(nil),           // 4: auth_service.v1.LoginRequest
-	(*LoginResponse)(nil),          // 5: auth_service.v1.LoginResponse
-	(*RefreshRequest)(nil),         // 6: auth_service.v1.RefreshRequest
-	(*RefreshResponse)(nil),        // 7: auth_service.v1.RefreshResponse
-	(*GetAccountByIDRequest)(nil),  // 8: auth_service.v1.GetAccountByIDRequest
-	(*GetAccountByIDResponse)(nil), // 9: auth_service.v1.GetAccountByIDResponse
-	(*LogoutRequest)(nil),          // 10: auth_service.v1.LogoutRequest
-	(*LogoutResponse)(nil),         // 11: auth_service.v1.LogoutResponse
+	(*Tokens)(nil),           // 0: auth_service.v1.Tokens
+	(*Account)(nil),          // 1: auth_service.v1.Account
+	(*RegisterRequest)(nil),  // 2: auth_service.v1.RegisterRequest
+	(*RegisterResponse)(nil), // 3: auth_service.v1.RegisterResponse
+	(*LoginRequest)(nil),     // 4: auth_service.v1.LoginRequest
+	(*LoginResponse)(nil),    // 5: auth_service.v1.LoginResponse
+	(*RefreshRequest)(nil),   // 6: auth_service.v1.RefreshRequest
+	(*RefreshResponse)(nil),  // 7: auth_service.v1.RefreshResponse
+	(*WhoIAmRequest)(nil),    // 8: auth_service.v1.WhoIAmRequest
+	(*WhoIAmResponse)(nil),   // 9: auth_service.v1.WhoIAmResponse
+	(*LogoutRequest)(nil),    // 10: auth_service.v1.LogoutRequest
+	(*LogoutResponse)(nil),   // 11: auth_service.v1.LogoutResponse
 }
 var file_auth_service_service_proto_depIdxs = []int32{
 	0,  // 0: auth_service.v1.LoginResponse.tokens:type_name -> auth_service.v1.Tokens
 	1,  // 1: auth_service.v1.LoginResponse.account:type_name -> auth_service.v1.Account
 	0,  // 2: auth_service.v1.RefreshResponse.tokens:type_name -> auth_service.v1.Tokens
-	1,  // 3: auth_service.v1.GetAccountByIDResponse.account:type_name -> auth_service.v1.Account
+	1,  // 3: auth_service.v1.WhoIAmResponse.account:type_name -> auth_service.v1.Account
 	2,  // 4: auth_service.v1.Auth.Register:input_type -> auth_service.v1.RegisterRequest
 	4,  // 5: auth_service.v1.Auth.Login:input_type -> auth_service.v1.LoginRequest
 	6,  // 6: auth_service.v1.Auth.Refresh:input_type -> auth_service.v1.RefreshRequest
-	8,  // 7: auth_service.v1.Auth.GetAccountByID:input_type -> auth_service.v1.GetAccountByIDRequest
+	8,  // 7: auth_service.v1.Auth.WhoIAm:input_type -> auth_service.v1.WhoIAmRequest
 	10, // 8: auth_service.v1.Auth.Logout:input_type -> auth_service.v1.LogoutRequest
 	3,  // 9: auth_service.v1.Auth.Register:output_type -> auth_service.v1.RegisterResponse
 	5,  // 10: auth_service.v1.Auth.Login:output_type -> auth_service.v1.LoginResponse
 	7,  // 11: auth_service.v1.Auth.Refresh:output_type -> auth_service.v1.RefreshResponse
-	9,  // 12: auth_service.v1.Auth.GetAccountByID:output_type -> auth_service.v1.GetAccountByIDResponse
+	9,  // 12: auth_service.v1.Auth.WhoIAm:output_type -> auth_service.v1.WhoIAmResponse
 	11, // 13: auth_service.v1.Auth.Logout:output_type -> auth_service.v1.LogoutResponse
 	9,  // [9:14] is the sub-list for method output_type
 	4,  // [4:9] is the sub-list for method input_type

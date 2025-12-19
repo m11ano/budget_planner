@@ -1,0 +1,24 @@
+backend_app:
+    name: ledger
+    version: 1.0.0
+    base:
+        start_timeout_sec: 30
+        stop_timeout_sec: 15
+        is_prod: false
+        use_fx_logger: true
+        use_logger: true
+        log_sql_queries: true
+        log_http: true
+    grpc:
+        port: 50052
+        log_queries: true
+
+auth:
+    jwt_access_secret:
+
+postgres:
+    max_attempts: 5
+    attempt_sleep_seconds: 1
+    migrations_path: migrations/sql
+    master:
+        dsn:

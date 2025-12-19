@@ -13,7 +13,7 @@ import (
 	"github.com/m11ano/budget_planner/backend/gateway/internal/app/fxboot/invoking"
 	"github.com/m11ano/budget_planner/backend/gateway/internal/app/fxboot/providing"
 	grpcClient "github.com/m11ano/budget_planner/backend/gateway/internal/client/grpc"
-	backendHTTP "github.com/m11ano/budget_planner/backend/gateway/internal/delivery/http/backend"
+	backendHTTP "github.com/m11ano/budget_planner/backend/gateway/internal/delivery/http/controller"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 )

@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Auth_Register_FullMethodName       = "/auth_service.v1.Auth/Register"
-	Auth_Login_FullMethodName          = "/auth_service.v1.Auth/Login"
-	Auth_Refresh_FullMethodName        = "/auth_service.v1.Auth/Refresh"
-	Auth_GetAccountByID_FullMethodName = "/auth_service.v1.Auth/GetAccountByID"
-	Auth_Logout_FullMethodName         = "/auth_service.v1.Auth/Logout"
+	Auth_Register_FullMethodName = "/auth_service.v1.Auth/Register"
+	Auth_Login_FullMethodName    = "/auth_service.v1.Auth/Login"
+	Auth_Refresh_FullMethodName  = "/auth_service.v1.Auth/Refresh"
+	Auth_WhoIAm_FullMethodName   = "/auth_service.v1.Auth/WhoIAm"
+	Auth_Logout_FullMethodName   = "/auth_service.v1.Auth/Logout"
 )
 
 // AuthClient is the client API for Auth service.
@@ -33,7 +33,7 @@ type AuthClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*RefreshResponse, error)
-	GetAccountByID(ctx context.Context, in *GetAccountByIDRequest, opts ...grpc.CallOption) (*GetAccountByIDResponse, error)
+	WhoIAm(ctx context.Context, in *WhoIAmRequest, opts ...grpc.CallOption) (*WhoIAmResponse, error)
 	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*LogoutResponse, error)
 }
 
@@ -75,10 +75,10 @@ func (c *authClient) Refresh(ctx context.Context, in *RefreshRequest, opts ...gr
 	return out, nil
 }
 
-func (c *authClient) GetAccountByID(ctx context.Context, in *GetAccountByIDRequest, opts ...grpc.CallOption) (*GetAccountByIDResponse, error) {
+func (c *authClient) WhoIAm(ctx context.Context, in *WhoIAmRequest, opts ...grpc.CallOption) (*WhoIAmResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetAccountByIDResponse)
-	err := c.cc.Invoke(ctx, Auth_GetAccountByID_FullMethodName, in, out, cOpts...)
+	out := new(WhoIAmResponse)
+	err := c.cc.Invoke(ctx, Auth_WhoIAm_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ type AuthServer interface {
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Refresh(context.Context, *RefreshRequest) (*RefreshResponse, error)
-	GetAccountByID(context.Context, *GetAccountByIDRequest) (*GetAccountByIDResponse, error)
+	WhoIAm(context.Context, *WhoIAmRequest) (*WhoIAmResponse, error)
 	Logout(context.Context, *LogoutRequest) (*LogoutResponse, error)
 	mustEmbedUnimplementedAuthServer()
 }
@@ -123,8 +123,8 @@ func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*LoginResp
 func (UnimplementedAuthServer) Refresh(context.Context, *RefreshRequest) (*RefreshResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Refresh not implemented")
 }
-func (UnimplementedAuthServer) GetAccountByID(context.Context, *GetAccountByIDRequest) (*GetAccountByIDResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAccountByID not implemented")
+func (UnimplementedAuthServer) WhoIAm(context.Context, *WhoIAmRequest) (*WhoIAmResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WhoIAm not implemented")
 }
 func (UnimplementedAuthServer) Logout(context.Context, *LogoutRequest) (*LogoutResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
@@ -204,20 +204,20 @@ func _Auth_Refresh_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Auth_GetAccountByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAccountByIDRequest)
+func _Auth_WhoIAm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WhoIAmRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServer).GetAccountByID(ctx, in)
+		return srv.(AuthServer).WhoIAm(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Auth_GetAccountByID_FullMethodName,
+		FullMethod: Auth_WhoIAm_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).GetAccountByID(ctx, req.(*GetAccountByIDRequest))
+		return srv.(AuthServer).WhoIAm(ctx, req.(*WhoIAmRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -260,8 +260,8 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Auth_Refresh_Handler,
 		},
 		{
-			MethodName: "GetAccountByID",
-			Handler:    _Auth_GetAccountByID_Handler,
+			MethodName: "WhoIAm",
+			Handler:    _Auth_WhoIAm_Handler,
 		},
 		{
 			MethodName: "Logout",

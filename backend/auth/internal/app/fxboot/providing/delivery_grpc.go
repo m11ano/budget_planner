@@ -16,7 +16,7 @@ var DeliveryGRPC = fx.Options(
 		if !cfg.BackendApp.GRPC.LogQueries {
 			logger = slog.New(slog.NewTextHandler(io.Discard, nil))
 		}
-		return deliveryGRPC.New(logger)
+		return deliveryGRPC.New(logger, cfg)
 	}),
 	fx.Invoke(controllerGRPC.Register),
 )

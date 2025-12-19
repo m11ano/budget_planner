@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package ledger_service.v1;
+
+import "google/protobuf/timestamp.proto";
+
+service Ledger {
+  rpc ListCategories (ListCategoriesRequest) returns (ListCategoriesResponse);
+
+  rpc AddTransaction (AddTransactionRequest) returns (AddTransactionResponse);
+
+  rpc PatchTransaction (PatchTransactionRequest) returns (PatchTransactionResponse);
+
+  rpc DeleteTransaction (DeleteTransactionRequest) returns (DeleteTransactionResponse);
+
+  rpc AddBudget (AddBudgetRequest) returns (AddBudgetResponse);
+
+  rpc PatchBudget (PatchBudgetRequest) returns (PatchBudgetResponse);
+
+  rpc DeleteBudget (DeleteBudgetRequest) returns (DeleteBudgetResponse);
+}
+
+message Category {
+  int64 id = 1;
+  string title = 2;
+}
+
+message Date {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+}
+
+message DateMonth {
+  int32 year = 1;
+  int32 month = 2;
+}
+
+message Transaction {
+  string id = 1;
+  string account_id = 2;
+  bool is_income = 3;
+  string amount = 4;
+  Date occurred_on = 5;
+  int64 category_id = 6;
+  string description = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+message Budget {
+  string id = 1;
+  string account_id = 2;
+  DateMonth period = 3;
+  int64 category_id = 4;
+  string amount = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message ListCategoriesRequest {}
+
+message ListCategoriesResponse {
+  repeated Category items = 1;
+}
+
+message AddTransactionRequest {
+  bool is_income = 1;
+  string amount = 2;
+  Date occurred_on = 3;
+  int64 category_id = 4;
+  string description = 5;
+}
+
+message AddTransactionResponse {
+  Transaction item = 1;
+}
+
+message PatchTransactionRequest {
+  string id = 1;
+  optional string amount = 2;
+  optional Date occurred_on = 3;
+  optional int64 category_id = 4;
+  optional string description = 5;
+}
+
+message PatchTransactionResponse {
+  Transaction item = 1;
+}
+
+message DeleteTransactionRequest {
+  string id = 1;
+}
+
+message DeleteTransactionResponse {}
+
+message AddBudgetRequest {
+  DateMonth period = 1;
+  int64 category_id = 2;
+  string amount = 3;
+}
+
+message AddBudgetResponse {
+  Budget item = 1;
+}
+
+message PatchBudgetRequest {
+  string id = 1;
+  optional DateMonth period = 2;
+  optional int64 category_id = 3;
+  optional string amount = 4;
+}
+
+message PatchBudgetResponse {
+  Budget item = 1;
+}
+
+message DeleteBudgetRequest {
+  string id = 1;
+}
+
+message DeleteBudgetResponse {
+  Budget item = 1;
+}

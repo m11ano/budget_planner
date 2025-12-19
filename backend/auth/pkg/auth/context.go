@@ -9,6 +9,7 @@ import (
 type contextKey string
 
 const (
+	ContextKeyAccessToken    contextKey = "auth_context_access_token"
 	ContextKeyAuthData       contextKey = "auth_context_auth_data"
 	ContextKeyAuthCheckRight contextKey = "auth_context_auth_check_right"
 )
@@ -25,6 +26,15 @@ func GetAuthData(ctx context.Context) *AuthData {
 	}
 
 	return copy
+}
+
+func SetAccessToken(ctx context.Context, token string) context.Context {
+	return context.WithValue(ctx, ContextKeyAccessToken, token)
+}
+
+func AccessToken(ctx context.Context) (string, bool) {
+	token, ok := ctx.Value(ContextKeyAccessToken).(string)
+	return token, ok
 }
 
 func SetAuthData(ctx context.Context, data *AuthData) context.Context {

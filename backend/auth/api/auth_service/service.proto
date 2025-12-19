@@ -9,7 +9,7 @@ service Auth {
 
   rpc Refresh (RefreshRequest) returns (RefreshResponse);
 
-  rpc GetAccountByID (GetAccountByIDRequest) returns (GetAccountByIDResponse);
+  rpc WhoIAm (WhoIAmRequest) returns (WhoIAmResponse);
 
   rpc Logout (LogoutRequest) returns (LogoutResponse);
 }
@@ -54,16 +54,12 @@ message RefreshResponse {
   Tokens tokens = 1;
 }
 
-message GetAccountByIDRequest {
-  string account_id = 1;
-}
+message WhoIAmRequest {}
 
-message GetAccountByIDResponse {
+message WhoIAmResponse {
   Account account = 1;
 }
 
-message LogoutRequest {
-  string session_id = 1;
-}
+message LogoutRequest {}
 
 message LogoutResponse {}

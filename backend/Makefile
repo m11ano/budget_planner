@@ -14,7 +14,7 @@ else
   BUF := $(LOCAL_BIN)/buf
 endif
 
-.PHONY: bin-deps generate-auth generate-gateway
+.PHONY: bin-deps generate-auth generate-ledger generate-gateway
 
 # Установка buf + локальных плагинов
 bin-deps:
@@ -52,9 +52,11 @@ endif
 generate-auth: bin-deps
 	"$(BUF)" generate --template auth/buf.gen.yaml 
 
+generate-ledger: bin-deps
+	"$(BUF)" generate --template ledger/buf.gen.yaml 
 
 generate-gateway: bin-deps
 	"$(BUF)" generate --template gateway/buf.gen.yaml 
 
 
-generate: generate-auth generate-gateway
+generate: generate-auth generate-ledger generate-gateway

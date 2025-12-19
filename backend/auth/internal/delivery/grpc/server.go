@@ -7,15 +7,17 @@ import (
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
+	"github.com/m11ano/budget_planner/backend/auth/internal/app/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 )
 
-func New(logger *slog.Logger) *grpc.Server {
+func New(logger *slog.Logger, cfg config.Config) *grpc.Server {
 	loggingOpts := []logging.Option{
 		logging.WithLogOnEvents(
+			logging.FinishCall,
 			logging.PayloadReceived,
 			logging.PayloadSent,
 		),
@@ -33,6 +35,7 @@ func New(logger *slog.Logger) *grpc.Server {
 		recovery.UnaryServerInterceptor(recoveryOpts...),
 		interceptorRequestIP(),
 		interceptorRequestID(),
+		interceptorAuth(cfg),
 		interceptorValidate,
 		logging.UnaryServerInterceptor(interceptorLogger(logger), loggingOpts...),
 	}

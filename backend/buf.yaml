@@ -2,6 +2,7 @@ version: v2
 
 modules:
     - path: auth/api
+    - path: ledger/api
 
 deps:
     - buf.build/googleapis/googleapis

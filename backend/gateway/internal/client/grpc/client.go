@@ -9,9 +9,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	grpcretry "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/retry"
+	"github.com/m11ano/budget_planner/backend/auth/pkg/auth"
 	appErrors "github.com/m11ano/budget_planner/backend/gateway/internal/app/errors"
 )
 
@@ -25,7 +27,7 @@ type Config struct {
 
 func NewClientConn(cfg Config, logger *slog.Logger) (*grpc.ClientConn, error) {
 	retryOpts := []grpcretry.CallOption{
-		grpcretry.WithCodes(codes.Internal, codes.Unavailable, codes.Aborted, codes.DeadlineExceeded),
+		grpcretry.WithCodes(codes.Internal, codes.Unavailable),
 		grpcretry.WithMax(uint(cfg.RetriesCount)),
 		grpcretry.WithPerRetryTimeout(cfg.Timeout),
 	}
@@ -35,6 +37,7 @@ func NewClientConn(cfg Config, logger *slog.Logger) (*grpc.ClientConn, error) {
 	}
 
 	intercepts := []grpc.UnaryClientInterceptor{
+		HeaderUnaryClientInterceptor(nil),
 		grpcretry.UnaryClientInterceptor(retryOpts...),
 	}
 
@@ -67,4 +70,35 @@ func ConnectToGRPCServer(ctx context.Context, cc *grpc.ClientConn) error {
 	}
 
 	return nil
+}
+
+func HeaderUnaryClientInterceptor(headers map[string]string) grpc.UnaryClientInterceptor {
+	return func(
+		ctx context.Context,
+		method string,
+		req, reply any,
+		cc *grpc.ClientConn,
+		invoker grpc.UnaryInvoker,
+		opts ...grpc.CallOption,
+	) error {
+		md, ok := metadata.FromOutgoingContext(ctx)
+		if !ok {
+			md = metadata.New(nil)
+		} else {
+			md = md.Copy()
+		}
+
+		accessToken, ok := auth.AccessToken(ctx)
+		if ok {
+			md.Set("authorization", "Bearer "+accessToken)
+		}
+
+		for k, v := range headers {
+			md.Set(k, v)
+		}
+
+		ctx = metadata.NewOutgoingContext(ctx, md)
+
+		return invoker(ctx, method, req, reply, cc, opts...)
+	}
 }

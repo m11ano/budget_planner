@@ -945,44 +945,42 @@ var _ interface {
 	ErrorName() string
 } = RefreshResponseValidationError{}
 
-// Validate checks the field values on GetAccountByIDRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetAccountByIDRequest) Validate() error {
+// Validate checks the field values on WhoIAmRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *WhoIAmRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetAccountByIDRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetAccountByIDRequestMultiError, or nil if none found.
-func (m *GetAccountByIDRequest) ValidateAll() error {
+// ValidateAll checks the field values on WhoIAmRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in WhoIAmRequestMultiError, or
+// nil if none found.
+func (m *WhoIAmRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetAccountByIDRequest) validate(all bool) error {
+func (m *WhoIAmRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for AccountId
-
 	if len(errors) > 0 {
-		return GetAccountByIDRequestMultiError(errors)
+		return WhoIAmRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetAccountByIDRequestMultiError is an error wrapping multiple validation
-// errors returned by GetAccountByIDRequest.ValidateAll() if the designated
-// constraints aren't met.
-type GetAccountByIDRequestMultiError []error
+// WhoIAmRequestMultiError is an error wrapping multiple validation errors
+// returned by WhoIAmRequest.ValidateAll() if the designated constraints
+// aren't met.
+type WhoIAmRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetAccountByIDRequestMultiError) Error() string {
+func (m WhoIAmRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -991,11 +989,11 @@ func (m GetAccountByIDRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetAccountByIDRequestMultiError) AllErrors() []error { return m }
+func (m WhoIAmRequestMultiError) AllErrors() []error { return m }
 
-// GetAccountByIDRequestValidationError is the validation error returned by
-// GetAccountByIDRequest.Validate if the designated constraints aren't met.
-type GetAccountByIDRequestValidationError struct {
+// WhoIAmRequestValidationError is the validation error returned by
+// WhoIAmRequest.Validate if the designated constraints aren't met.
+type WhoIAmRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1003,24 +1001,22 @@ type GetAccountByIDRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetAccountByIDRequestValidationError) Field() string { return e.field }
+func (e WhoIAmRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetAccountByIDRequestValidationError) Reason() string { return e.reason }
+func (e WhoIAmRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetAccountByIDRequestValidationError) Cause() error { return e.cause }
+func (e WhoIAmRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetAccountByIDRequestValidationError) Key() bool { return e.key }
+func (e WhoIAmRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetAccountByIDRequestValidationError) ErrorName() string {
-	return "GetAccountByIDRequestValidationError"
-}
+func (e WhoIAmRequestValidationError) ErrorName() string { return "WhoIAmRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetAccountByIDRequestValidationError) Error() string {
+func (e WhoIAmRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1032,14 +1028,14 @@ func (e GetAccountByIDRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetAccountByIDRequest.%s: %s%s",
+		"invalid %sWhoIAmRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetAccountByIDRequestValidationError{}
+var _ error = WhoIAmRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -1047,24 +1043,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetAccountByIDRequestValidationError{}
+} = WhoIAmRequestValidationError{}
 
-// Validate checks the field values on GetAccountByIDResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetAccountByIDResponse) Validate() error {
+// Validate checks the field values on WhoIAmResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *WhoIAmResponse) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetAccountByIDResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetAccountByIDResponseMultiError, or nil if none found.
-func (m *GetAccountByIDResponse) ValidateAll() error {
+// ValidateAll checks the field values on WhoIAmResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in WhoIAmResponseMultiError,
+// or nil if none found.
+func (m *WhoIAmResponse) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetAccountByIDResponse) validate(all bool) error {
+func (m *WhoIAmResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1075,7 +1071,7 @@ func (m *GetAccountByIDResponse) validate(all bool) error {
 		switch v := interface{}(m.GetAccount()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetAccountByIDResponseValidationError{
+				errors = append(errors, WhoIAmResponseValidationError{
 					field:  "Account",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1083,7 +1079,7 @@ func (m *GetAccountByIDResponse) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, GetAccountByIDResponseValidationError{
+				errors = append(errors, WhoIAmResponseValidationError{
 					field:  "Account",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1092,7 +1088,7 @@ func (m *GetAccountByIDResponse) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetAccount()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GetAccountByIDResponseValidationError{
+			return WhoIAmResponseValidationError{
 				field:  "Account",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -1101,19 +1097,19 @@ func (m *GetAccountByIDResponse) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetAccountByIDResponseMultiError(errors)
+		return WhoIAmResponseMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetAccountByIDResponseMultiError is an error wrapping multiple validation
-// errors returned by GetAccountByIDResponse.ValidateAll() if the designated
-// constraints aren't met.
-type GetAccountByIDResponseMultiError []error
+// WhoIAmResponseMultiError is an error wrapping multiple validation errors
+// returned by WhoIAmResponse.ValidateAll() if the designated constraints
+// aren't met.
+type WhoIAmResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetAccountByIDResponseMultiError) Error() string {
+func (m WhoIAmResponseMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1122,11 +1118,11 @@ func (m GetAccountByIDResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetAccountByIDResponseMultiError) AllErrors() []error { return m }
+func (m WhoIAmResponseMultiError) AllErrors() []error { return m }
 
-// GetAccountByIDResponseValidationError is the validation error returned by
-// GetAccountByIDResponse.Validate if the designated constraints aren't met.
-type GetAccountByIDResponseValidationError struct {
+// WhoIAmResponseValidationError is the validation error returned by
+// WhoIAmResponse.Validate if the designated constraints aren't met.
+type WhoIAmResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1134,24 +1130,22 @@ type GetAccountByIDResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetAccountByIDResponseValidationError) Field() string { return e.field }
+func (e WhoIAmResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetAccountByIDResponseValidationError) Reason() string { return e.reason }
+func (e WhoIAmResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetAccountByIDResponseValidationError) Cause() error { return e.cause }
+func (e WhoIAmResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetAccountByIDResponseValidationError) Key() bool { return e.key }
+func (e WhoIAmResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetAccountByIDResponseValidationError) ErrorName() string {
-	return "GetAccountByIDResponseValidationError"
-}
+func (e WhoIAmResponseValidationError) ErrorName() string { return "WhoIAmResponseValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetAccountByIDResponseValidationError) Error() string {
+func (e WhoIAmResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1163,14 +1157,14 @@ func (e GetAccountByIDResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetAccountByIDResponse.%s: %s%s",
+		"invalid %sWhoIAmResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetAccountByIDResponseValidationError{}
+var _ error = WhoIAmResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -1178,7 +1172,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetAccountByIDResponseValidationError{}
+} = WhoIAmResponseValidationError{}
 
 // Validate checks the field values on LogoutRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -1201,8 +1195,6 @@ func (m *LogoutRequest) validate(all bool) error {
 	}
 
 	var errors []error
-
-	// no validation rules for SessionId
 
 	if len(errors) > 0 {
 		return LogoutRequestMultiError(errors)
