@@ -40,6 +40,11 @@ type Config struct {
 			RetriesCount int    `yaml:"retries_count" env:"GRPC_AUTH_RETRIES_COUNT" env-default:"5"`
 			Timeout      string `yaml:"timeout" env:"GRPC_AUTH_TIMEOUT" env-default:"60s"`
 		}
+		Ledger struct {
+			Addr         string `yaml:"addr" env:"GRPC_LEDGER_ADDR"`
+			RetriesCount int    `yaml:"retries_count" env:"GRPC_LEDGER_RETRIES_COUNT" env-default:"5"`
+			Timeout      string `yaml:"timeout" env:"GRPC_LEDGER_TIMEOUT" env-default:"60s"`
+		}
 	}
 }
 

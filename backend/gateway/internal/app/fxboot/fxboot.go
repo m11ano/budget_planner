@@ -30,6 +30,9 @@ const (
 
 	// ProvidingIDDeliveryGRPC
 	ProvidingIDGRPCAuthClient
+
+	// ProvidingIDDeliveryGRPC
+	ProvidingIDGRPCLedgerClient
 )
 
 type OptionsMap struct {

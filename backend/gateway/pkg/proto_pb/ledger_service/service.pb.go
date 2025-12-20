@@ -2052,8 +2052,8 @@ const file_ledger_service_service_proto_rawDesc = "" +
 	"\fDeleteBudget\x12&.ledger_service.v1.DeleteBudgetRequest\x1a'.ledger_service.v1.DeleteBudgetResponse\x12\\\n" +
 	"\vListReports\x12%.ledger_service.v1.ListReportsRequest\x1a&.ledger_service.v1.ListReportsResponse\x12u\n" +
 	"\x15CSVExportTransactions\x12*.ledger_service.v1.ListTransactionsRequest\x1a0.ledger_service.v1.CSVExportTransactionsResponse\x12z\n" +
-	"\x15CSVImportTransactions\x12/.ledger_service.v1.CSVImportTransactionsRequest\x1a0.ledger_service.v1.CSVImportTransactionsResponseB\xe4\x01\n" +
-	"\x15com.ledger_service.v1B\fServiceProtoP\x01Z\\github.com/m11ano/budget_planner/backend/ledger/pkg/proto_pb/ledger_service;ledger_servicev1\xa2\x02\x03LXX\xaa\x02\x10LedgerService.V1\xca\x02\x10LedgerService\\V1\xe2\x02\x1cLedgerService\\V1\\GPBMetadata\xea\x02\x11LedgerService::V1b\x06proto3"
+	"\x15CSVImportTransactions\x12/.ledger_service.v1.CSVImportTransactionsRequest\x1a0.ledger_service.v1.CSVImportTransactionsResponseB\xe5\x01\n" +
+	"\x15com.ledger_service.v1B\fServiceProtoP\x01Z]github.com/m11ano/budget_planner/backend/gateway/pkg/proto_pb/ledger_service;ledger_servicev1\xa2\x02\x03LXX\xaa\x02\x10LedgerService.V1\xca\x02\x10LedgerService\\V1\xe2\x02\x1cLedgerService\\V1\\GPBMetadata\xea\x02\x11LedgerService::V1b\x06proto3"
 
 var (
 	file_ledger_service_service_proto_rawDescOnce sync.Once

@@ -3,6 +3,7 @@ package transaction
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"cloud.google.com/go/civil"
@@ -277,6 +278,49 @@ func (uc *UsecaseImpl) DeleteTransactionByID(ctx context.Context, id uuid.UUID) 
 		err = uc.transactionRepo.Update(ctx, transaction)
 		if err != nil {
 			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	return nil
+}
+
+func (uc *UsecaseImpl) ImportTransactionsFromCSV(
+	ctx context.Context,
+	data []byte,
+	accountID uuid.UUID,
+) error {
+	const op = "ImportTransactionsFromCSV"
+
+	items, err := uc.transactionCSVRepo.ItemsFromCSV(ctx, data, accountID)
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	err = uc.dbMasterClient.DoWithIsoLvl(ctx, pgclient.Serializable, func(ctx context.Context) error {
+		for idx, item := range items {
+			_, err := uc.CreateTransactionByDTO(ctx, usecase.CreateTransactionDataInput{
+				AccountID:   accountID,
+				IsIncome:    item.IsIncome,
+				Amount:      item.Amount,
+				OccurredOn:  item.OccurredOn,
+				CategoryID:  item.CategoryID,
+				Description: item.Description,
+			})
+			if err != nil {
+				appErr, ok := appErrors.ExtractError(err)
+				if ok {
+					hints := appErr.Hints()
+					hints = append(hints, fmt.Sprintf("line %d", idx+1))
+
+					return appErrors.Chainf(appErr.WithHints(hints...), "%s.%s: line %d", uc.pkg, op, idx+1)
+				}
+				return appErrors.Chainf(err, "%s.%s: line %d", uc.pkg, op, idx+1)
+			}
 		}
 
 		return nil

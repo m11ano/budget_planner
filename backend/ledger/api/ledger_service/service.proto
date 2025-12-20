@@ -30,6 +30,8 @@ service Ledger {
   rpc ListReports (ListReportsRequest) returns (ListReportsResponse);
 
   rpc CSVExportTransactions (ListTransactionsRequest) returns (CSVExportTransactionsResponse);
+
+  rpc CSVImportTransactions (CSVImportTransactionsRequest) returns (CSVImportTransactionsResponse);
 }
 
 message Category {
@@ -205,3 +207,9 @@ message CSVExportTransactionsResponse {
   int64 total = 2;
   bool hit_cache = 3;
 }
+
+message CSVImportTransactionsRequest {
+  bytes data = 1;
+}
+
+message CSVImportTransactionsResponse {}

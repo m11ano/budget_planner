@@ -2,6 +2,7 @@ version: v2
 
 inputs:
     - directory: auth/api
+    - directory: ledger/api
 
 managed:
     enabled: true

@@ -8,6 +8,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	authAdapter "github.com/m11ano/budget_planner/backend/gateway/internal/adapter/auth"
+	ledgerAdapter "github.com/m11ano/budget_planner/backend/gateway/internal/adapter/ledger"
 	"github.com/m11ano/budget_planner/backend/gateway/internal/app"
 	"github.com/m11ano/budget_planner/backend/gateway/internal/app/config"
 	"github.com/m11ano/budget_planner/backend/gateway/internal/app/fxboot/invoking"
@@ -65,6 +66,26 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 					}
 
 					adapter, err := authAdapter.NewAdapterImpl(cfg.GRPC.Auth.Addr, cfg.GRPC.Auth.RetriesCount, timeout, logger)
+					if err != nil {
+						panic(err)
+					}
+
+					return adapter
+				},
+			),
+			ProvidingIDGRPCLedgerClient: fx.Provide(
+				func(logger *slog.Logger, cfg config.Config) ledgerAdapter.Adapter {
+					timeout, err := time.ParseDuration(cfg.GRPC.Ledger.Timeout)
+					if err != nil {
+						panic(fmt.Errorf("failed to parse grpc ledger timeout: %w", err))
+					}
+
+					adapter, err := ledgerAdapter.NewAdapterImpl(
+						cfg.GRPC.Ledger.Addr,
+						cfg.GRPC.Ledger.RetriesCount,
+						timeout,
+						logger,
+					)
 					if err != nil {
 						panic(err)
 					}

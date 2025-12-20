@@ -108,6 +108,12 @@ type TransactionUsecase interface {
 		listOptions *TransactionListOptions,
 		queryParams *uctypes.QueryGetListParams,
 	) (res []byte, total uint64, resErr error)
+
+	ImportTransactionsFromCSV(
+		ctx context.Context,
+		data []byte,
+		accountID uuid.UUID,
+	) (resErr error)
 }
 
 type TransactionRepository interface {
@@ -147,4 +153,6 @@ type TransactionCacheRepository interface {
 
 type TransactionCSVRepository interface {
 	ItemsToCSV(ctx context.Context, items []*TransactionDTO) ([]byte, error)
+
+	ItemsFromCSV(ctx context.Context, data []byte, accountID uuid.UUID) (items []*entity.Transaction, err error)
 }
