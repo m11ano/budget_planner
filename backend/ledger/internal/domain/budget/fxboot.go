@@ -3,6 +3,7 @@ package budget
 import (
 	"go.uber.org/fx"
 
+	transactionCSVRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/csv/transaction"
 	budgetRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/pg/budget"
 	categoryRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/pg/category"
 	transactionRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/pg/transaction"
@@ -37,6 +38,10 @@ var FxModule = fx.Module(
 	fx.Provide(
 		fx.Private,
 		fx.Annotate(budgetRedisRepo.NewRepository, fx.As(new(usecase.BudgetCacheRepository))),
+	),
+	fx.Provide(
+		fx.Private,
+		fx.Annotate(transactionCSVRepo.NewRepository, fx.As(new(usecase.TransactionCSVRepository))),
 	),
 
 	// usecases

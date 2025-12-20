@@ -8,7 +8,8 @@ import (
 )
 
 type CategoryListOptions struct {
-	Sort []uctypes.SortOption[CategoryListOptionsSortField]
+	FilterIDs *[]uint64
+	Sort      []uctypes.SortOption[CategoryListOptionsSortField]
 }
 
 type CategoryListOptionsSortField string

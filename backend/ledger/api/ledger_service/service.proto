@@ -28,6 +28,8 @@ service Ledger {
   rpc DeleteBudget (DeleteBudgetRequest) returns (DeleteBudgetResponse);
 
   rpc ListReports (ListReportsRequest) returns (ListReportsResponse);
+
+  rpc CSVExportTransactions (ListTransactionsRequest) returns (CSVExportTransactionsResponse);
 }
 
 message Category {
@@ -196,4 +198,10 @@ message ListReportsRequest {
 message ListReportsResponse {
   repeated PeriodReport reports = 1;
   bool hit_cache = 2;
+}
+
+message CSVExportTransactionsResponse {
+  bytes data = 1;
+  int64 total = 2;
+  bool hit_cache = 3;
 }

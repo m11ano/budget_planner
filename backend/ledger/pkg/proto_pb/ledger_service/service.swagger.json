@@ -90,6 +90,22 @@
         }
       }
     },
+    "v1CSVExportTransactionsResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "format": "byte"
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        },
+        "hitCache": {
+          "type": "boolean"
+        }
+      }
+    },
     "v1Category": {
       "type": "object",
       "properties": {

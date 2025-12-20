@@ -19,18 +19,19 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Ledger_ListCategories_FullMethodName    = "/ledger_service.v1.Ledger/ListCategories"
-	Ledger_ListTransactions_FullMethodName  = "/ledger_service.v1.Ledger/ListTransactions"
-	Ledger_GetTransaction_FullMethodName    = "/ledger_service.v1.Ledger/GetTransaction"
-	Ledger_AddTransaction_FullMethodName    = "/ledger_service.v1.Ledger/AddTransaction"
-	Ledger_PatchTransaction_FullMethodName  = "/ledger_service.v1.Ledger/PatchTransaction"
-	Ledger_DeleteTransaction_FullMethodName = "/ledger_service.v1.Ledger/DeleteTransaction"
-	Ledger_ListBudgets_FullMethodName       = "/ledger_service.v1.Ledger/ListBudgets"
-	Ledger_GetBudget_FullMethodName         = "/ledger_service.v1.Ledger/GetBudget"
-	Ledger_AddBudget_FullMethodName         = "/ledger_service.v1.Ledger/AddBudget"
-	Ledger_PatchBudget_FullMethodName       = "/ledger_service.v1.Ledger/PatchBudget"
-	Ledger_DeleteBudget_FullMethodName      = "/ledger_service.v1.Ledger/DeleteBudget"
-	Ledger_ListReports_FullMethodName       = "/ledger_service.v1.Ledger/ListReports"
+	Ledger_ListCategories_FullMethodName        = "/ledger_service.v1.Ledger/ListCategories"
+	Ledger_ListTransactions_FullMethodName      = "/ledger_service.v1.Ledger/ListTransactions"
+	Ledger_GetTransaction_FullMethodName        = "/ledger_service.v1.Ledger/GetTransaction"
+	Ledger_AddTransaction_FullMethodName        = "/ledger_service.v1.Ledger/AddTransaction"
+	Ledger_PatchTransaction_FullMethodName      = "/ledger_service.v1.Ledger/PatchTransaction"
+	Ledger_DeleteTransaction_FullMethodName     = "/ledger_service.v1.Ledger/DeleteTransaction"
+	Ledger_ListBudgets_FullMethodName           = "/ledger_service.v1.Ledger/ListBudgets"
+	Ledger_GetBudget_FullMethodName             = "/ledger_service.v1.Ledger/GetBudget"
+	Ledger_AddBudget_FullMethodName             = "/ledger_service.v1.Ledger/AddBudget"
+	Ledger_PatchBudget_FullMethodName           = "/ledger_service.v1.Ledger/PatchBudget"
+	Ledger_DeleteBudget_FullMethodName          = "/ledger_service.v1.Ledger/DeleteBudget"
+	Ledger_ListReports_FullMethodName           = "/ledger_service.v1.Ledger/ListReports"
+	Ledger_CSVExportTransactions_FullMethodName = "/ledger_service.v1.Ledger/CSVExportTransactions"
 )
 
 // LedgerClient is the client API for Ledger service.
@@ -49,6 +50,7 @@ type LedgerClient interface {
 	PatchBudget(ctx context.Context, in *PatchBudgetRequest, opts ...grpc.CallOption) (*PatchBudgetResponse, error)
 	DeleteBudget(ctx context.Context, in *DeleteBudgetRequest, opts ...grpc.CallOption) (*DeleteBudgetResponse, error)
 	ListReports(ctx context.Context, in *ListReportsRequest, opts ...grpc.CallOption) (*ListReportsResponse, error)
+	CSVExportTransactions(ctx context.Context, in *ListTransactionsRequest, opts ...grpc.CallOption) (*CSVExportTransactionsResponse, error)
 }
 
 type ledgerClient struct {
@@ -179,6 +181,16 @@ func (c *ledgerClient) ListReports(ctx context.Context, in *ListReportsRequest, 
 	return out, nil
 }
 
+func (c *ledgerClient) CSVExportTransactions(ctx context.Context, in *ListTransactionsRequest, opts ...grpc.CallOption) (*CSVExportTransactionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CSVExportTransactionsResponse)
+	err := c.cc.Invoke(ctx, Ledger_CSVExportTransactions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LedgerServer is the server API for Ledger service.
 // All implementations must embed UnimplementedLedgerServer
 // for forward compatibility.
@@ -195,6 +207,7 @@ type LedgerServer interface {
 	PatchBudget(context.Context, *PatchBudgetRequest) (*PatchBudgetResponse, error)
 	DeleteBudget(context.Context, *DeleteBudgetRequest) (*DeleteBudgetResponse, error)
 	ListReports(context.Context, *ListReportsRequest) (*ListReportsResponse, error)
+	CSVExportTransactions(context.Context, *ListTransactionsRequest) (*CSVExportTransactionsResponse, error)
 	mustEmbedUnimplementedLedgerServer()
 }
 
@@ -240,6 +253,9 @@ func (UnimplementedLedgerServer) DeleteBudget(context.Context, *DeleteBudgetRequ
 }
 func (UnimplementedLedgerServer) ListReports(context.Context, *ListReportsRequest) (*ListReportsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListReports not implemented")
+}
+func (UnimplementedLedgerServer) CSVExportTransactions(context.Context, *ListTransactionsRequest) (*CSVExportTransactionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CSVExportTransactions not implemented")
 }
 func (UnimplementedLedgerServer) mustEmbedUnimplementedLedgerServer() {}
 func (UnimplementedLedgerServer) testEmbeddedByValue()                {}
@@ -478,6 +494,24 @@ func _Ledger_ListReports_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Ledger_CSVExportTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTransactionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LedgerServer).CSVExportTransactions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Ledger_CSVExportTransactions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LedgerServer).CSVExportTransactions(ctx, req.(*ListTransactionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Ledger_ServiceDesc is the grpc.ServiceDesc for Ledger service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -532,6 +566,10 @@ var Ledger_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListReports",
 			Handler:    _Ledger_ListReports_Handler,
+		},
+		{
+			MethodName: "CSVExportTransactions",
+			Handler:    _Ledger_CSVExportTransactions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

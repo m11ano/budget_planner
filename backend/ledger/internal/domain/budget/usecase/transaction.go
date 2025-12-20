@@ -27,6 +27,7 @@ const (
 
 type TransactionDTO struct {
 	Transaction *entity.Transaction
+	Category    *entity.Category
 }
 
 type CreateTransactionDataInput struct {
@@ -101,6 +102,12 @@ type TransactionUsecase interface {
 		ctx context.Context,
 		queryFilter CountReportItemsQueryFilter,
 	) (items []*entity.ReportItem, cacheHit bool, err error)
+
+	FindPagedListAsCSV(
+		ctx context.Context,
+		listOptions *TransactionListOptions,
+		queryParams *uctypes.QueryGetListParams,
+	) (res []byte, total uint64, resErr error)
 }
 
 type TransactionRepository interface {
@@ -136,4 +143,8 @@ type TransactionCacheRepository interface {
 	SaveReports(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) (err error)
 
 	GetReports(ctx context.Context, key string) (items []*entity.ReportItem, err error)
+}
+
+type TransactionCSVRepository interface {
+	ItemsToCSV(ctx context.Context, items []*TransactionDTO) ([]byte, error)
 }

@@ -301,3 +301,23 @@ func (uc *UsecaseImpl) countReportItems(
 
 	return out, nil
 }
+
+func (uc *UsecaseImpl) FindPagedListAsCSV(
+	ctx context.Context,
+	listOptions *usecase.TransactionListOptions,
+	queryParams *uctypes.QueryGetListParams,
+) ([]byte, uint64, error) {
+	const op = "FindPagedListAsCSV"
+
+	items, total, err := uc.FindPagedList(ctx, listOptions, queryParams)
+	if err != nil {
+		return nil, 0, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	data, err := uc.transactionCSVRepo.ItemsToCSV(ctx, items)
+	if err != nil {
+		return nil, 0, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	return data, total, nil
+}

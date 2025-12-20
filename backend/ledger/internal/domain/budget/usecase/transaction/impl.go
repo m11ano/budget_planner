@@ -17,6 +17,7 @@ type UsecaseImpl struct {
 	sfGroup              singleflight.Group
 	transactionRepo      usecase.TransactionRepository
 	transactionCacheRepo usecase.TransactionCacheRepository
+	transactionCSVRepo   usecase.TransactionCSVRepository
 	categoryRepo         usecase.CategoryRepository
 	budgetRepo           usecase.BudgetRepository
 }
@@ -26,7 +27,8 @@ func NewUsecaseImpl(
 	cfg config.Config,
 	dbMasterClient db.MasterClient,
 	transactionRepo usecase.TransactionRepository,
-	transactionRedisRepo usecase.TransactionCacheRepository,
+	transactionCacheRepo usecase.TransactionCacheRepository,
+	transactionCSVRepo usecase.TransactionCSVRepository,
 	categoryRepo usecase.CategoryRepository,
 	budgetRepo usecase.BudgetRepository,
 ) *UsecaseImpl {
@@ -36,7 +38,8 @@ func NewUsecaseImpl(
 		cfg:                  cfg,
 		dbMasterClient:       dbMasterClient,
 		transactionRepo:      transactionRepo,
-		transactionCacheRepo: transactionRedisRepo,
+		transactionCacheRepo: transactionCacheRepo,
+		transactionCSVRepo:   transactionCSVRepo,
 		categoryRepo:         categoryRepo,
 		budgetRepo:           budgetRepo,
 	}

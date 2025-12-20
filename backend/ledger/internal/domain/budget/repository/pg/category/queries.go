@@ -14,7 +14,21 @@ import (
 	"github.com/m11ano/budget_planner/backend/ledger/internal/infra/loghandler"
 )
 
-func (r *Repository) buildWhereForList(_ *usecase.CategoryListOptions, _ bool) (where squirrel.And) {
+func (r *Repository) buildWhereForList(listOptions *usecase.CategoryListOptions, withDeleted bool) (where squirrel.And) {
+	defer func() {
+		if !withDeleted {
+			where = append(where, squirrel.Expr("deleted_at IS NULL"))
+		}
+	}()
+
+	if listOptions == nil {
+		return where
+	}
+
+	if listOptions.FilterIDs != nil {
+		where = append(where, squirrel.Eq{"id": *listOptions.FilterIDs})
+	}
+
 	return where
 }
 

@@ -1746,6 +1746,66 @@ func (x *ListReportsResponse) GetHitCache() bool {
 	return false
 }
 
+type CSVExportTransactionsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	Total         int64                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	HitCache      bool                   `protobuf:"varint,3,opt,name=hit_cache,json=hitCache,proto3" json:"hit_cache,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CSVExportTransactionsResponse) Reset() {
+	*x = CSVExportTransactionsResponse{}
+	mi := &file_ledger_service_service_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CSVExportTransactionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CSVExportTransactionsResponse) ProtoMessage() {}
+
+func (x *CSVExportTransactionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ledger_service_service_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CSVExportTransactionsResponse.ProtoReflect.Descriptor instead.
+func (*CSVExportTransactionsResponse) Descriptor() ([]byte, []int) {
+	return file_ledger_service_service_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *CSVExportTransactionsResponse) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *CSVExportTransactionsResponse) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *CSVExportTransactionsResponse) GetHitCache() bool {
+	if x != nil {
+		return x.HitCache
+	}
+	return false
+}
+
 var File_ledger_service_service_proto protoreflect.FileDescriptor
 
 const file_ledger_service_service_proto_rawDesc = "" +
@@ -1890,7 +1950,12 @@ const file_ledger_service_service_proto_rawDesc = "" +
 	"\adate_to\x18\x02 \x01(\v2\x17.ledger_service.v1.DateR\x06dateTo\"m\n" +
 	"\x13ListReportsResponse\x129\n" +
 	"\areports\x18\x01 \x03(\v2\x1f.ledger_service.v1.PeriodReportR\areports\x12\x1b\n" +
-	"\thit_cache\x18\x02 \x01(\bR\bhitCache2\xb2\t\n" +
+	"\thit_cache\x18\x02 \x01(\bR\bhitCache\"f\n" +
+	"\x1dCSVExportTransactionsResponse\x12\x12\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x03R\x05total\x12\x1b\n" +
+	"\thit_cache\x18\x03 \x01(\bR\bhitCache2\xa9\n" +
+	"\n" +
 	"\x06Ledger\x12e\n" +
 	"\x0eListCategories\x12(.ledger_service.v1.ListCategoriesRequest\x1a).ledger_service.v1.ListCategoriesResponse\x12k\n" +
 	"\x10ListTransactions\x12*.ledger_service.v1.ListTransactionsRequest\x1a+.ledger_service.v1.ListTransactionsResponse\x12e\n" +
@@ -1903,7 +1968,8 @@ const file_ledger_service_service_proto_rawDesc = "" +
 	"\tAddBudget\x12#.ledger_service.v1.AddBudgetRequest\x1a$.ledger_service.v1.AddBudgetResponse\x12\\\n" +
 	"\vPatchBudget\x12%.ledger_service.v1.PatchBudgetRequest\x1a&.ledger_service.v1.PatchBudgetResponse\x12_\n" +
 	"\fDeleteBudget\x12&.ledger_service.v1.DeleteBudgetRequest\x1a'.ledger_service.v1.DeleteBudgetResponse\x12\\\n" +
-	"\vListReports\x12%.ledger_service.v1.ListReportsRequest\x1a&.ledger_service.v1.ListReportsResponseB\xe4\x01\n" +
+	"\vListReports\x12%.ledger_service.v1.ListReportsRequest\x1a&.ledger_service.v1.ListReportsResponse\x12u\n" +
+	"\x15CSVExportTransactions\x12*.ledger_service.v1.ListTransactionsRequest\x1a0.ledger_service.v1.CSVExportTransactionsResponseB\xe4\x01\n" +
 	"\x15com.ledger_service.v1B\fServiceProtoP\x01Z\\github.com/m11ano/budget_planner/backend/ledger/pkg/proto_pb/ledger_service;ledger_servicev1\xa2\x02\x03LXX\xaa\x02\x10LedgerService.V1\xca\x02\x10LedgerService\\V1\xe2\x02\x1cLedgerService\\V1\\GPBMetadata\xea\x02\x11LedgerService::V1b\x06proto3"
 
 var (
@@ -1918,48 +1984,49 @@ func file_ledger_service_service_proto_rawDescGZIP() []byte {
 	return file_ledger_service_service_proto_rawDescData
 }
 
-var file_ledger_service_service_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
+var file_ledger_service_service_proto_msgTypes = make([]protoimpl.MessageInfo, 32)
 var file_ledger_service_service_proto_goTypes = []any{
-	(*Category)(nil),                  // 0: ledger_service.v1.Category
-	(*Date)(nil),                      // 1: ledger_service.v1.Date
-	(*DateMonth)(nil),                 // 2: ledger_service.v1.DateMonth
-	(*Transaction)(nil),               // 3: ledger_service.v1.Transaction
-	(*Budget)(nil),                    // 4: ledger_service.v1.Budget
-	(*ReportItem)(nil),                // 5: ledger_service.v1.ReportItem
-	(*PeriodReport)(nil),              // 6: ledger_service.v1.PeriodReport
-	(*ListCategoriesRequest)(nil),     // 7: ledger_service.v1.ListCategoriesRequest
-	(*ListCategoriesResponse)(nil),    // 8: ledger_service.v1.ListCategoriesResponse
-	(*ListTransactionsRequest)(nil),   // 9: ledger_service.v1.ListTransactionsRequest
-	(*ListTransactionsResponse)(nil),  // 10: ledger_service.v1.ListTransactionsResponse
-	(*GetTransactionRequest)(nil),     // 11: ledger_service.v1.GetTransactionRequest
-	(*GetTransactionResponse)(nil),    // 12: ledger_service.v1.GetTransactionResponse
-	(*AddTransactionRequest)(nil),     // 13: ledger_service.v1.AddTransactionRequest
-	(*AddTransactionResponse)(nil),    // 14: ledger_service.v1.AddTransactionResponse
-	(*PatchTransactionRequest)(nil),   // 15: ledger_service.v1.PatchTransactionRequest
-	(*PatchTransactionResponse)(nil),  // 16: ledger_service.v1.PatchTransactionResponse
-	(*DeleteTransactionRequest)(nil),  // 17: ledger_service.v1.DeleteTransactionRequest
-	(*DeleteTransactionResponse)(nil), // 18: ledger_service.v1.DeleteTransactionResponse
-	(*ListBudgetsRequest)(nil),        // 19: ledger_service.v1.ListBudgetsRequest
-	(*ListBudgetsResponse)(nil),       // 20: ledger_service.v1.ListBudgetsResponse
-	(*GetBudgetRequest)(nil),          // 21: ledger_service.v1.GetBudgetRequest
-	(*GetBudgetResponse)(nil),         // 22: ledger_service.v1.GetBudgetResponse
-	(*AddBudgetRequest)(nil),          // 23: ledger_service.v1.AddBudgetRequest
-	(*AddBudgetResponse)(nil),         // 24: ledger_service.v1.AddBudgetResponse
-	(*PatchBudgetRequest)(nil),        // 25: ledger_service.v1.PatchBudgetRequest
-	(*PatchBudgetResponse)(nil),       // 26: ledger_service.v1.PatchBudgetResponse
-	(*DeleteBudgetRequest)(nil),       // 27: ledger_service.v1.DeleteBudgetRequest
-	(*DeleteBudgetResponse)(nil),      // 28: ledger_service.v1.DeleteBudgetResponse
-	(*ListReportsRequest)(nil),        // 29: ledger_service.v1.ListReportsRequest
-	(*ListReportsResponse)(nil),       // 30: ledger_service.v1.ListReportsResponse
-	(*timestamppb.Timestamp)(nil),     // 31: google.protobuf.Timestamp
+	(*Category)(nil),                      // 0: ledger_service.v1.Category
+	(*Date)(nil),                          // 1: ledger_service.v1.Date
+	(*DateMonth)(nil),                     // 2: ledger_service.v1.DateMonth
+	(*Transaction)(nil),                   // 3: ledger_service.v1.Transaction
+	(*Budget)(nil),                        // 4: ledger_service.v1.Budget
+	(*ReportItem)(nil),                    // 5: ledger_service.v1.ReportItem
+	(*PeriodReport)(nil),                  // 6: ledger_service.v1.PeriodReport
+	(*ListCategoriesRequest)(nil),         // 7: ledger_service.v1.ListCategoriesRequest
+	(*ListCategoriesResponse)(nil),        // 8: ledger_service.v1.ListCategoriesResponse
+	(*ListTransactionsRequest)(nil),       // 9: ledger_service.v1.ListTransactionsRequest
+	(*ListTransactionsResponse)(nil),      // 10: ledger_service.v1.ListTransactionsResponse
+	(*GetTransactionRequest)(nil),         // 11: ledger_service.v1.GetTransactionRequest
+	(*GetTransactionResponse)(nil),        // 12: ledger_service.v1.GetTransactionResponse
+	(*AddTransactionRequest)(nil),         // 13: ledger_service.v1.AddTransactionRequest
+	(*AddTransactionResponse)(nil),        // 14: ledger_service.v1.AddTransactionResponse
+	(*PatchTransactionRequest)(nil),       // 15: ledger_service.v1.PatchTransactionRequest
+	(*PatchTransactionResponse)(nil),      // 16: ledger_service.v1.PatchTransactionResponse
+	(*DeleteTransactionRequest)(nil),      // 17: ledger_service.v1.DeleteTransactionRequest
+	(*DeleteTransactionResponse)(nil),     // 18: ledger_service.v1.DeleteTransactionResponse
+	(*ListBudgetsRequest)(nil),            // 19: ledger_service.v1.ListBudgetsRequest
+	(*ListBudgetsResponse)(nil),           // 20: ledger_service.v1.ListBudgetsResponse
+	(*GetBudgetRequest)(nil),              // 21: ledger_service.v1.GetBudgetRequest
+	(*GetBudgetResponse)(nil),             // 22: ledger_service.v1.GetBudgetResponse
+	(*AddBudgetRequest)(nil),              // 23: ledger_service.v1.AddBudgetRequest
+	(*AddBudgetResponse)(nil),             // 24: ledger_service.v1.AddBudgetResponse
+	(*PatchBudgetRequest)(nil),            // 25: ledger_service.v1.PatchBudgetRequest
+	(*PatchBudgetResponse)(nil),           // 26: ledger_service.v1.PatchBudgetResponse
+	(*DeleteBudgetRequest)(nil),           // 27: ledger_service.v1.DeleteBudgetRequest
+	(*DeleteBudgetResponse)(nil),          // 28: ledger_service.v1.DeleteBudgetResponse
+	(*ListReportsRequest)(nil),            // 29: ledger_service.v1.ListReportsRequest
+	(*ListReportsResponse)(nil),           // 30: ledger_service.v1.ListReportsResponse
+	(*CSVExportTransactionsResponse)(nil), // 31: ledger_service.v1.CSVExportTransactionsResponse
+	(*timestamppb.Timestamp)(nil),         // 32: google.protobuf.Timestamp
 }
 var file_ledger_service_service_proto_depIdxs = []int32{
 	1,  // 0: ledger_service.v1.Transaction.occurred_on:type_name -> ledger_service.v1.Date
-	31, // 1: ledger_service.v1.Transaction.created_at:type_name -> google.protobuf.Timestamp
-	31, // 2: ledger_service.v1.Transaction.updated_at:type_name -> google.protobuf.Timestamp
+	32, // 1: ledger_service.v1.Transaction.created_at:type_name -> google.protobuf.Timestamp
+	32, // 2: ledger_service.v1.Transaction.updated_at:type_name -> google.protobuf.Timestamp
 	2,  // 3: ledger_service.v1.Budget.period:type_name -> ledger_service.v1.DateMonth
-	31, // 4: ledger_service.v1.Budget.created_at:type_name -> google.protobuf.Timestamp
-	31, // 5: ledger_service.v1.Budget.updated_at:type_name -> google.protobuf.Timestamp
+	32, // 4: ledger_service.v1.Budget.created_at:type_name -> google.protobuf.Timestamp
+	32, // 5: ledger_service.v1.Budget.updated_at:type_name -> google.protobuf.Timestamp
 	1,  // 6: ledger_service.v1.PeriodReport.period_start:type_name -> ledger_service.v1.Date
 	1,  // 7: ledger_service.v1.PeriodReport.period_end:type_name -> ledger_service.v1.Date
 	5,  // 8: ledger_service.v1.PeriodReport.items:type_name -> ledger_service.v1.ReportItem
@@ -1995,20 +2062,22 @@ var file_ledger_service_service_proto_depIdxs = []int32{
 	25, // 38: ledger_service.v1.Ledger.PatchBudget:input_type -> ledger_service.v1.PatchBudgetRequest
 	27, // 39: ledger_service.v1.Ledger.DeleteBudget:input_type -> ledger_service.v1.DeleteBudgetRequest
 	29, // 40: ledger_service.v1.Ledger.ListReports:input_type -> ledger_service.v1.ListReportsRequest
-	8,  // 41: ledger_service.v1.Ledger.ListCategories:output_type -> ledger_service.v1.ListCategoriesResponse
-	10, // 42: ledger_service.v1.Ledger.ListTransactions:output_type -> ledger_service.v1.ListTransactionsResponse
-	12, // 43: ledger_service.v1.Ledger.GetTransaction:output_type -> ledger_service.v1.GetTransactionResponse
-	14, // 44: ledger_service.v1.Ledger.AddTransaction:output_type -> ledger_service.v1.AddTransactionResponse
-	16, // 45: ledger_service.v1.Ledger.PatchTransaction:output_type -> ledger_service.v1.PatchTransactionResponse
-	18, // 46: ledger_service.v1.Ledger.DeleteTransaction:output_type -> ledger_service.v1.DeleteTransactionResponse
-	20, // 47: ledger_service.v1.Ledger.ListBudgets:output_type -> ledger_service.v1.ListBudgetsResponse
-	22, // 48: ledger_service.v1.Ledger.GetBudget:output_type -> ledger_service.v1.GetBudgetResponse
-	24, // 49: ledger_service.v1.Ledger.AddBudget:output_type -> ledger_service.v1.AddBudgetResponse
-	26, // 50: ledger_service.v1.Ledger.PatchBudget:output_type -> ledger_service.v1.PatchBudgetResponse
-	28, // 51: ledger_service.v1.Ledger.DeleteBudget:output_type -> ledger_service.v1.DeleteBudgetResponse
-	30, // 52: ledger_service.v1.Ledger.ListReports:output_type -> ledger_service.v1.ListReportsResponse
-	41, // [41:53] is the sub-list for method output_type
-	29, // [29:41] is the sub-list for method input_type
+	9,  // 41: ledger_service.v1.Ledger.CSVExportTransactions:input_type -> ledger_service.v1.ListTransactionsRequest
+	8,  // 42: ledger_service.v1.Ledger.ListCategories:output_type -> ledger_service.v1.ListCategoriesResponse
+	10, // 43: ledger_service.v1.Ledger.ListTransactions:output_type -> ledger_service.v1.ListTransactionsResponse
+	12, // 44: ledger_service.v1.Ledger.GetTransaction:output_type -> ledger_service.v1.GetTransactionResponse
+	14, // 45: ledger_service.v1.Ledger.AddTransaction:output_type -> ledger_service.v1.AddTransactionResponse
+	16, // 46: ledger_service.v1.Ledger.PatchTransaction:output_type -> ledger_service.v1.PatchTransactionResponse
+	18, // 47: ledger_service.v1.Ledger.DeleteTransaction:output_type -> ledger_service.v1.DeleteTransactionResponse
+	20, // 48: ledger_service.v1.Ledger.ListBudgets:output_type -> ledger_service.v1.ListBudgetsResponse
+	22, // 49: ledger_service.v1.Ledger.GetBudget:output_type -> ledger_service.v1.GetBudgetResponse
+	24, // 50: ledger_service.v1.Ledger.AddBudget:output_type -> ledger_service.v1.AddBudgetResponse
+	26, // 51: ledger_service.v1.Ledger.PatchBudget:output_type -> ledger_service.v1.PatchBudgetResponse
+	28, // 52: ledger_service.v1.Ledger.DeleteBudget:output_type -> ledger_service.v1.DeleteBudgetResponse
+	30, // 53: ledger_service.v1.Ledger.ListReports:output_type -> ledger_service.v1.ListReportsResponse
+	31, // 54: ledger_service.v1.Ledger.CSVExportTransactions:output_type -> ledger_service.v1.CSVExportTransactionsResponse
+	42, // [42:55] is the sub-list for method output_type
+	29, // [29:42] is the sub-list for method input_type
 	29, // [29:29] is the sub-list for extension type_name
 	29, // [29:29] is the sub-list for extension extendee
 	0,  // [0:29] is the sub-list for field type_name
@@ -2030,7 +2099,7 @@ func file_ledger_service_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ledger_service_service_proto_rawDesc), len(file_ledger_service_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   31,
+			NumMessages:   32,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
