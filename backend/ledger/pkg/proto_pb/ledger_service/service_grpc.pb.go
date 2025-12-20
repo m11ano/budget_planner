@@ -30,6 +30,7 @@ const (
 	Ledger_AddBudget_FullMethodName         = "/ledger_service.v1.Ledger/AddBudget"
 	Ledger_PatchBudget_FullMethodName       = "/ledger_service.v1.Ledger/PatchBudget"
 	Ledger_DeleteBudget_FullMethodName      = "/ledger_service.v1.Ledger/DeleteBudget"
+	Ledger_ListReports_FullMethodName       = "/ledger_service.v1.Ledger/ListReports"
 )
 
 // LedgerClient is the client API for Ledger service.
@@ -47,6 +48,7 @@ type LedgerClient interface {
 	AddBudget(ctx context.Context, in *AddBudgetRequest, opts ...grpc.CallOption) (*AddBudgetResponse, error)
 	PatchBudget(ctx context.Context, in *PatchBudgetRequest, opts ...grpc.CallOption) (*PatchBudgetResponse, error)
 	DeleteBudget(ctx context.Context, in *DeleteBudgetRequest, opts ...grpc.CallOption) (*DeleteBudgetResponse, error)
+	ListReports(ctx context.Context, in *ListReportsRequest, opts ...grpc.CallOption) (*ListReportsResponse, error)
 }
 
 type ledgerClient struct {
@@ -167,6 +169,16 @@ func (c *ledgerClient) DeleteBudget(ctx context.Context, in *DeleteBudgetRequest
 	return out, nil
 }
 
+func (c *ledgerClient) ListReports(ctx context.Context, in *ListReportsRequest, opts ...grpc.CallOption) (*ListReportsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListReportsResponse)
+	err := c.cc.Invoke(ctx, Ledger_ListReports_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LedgerServer is the server API for Ledger service.
 // All implementations must embed UnimplementedLedgerServer
 // for forward compatibility.
@@ -182,6 +194,7 @@ type LedgerServer interface {
 	AddBudget(context.Context, *AddBudgetRequest) (*AddBudgetResponse, error)
 	PatchBudget(context.Context, *PatchBudgetRequest) (*PatchBudgetResponse, error)
 	DeleteBudget(context.Context, *DeleteBudgetRequest) (*DeleteBudgetResponse, error)
+	ListReports(context.Context, *ListReportsRequest) (*ListReportsResponse, error)
 	mustEmbedUnimplementedLedgerServer()
 }
 
@@ -224,6 +237,9 @@ func (UnimplementedLedgerServer) PatchBudget(context.Context, *PatchBudgetReques
 }
 func (UnimplementedLedgerServer) DeleteBudget(context.Context, *DeleteBudgetRequest) (*DeleteBudgetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBudget not implemented")
+}
+func (UnimplementedLedgerServer) ListReports(context.Context, *ListReportsRequest) (*ListReportsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListReports not implemented")
 }
 func (UnimplementedLedgerServer) mustEmbedUnimplementedLedgerServer() {}
 func (UnimplementedLedgerServer) testEmbeddedByValue()                {}
@@ -444,6 +460,24 @@ func _Ledger_DeleteBudget_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Ledger_ListReports_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListReportsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LedgerServer).ListReports(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Ledger_ListReports_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LedgerServer).ListReports(ctx, req.(*ListReportsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Ledger_ServiceDesc is the grpc.ServiceDesc for Ledger service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -494,6 +528,10 @@ var Ledger_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteBudget",
 			Handler:    _Ledger_DeleteBudget_Handler,
+		},
+		{
+			MethodName: "ListReports",
+			Handler:    _Ledger_ListReports_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

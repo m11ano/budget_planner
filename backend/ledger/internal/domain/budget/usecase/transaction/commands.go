@@ -3,7 +3,6 @@ package transaction
 import (
 	"context"
 	"errors"
-	"fmt"
 	"time"
 
 	"cloud.google.com/go/civil"
@@ -79,10 +78,10 @@ func (uc *UsecaseImpl) CreateTransactionByDTO(
 
 				periodEnd := period.AddMonths(1).AddDays(-1)
 
-				reports, err := uc.transactionRepo.CountReportItems(ctx, &usecase.CountReportItemsFilter{
-					AccountID:  &transaction.AccountID,
-					PeriodFrom: &period,
-					PeriodTo:   &periodEnd,
+				reports, err := uc.transactionRepo.CountReportItems(ctx, usecase.CountReportItemsQueryFilter{
+					AccountID:  transaction.AccountID,
+					DateFrom:   &period,
+					DateTo:     &periodEnd,
 					CategoryID: &transaction.CategoryID,
 				})
 				if err != nil {
@@ -91,9 +90,11 @@ func (uc *UsecaseImpl) CreateTransactionByDTO(
 
 				balance := transaction.Amount
 				for _, report := range reports {
-					balance, err = balance.Add(report.Sum)
-					if err != nil {
-						return err
+					if report.Sum != nil {
+						balance, err = balance.Add(*report.Sum)
+						if err != nil {
+							return err
+						}
 					}
 				}
 
@@ -199,10 +200,10 @@ func (uc *UsecaseImpl) PatchTransactionByDTO(
 
 					periodEnd := period.AddMonths(1).AddDays(-1)
 
-					reports, err := uc.transactionRepo.CountReportItems(ctx, &usecase.CountReportItemsFilter{
-						AccountID:  &transaction.AccountID,
-						PeriodFrom: &period,
-						PeriodTo:   &periodEnd,
+					reports, err := uc.transactionRepo.CountReportItems(ctx, usecase.CountReportItemsQueryFilter{
+						AccountID:  transaction.AccountID,
+						DateFrom:   &period,
+						DateTo:     &periodEnd,
 						CategoryID: &transaction.CategoryID,
 						ExcludeIDs: []uuid.UUID{transaction.ID},
 					})
@@ -212,10 +213,11 @@ func (uc *UsecaseImpl) PatchTransactionByDTO(
 
 					balance := *in.Amount
 					for _, report := range reports {
-						fmt.Printf("%#v", report)
-						balance, err = balance.Add(report.Sum)
-						if err != nil {
-							return err
+						if report.Sum != nil {
+							balance, err = balance.Add(*report.Sum)
+							if err != nil {
+								return err
+							}
 						}
 					}
 

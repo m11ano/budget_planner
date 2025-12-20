@@ -736,6 +736,310 @@ var _ interface {
 	ErrorName() string
 } = BudgetValidationError{}
 
+// Validate checks the field values on ReportItem with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ReportItem) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ReportItem with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ReportItemMultiError, or
+// nil if none found.
+func (m *ReportItem) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ReportItem) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for CategoryId
+
+	if m.Sum != nil {
+		// no validation rules for Sum
+	}
+
+	if m.SpentBudget != nil {
+		// no validation rules for SpentBudget
+	}
+
+	if m.ItemBudget != nil {
+		// no validation rules for ItemBudget
+	}
+
+	if len(errors) > 0 {
+		return ReportItemMultiError(errors)
+	}
+
+	return nil
+}
+
+// ReportItemMultiError is an error wrapping multiple validation errors
+// returned by ReportItem.ValidateAll() if the designated constraints aren't met.
+type ReportItemMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ReportItemMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ReportItemMultiError) AllErrors() []error { return m }
+
+// ReportItemValidationError is the validation error returned by
+// ReportItem.Validate if the designated constraints aren't met.
+type ReportItemValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ReportItemValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ReportItemValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ReportItemValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ReportItemValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ReportItemValidationError) ErrorName() string { return "ReportItemValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ReportItemValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sReportItem.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ReportItemValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ReportItemValidationError{}
+
+// Validate checks the field values on PeriodReport with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PeriodReport) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PeriodReport with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PeriodReportMultiError, or
+// nil if none found.
+func (m *PeriodReport) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PeriodReport) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPeriodStart()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PeriodReportValidationError{
+					field:  "PeriodStart",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PeriodReportValidationError{
+					field:  "PeriodStart",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPeriodStart()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PeriodReportValidationError{
+				field:  "PeriodStart",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetPeriodEnd()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PeriodReportValidationError{
+					field:  "PeriodEnd",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PeriodReportValidationError{
+					field:  "PeriodEnd",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPeriodEnd()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PeriodReportValidationError{
+				field:  "PeriodEnd",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetItems() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PeriodReportValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PeriodReportValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PeriodReportValidationError{
+					field:  fmt.Sprintf("Items[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return PeriodReportMultiError(errors)
+	}
+
+	return nil
+}
+
+// PeriodReportMultiError is an error wrapping multiple validation errors
+// returned by PeriodReport.ValidateAll() if the designated constraints aren't met.
+type PeriodReportMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PeriodReportMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PeriodReportMultiError) AllErrors() []error { return m }
+
+// PeriodReportValidationError is the validation error returned by
+// PeriodReport.Validate if the designated constraints aren't met.
+type PeriodReportValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PeriodReportValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PeriodReportValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PeriodReportValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PeriodReportValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PeriodReportValidationError) ErrorName() string { return "PeriodReportValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PeriodReportValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPeriodReport.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PeriodReportValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PeriodReportValidationError{}
+
 // Validate checks the field values on ListCategoriesRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -3563,3 +3867,299 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteBudgetResponseValidationError{}
+
+// Validate checks the field values on ListReportsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListReportsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListReportsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListReportsRequestMultiError, or nil if none found.
+func (m *ListReportsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListReportsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetDateFrom()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListReportsRequestValidationError{
+					field:  "DateFrom",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListReportsRequestValidationError{
+					field:  "DateFrom",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDateFrom()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListReportsRequestValidationError{
+				field:  "DateFrom",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetDateTo()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListReportsRequestValidationError{
+					field:  "DateTo",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListReportsRequestValidationError{
+					field:  "DateTo",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDateTo()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListReportsRequestValidationError{
+				field:  "DateTo",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ListReportsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListReportsRequestMultiError is an error wrapping multiple validation errors
+// returned by ListReportsRequest.ValidateAll() if the designated constraints
+// aren't met.
+type ListReportsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListReportsRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListReportsRequestMultiError) AllErrors() []error { return m }
+
+// ListReportsRequestValidationError is the validation error returned by
+// ListReportsRequest.Validate if the designated constraints aren't met.
+type ListReportsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListReportsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListReportsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListReportsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListReportsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListReportsRequestValidationError) ErrorName() string {
+	return "ListReportsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListReportsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListReportsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListReportsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListReportsRequestValidationError{}
+
+// Validate checks the field values on ListReportsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListReportsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListReportsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListReportsResponseMultiError, or nil if none found.
+func (m *ListReportsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListReportsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetReports() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListReportsResponseValidationError{
+						field:  fmt.Sprintf("Reports[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListReportsResponseValidationError{
+						field:  fmt.Sprintf("Reports[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListReportsResponseValidationError{
+					field:  fmt.Sprintf("Reports[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListReportsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListReportsResponseMultiError is an error wrapping multiple validation
+// errors returned by ListReportsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type ListReportsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListReportsResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListReportsResponseMultiError) AllErrors() []error { return m }
+
+// ListReportsResponseValidationError is the validation error returned by
+// ListReportsResponse.Validate if the designated constraints aren't met.
+type ListReportsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListReportsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListReportsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListReportsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListReportsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListReportsResponseValidationError) ErrorName() string {
+	return "ListReportsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListReportsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListReportsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListReportsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListReportsResponseValidationError{}

@@ -303,66 +303,70 @@ func (r *Repository) FindOneByID(
 
 func (r *Repository) CountReportItems(
 	ctx context.Context,
-	filter *usecase.CountReportItemsFilter,
+	queryFilter usecase.CountReportItemsQueryFilter,
 ) ([]*entity.TransactionReportItem, error) {
 	const op = "CountReportItems"
 
 	type reportRow struct {
-		AccountID  uuid.UUID       `db:"account_id"`
-		Sum        decimal.Decimal `db:"sum"`
-		Period     civil.Date      `db:"period"`
-		CategoryID uint64          `db:"category_id"`
+		AccountID    uuid.UUID        `db:"account_id"`
+		Sum          decimal.Decimal  `db:"sum"`
+		Period       civil.Date       `db:"period"`
+		CategoryID   uint64           `db:"category_id"`
+		BudgetID     *uuid.UUID       `db:"budget_id"`
+		BudgetAmount *decimal.Decimal `db:"budget_amount"`
 	}
 
 	where := squirrel.And{
+		squirrel.Eq{"account_id": queryFilter.AccountID},
 		squirrel.Expr("deleted_at IS NULL"),
 	}
 
-	if filter != nil {
-		if filter.AccountID != nil {
-			where = append(where, squirrel.Eq{"account_id": *filter.AccountID})
-		}
-		if filter.PeriodFrom != nil {
-			where = append(where, squirrel.GtOrEq{"occurred_on": *filter.PeriodFrom})
-		}
-		if filter.PeriodTo != nil {
-			where = append(where, squirrel.LtOrEq{"occurred_on": *filter.PeriodTo})
-		}
-		if filter.CategoryID != nil {
-			where = append(where, squirrel.Eq{"category_id": *filter.CategoryID})
-		}
-		if len(filter.ExcludeIDs) > 0 {
-			where = append(where, squirrel.NotEq{"id": filter.ExcludeIDs})
-		}
+	if queryFilter.DateFrom != nil {
+		where = append(where, squirrel.GtOrEq{"occurred_on": *queryFilter.DateFrom})
+	}
+	if queryFilter.DateTo != nil {
+		where = append(where, squirrel.LtOrEq{"occurred_on": *queryFilter.DateTo})
+	}
+	if queryFilter.CategoryID != nil {
+		where = append(where, squirrel.Eq{"category_id": *queryFilter.CategoryID})
+	}
+	if len(queryFilter.ExcludeIDs) > 0 {
+		where = append(where, squirrel.NotEq{"id": queryFilter.ExcludeIDs})
 	}
 
-	periodExpr := "date_trunc('month', occurred_on)::date AS period"
+	periodExpr := "date_trunc('month', occurred_on::timestamp)::date AS period"
 	sumExpr := "SUM(amount) AS sum"
 
-	selectCols := []string{
-		"account_id",
-		periodExpr,
-		sumExpr,
-	}
-
-	groupBy := []string{
-		"account_id",
-		"period",
-	}
-
-	if filter != nil && filter.GroupByCategory {
-		selectCols = append(selectCols, "category_id")
-		groupBy = append(groupBy, "category_id")
-	}
-
-	q := r.qb.
-		Select(selectCols...).
+	inner := r.qb.
+		Select(
+			"account_id",
+			periodExpr,
+			"category_id",
+			sumExpr,
+		).
 		From(pg.TransactionTable).
 		Where(where).
-		GroupBy(groupBy...).
-		OrderBy("period ASC")
+		GroupBy("account_id", "period", "category_id")
 
-	query, args, err := q.ToSql()
+	outer := r.qb.
+		Select(
+			"t.account_id",
+			"t.period",
+			"t.category_id",
+			"t.sum",
+			"b.id AS budget_id",
+			"b.amount AS budget_amount",
+		).
+		FromSelect(inner, "t").
+		LeftJoin(`budget b
+			ON b.deleted_at IS NULL
+			AND b.account_id = t.account_id
+			AND b.period = t.period
+			AND b.category_id = t.category_id`,
+		).
+		OrderBy("t.period ASC", "t.category_id ASC")
+
+	query, args, err := outer.ToSql()
 	if err != nil {
 		r.logger.ErrorContext(loghandler.WithSource(ctx), "building query", slog.Any("error", err))
 		return nil, appErrors.Chainf(appErrors.ErrInternal.WithWrap(err), "%s.%s", r.pkg, op)
@@ -390,10 +394,12 @@ func (r *Repository) CountReportItems(
 	result := make([]*entity.TransactionReportItem, 0, len(dbData))
 	for _, it := range dbData {
 		result = append(result, &entity.TransactionReportItem{
-			AccountID:  it.AccountID,
-			Sum:        it.Sum,
-			Period:     it.Period,
-			CategoryID: it.CategoryID,
+			AccountID:    it.AccountID,
+			Sum:          &it.Sum,
+			Period:       it.Period,
+			CategoryID:   it.CategoryID,
+			BudgetID:     it.BudgetID,
+			BudgetAmount: it.BudgetAmount,
 		})
 	}
 

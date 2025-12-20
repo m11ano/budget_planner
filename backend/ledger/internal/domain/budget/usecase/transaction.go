@@ -46,13 +46,12 @@ type PatchTransactionDataInput struct {
 	Description *string
 }
 
-type CountReportItemsFilter struct {
-	AccountID       *uuid.UUID
-	PeriodFrom      *civil.Date
-	PeriodTo        *civil.Date
-	CategoryID      *uint64
-	ExcludeIDs      []uuid.UUID
-	GroupByCategory bool
+type CountReportItemsQueryFilter struct {
+	AccountID  uuid.UUID
+	DateFrom   *civil.Date
+	DateTo     *civil.Date
+	CategoryID *uint64
+	ExcludeIDs []uuid.UUID
 }
 
 type TransactionUsecase interface {
@@ -96,6 +95,11 @@ type TransactionUsecase interface {
 		ctx context.Context,
 		id uuid.UUID,
 	) (resErr error)
+
+	CountReportItems(
+		ctx context.Context,
+		queryFilter CountReportItemsQueryFilter,
+	) (items []*entity.ReportItem, err error)
 }
 
 type TransactionRepository interface {
@@ -123,6 +127,6 @@ type TransactionRepository interface {
 
 	CountReportItems(
 		ctx context.Context,
-		filter *CountReportItemsFilter,
+		queryFilter CountReportItemsQueryFilter,
 	) (items []*entity.TransactionReportItem, err error)
 }

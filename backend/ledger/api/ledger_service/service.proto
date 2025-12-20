@@ -26,6 +26,8 @@ service Ledger {
   rpc PatchBudget (PatchBudgetRequest) returns (PatchBudgetResponse);
 
   rpc DeleteBudget (DeleteBudgetRequest) returns (DeleteBudgetResponse);
+
+  rpc ListReports (ListReportsRequest) returns (ListReportsResponse);
 }
 
 message Category {
@@ -64,6 +66,19 @@ message Budget {
   string amount = 5;
   google.protobuf.Timestamp created_at = 6;
   google.protobuf.Timestamp updated_at = 7;
+}
+
+message ReportItem {
+  int64 category_id = 1;
+  optional string sum = 2;
+  optional string spent_budget = 3;
+  optional string item_budget = 4;
+}
+
+message PeriodReport {
+  Date period_start = 1;
+  Date period_end = 2;
+  repeated ReportItem items = 3; 
 }
 
 message ListCategoriesRequest {}
@@ -170,3 +185,12 @@ message DeleteBudgetRequest {
 }
 
 message DeleteBudgetResponse {}
+
+message ListReportsRequest {
+  Date date_from = 1;
+  Date date_to = 2;
+}
+
+message ListReportsResponse {
+  repeated PeriodReport reports = 1;
+}

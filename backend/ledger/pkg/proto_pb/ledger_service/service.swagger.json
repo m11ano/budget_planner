@@ -182,6 +182,18 @@
         }
       }
     },
+    "v1ListReportsResponse": {
+      "type": "object",
+      "properties": {
+        "reports": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PeriodReport"
+          }
+        }
+      }
+    },
     "v1ListTransactionsResponse": {
       "type": "object",
       "properties": {
@@ -211,6 +223,42 @@
       "properties": {
         "item": {
           "$ref": "#/definitions/v1Transaction"
+        }
+      }
+    },
+    "v1PeriodReport": {
+      "type": "object",
+      "properties": {
+        "periodStart": {
+          "$ref": "#/definitions/v1Date"
+        },
+        "periodEnd": {
+          "$ref": "#/definitions/v1Date"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ReportItem"
+          }
+        }
+      }
+    },
+    "v1ReportItem": {
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sum": {
+          "type": "string"
+        },
+        "spentBudget": {
+          "type": "string"
+        },
+        "itemBudget": {
+          "type": "string"
         }
       }
     },
