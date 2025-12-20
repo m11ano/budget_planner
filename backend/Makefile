@@ -60,3 +60,4 @@ generate-gateway: bin-deps
 
 
 generate: generate-auth generate-ledger generate-gateway
+

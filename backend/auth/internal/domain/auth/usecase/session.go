@@ -12,6 +12,7 @@ type SessionListOptions struct {
 	FilterAccountID *uuid.UUID
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/auth/internal/domain/auth/usecase.SessionUsecase -o mocks/session_usecase.go
 type SessionUsecase interface {
 	Create(
 		ctx context.Context,
@@ -40,6 +41,7 @@ type SessionUsecase interface {
 	RevokeSessionByID(ctx context.Context, ID uuid.UUID) (resErr error)
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/auth/internal/domain/auth/usecase.SessionRepository -o mocks/session_repository.go
 type SessionRepository interface {
 	Create(
 		ctx context.Context,

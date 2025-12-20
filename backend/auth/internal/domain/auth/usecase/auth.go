@@ -29,6 +29,7 @@ var ErrInvalidToken = appErrors.ErrUnauthorized.Extend("invalid token")
 
 var ErrExpiredToken = appErrors.ErrUnauthorized.Extend("expired token").WithTextCode("EXPIRED_TOKEN")
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/auth/internal/domain/auth/usecase.AuthUsecase -o mocks/auth_usecase.go
 type AuthUsecase interface {
 	LoginByEmail(
 		ctx context.Context,

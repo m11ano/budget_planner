@@ -46,6 +46,7 @@ type PatchAccountDataInput struct {
 	ProfileSurname    *string
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/auth/internal/domain/auth/usecase.AccountUsecase -o mocks/account_usecase.go
 type AccountUsecase interface {
 	FindOneByEmail(
 		ctx context.Context,
@@ -93,6 +94,7 @@ type AccountUsecase interface {
 	UpdateAccount(ctx context.Context, item *entity.Account) (resErr error)
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/auth/internal/domain/auth/usecase.AccountRepository -o mocks/account_repository.go
 type AccountRepository interface {
 	FindOneByEmail(
 		ctx context.Context,
