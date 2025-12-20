@@ -22,6 +22,7 @@ type CategoryDTO struct {
 	Category *entity.Category
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.CategoryUsecase -o mocks/category_usecase.go
 type CategoryUsecase interface {
 	FindOneByID(
 		ctx context.Context,
@@ -36,6 +37,7 @@ type CategoryUsecase interface {
 	) (resItems []*CategoryDTO, resErr error)
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.CategoryRepository -o mocks/category_repository.go
 type CategoryRepository interface {
 	FindOneByID(
 		ctx context.Context,

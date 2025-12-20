@@ -11,6 +11,7 @@ require (
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/georgysavva/scany/v2 v2.1.4
 	github.com/go-playground/validator/v10 v10.26.0
+	github.com/gojuno/minimock/v3 v3.4.7
 	github.com/google/uuid v1.6.0
 	github.com/govalues/decimal v0.1.36
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3

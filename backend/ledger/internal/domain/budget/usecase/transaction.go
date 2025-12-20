@@ -56,6 +56,7 @@ type CountReportItemsQueryFilter struct {
 	ExcludeIDs []uuid.UUID
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.TransactionUsecase -o mocks/transaction_usecase.go
 type TransactionUsecase interface {
 	FindOneByID(
 		ctx context.Context,
@@ -116,6 +117,7 @@ type TransactionUsecase interface {
 	) (resErr error)
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.TransactionRepository -o mocks/transaction_repository.go
 type TransactionRepository interface {
 	FindOneByID(
 		ctx context.Context,
@@ -145,12 +147,14 @@ type TransactionRepository interface {
 	) (items []*entity.AccountTransactionReportItem, err error)
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.TransactionCacheRepository -o mocks/transaction_cache_repository.go
 type TransactionCacheRepository interface {
 	SaveReports(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) (err error)
 
 	GetReports(ctx context.Context, key string) (items []*entity.ReportItem, err error)
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.TransactionCSVRepository -o mocks/transaction_csv_repository.go
 type TransactionCSVRepository interface {
 	ItemsToCSV(ctx context.Context, items []*TransactionDTO) ([]byte, error)
 

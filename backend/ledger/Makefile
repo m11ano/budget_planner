@@ -18,7 +18,7 @@ linter-fix:
 
 DB_DSN := "postgres://postgres:12345678@localhost:5433/budget-planner-ledger"
 
-.PHONY: goose-up goose-down
+.PHONY: goose-up goose-down test test-cov
 
 goose-up:
 	@echo "== Applying migrations using DSN: $(DB_DSN) =="
@@ -27,3 +27,9 @@ goose-up:
 goose-down:
 	@echo "== Rolling back last migration using DSN: $(DB_DSN) =="
 	goose -dir $(CURDIR)/migrations/sql postgres "$(DB_DSN)" down
+
+test:
+	go test -covermode=atomic -coverprofile=coverage.out ./... && go tool cover -html=coverage.out -o coverage.html
+
+test-cov:
+	$(MAKE) test && go tool cover -func=coverage.out

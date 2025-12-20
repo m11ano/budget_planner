@@ -46,6 +46,7 @@ type PatchBudgetDataInput struct {
 	CategoryID *uint64
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.BudgetUsecase -o mocks/budget_usecase.go
 type BudgetUsecase interface {
 	FindOneByID(
 		ctx context.Context,
@@ -83,6 +84,7 @@ type BudgetUsecase interface {
 	) (resErr error)
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.BudgetRepository -o mocks/budget_repository.go
 type BudgetRepository interface {
 	FindOneByID(
 		ctx context.Context,
@@ -107,6 +109,7 @@ type BudgetRepository interface {
 	Update(ctx context.Context, item *entity.Budget) (err error)
 }
 
+//go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.BudgetCacheRepository -o mocks/budget_cache_repository.go
 type BudgetCacheRepository interface {
 	SaveBudgetsList(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration) (err error)
 
