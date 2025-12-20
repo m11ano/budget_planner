@@ -85,3 +85,55 @@ func NewCategoryOutput(category *desc.Category) *CategoryOutput {
 		Title: category.Title,
 	}
 }
+
+type ReportOutputItem struct {
+	CategoryID  uint64  `json:"categoryID"`
+	Sum         *string `json:"sum"`
+	SpentBudget *string `json:"spentBudget"`
+	ItemBudget  *string `json:"itemBudget"`
+}
+
+type ReportOutput struct {
+	PeriodStart civil.Date          `json:"periodStart"`
+	PeriodEnd   civil.Date          `json:"periodEnd"`
+	Items       []*ReportOutputItem `json:"items"`
+}
+
+func NewReportOutput(report *desc.PeriodReport) *ReportOutput {
+	periodStart, err := civil.ParseDate(fmt.Sprintf(
+		"%04d-%02d-%02d",
+		report.PeriodStart.Year,
+		report.PeriodStart.Month,
+		report.PeriodStart.Day,
+	))
+	if err != nil {
+		panic(err)
+	}
+
+	periodEnd, err := civil.ParseDate(fmt.Sprintf(
+		"%04d-%02d-%02d",
+		report.PeriodEnd.Year,
+		report.PeriodEnd.Month,
+		report.PeriodEnd.Day,
+	))
+	if err != nil {
+		panic(err)
+	}
+
+	result := &ReportOutput{
+		PeriodStart: periodStart,
+		PeriodEnd:   periodEnd,
+		Items:       make([]*ReportOutputItem, 0, len(report.Items)),
+	}
+
+	for _, item := range report.Items {
+		result.Items = append(result.Items, &ReportOutputItem{
+			CategoryID:  uint64(item.CategoryId),
+			Sum:         item.Sum,
+			SpentBudget: item.SpentBudget,
+			ItemBudget:  item.ItemBudget,
+		})
+	}
+
+	return result
+}

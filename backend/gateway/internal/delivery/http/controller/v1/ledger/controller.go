@@ -61,4 +61,6 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, mdwr *middleware.Contro
 	routeGroup.Delete("/budgets/:id<guid>", ctrl.BudgetDeleteHandler)
 
 	routeGroup.Get("/categories", ctrl.CategoryListHandler)
+
+	routeGroup.Get("/reports", ctrl.ReportListHandler)
 }
