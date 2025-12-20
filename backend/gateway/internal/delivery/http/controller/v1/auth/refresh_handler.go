@@ -12,6 +12,15 @@ type RefreshHandlerIn struct {
 	RefreshJWT string `json:"refreshJWT"`
 }
 
+// RefreshHandler - refresh tokens
+// @Summary Refresh tokens
+// @Tags auth
+// @Produce  json
+// @Accept  json
+// @Param request body RefreshHandlerIn true "JSON"
+// @Success 200 {object} TokensOutDTO
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /auth/refresh [post]
 func (ctrl *Controller) RefreshHandler(c *fiber.Ctx) error {
 	const op = "RefreshHandler"
 

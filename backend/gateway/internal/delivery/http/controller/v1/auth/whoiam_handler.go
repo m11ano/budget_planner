@@ -7,6 +7,14 @@ import (
 	auth_servicev1 "github.com/m11ano/budget_planner/backend/gateway/pkg/proto_pb/auth_service"
 )
 
+// WhoIAmHandler - who i am
+// @Summary Who i am
+// @Security BearerAuth
+// @Tags auth
+// @Produce  json
+// @Success 200 {object} AccountOutDTO
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /auth/whoiam [get]
 func (ctrl *Controller) WhoIAmHandler(c *fiber.Ctx) error {
 	const op = "WhoIAmHandler"
 
@@ -20,7 +28,7 @@ func (ctrl *Controller) WhoIAmHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.FromGRPCError(err), "%s.%s", ctrl.pkg, op)
 	}
 
-	out := AccoutOutDTO{
+	out := AccountOutDTO{
 		ID:             resp.Account.Id,
 		Email:          resp.Account.Email,
 		ProfileName:    resp.Account.ProfileName,

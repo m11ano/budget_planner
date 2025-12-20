@@ -7,6 +7,14 @@ import (
 	desc "github.com/m11ano/budget_planner/backend/gateway/pkg/proto_pb/ledger_service"
 )
 
+// BudgetDeleteHandler - delete budget
+// @Summary Delete budget
+// @Security BearerAuth
+// @Tags ledger
+// @Param id path string true "ID"
+// @Success 200
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/budgets/{id} [delete]
 func (ctrl *Controller) BudgetDeleteHandler(c *fiber.Ctx) error {
 	const op = "BudgetDeleteHandler"
 

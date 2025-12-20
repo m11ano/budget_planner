@@ -1,0 +1,606 @@
+basePath: /api/v1
+definitions:
+  auth.AccountOutDTO:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      profileName:
+        type: string
+      profileSurname:
+        type: string
+    type: object
+  auth.LoginHandlerIn:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 0
+        type: string
+    required:
+    - email
+    type: object
+  auth.LoginHandlerOut:
+    properties:
+      accout:
+        $ref: '#/definitions/auth.AccountOutDTO'
+      tokens:
+        $ref: '#/definitions/auth.TokensOutDTO'
+    type: object
+  auth.RefreshHandlerIn:
+    properties:
+      refreshJWT:
+        type: string
+    type: object
+  auth.RegisterHandlerIn:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 0
+        type: string
+      profileName:
+        type: string
+      profileSurname:
+        type: string
+    required:
+    - email
+    - profileName
+    - profileSurname
+    type: object
+  auth.TokensOutDTO:
+    properties:
+      accessJWT:
+        type: string
+      refreshJWT:
+        type: string
+    type: object
+  ledger.BudgetAddHandlerInput:
+    properties:
+      amount:
+        type: string
+      categoryID:
+        type: integer
+      period:
+        $ref: '#/definitions/ledger.BudgetAddHandlerInputPeriod'
+    type: object
+  ledger.BudgetAddHandlerInputPeriod:
+    properties:
+      month:
+        type: integer
+      year:
+        type: integer
+    type: object
+  ledger.BudgetAddHandlerOutput:
+    properties:
+      item:
+        $ref: '#/definitions/ledger.BudgetOutput'
+    type: object
+  ledger.BudgetGetHandlerOutput:
+    properties:
+      hitCache:
+        type: boolean
+      item:
+        $ref: '#/definitions/ledger.BudgetOutput'
+    type: object
+  ledger.BudgetListHandlerOutput:
+    properties:
+      hit_cache:
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/ledger.BudgetOutput'
+        type: array
+      total:
+        type: integer
+    type: object
+  ledger.BudgetOutput:
+    properties:
+      accountID:
+        type: string
+      amount:
+        type: string
+      categoryID:
+        type: integer
+      createdAt:
+        type: string
+      id:
+        type: string
+      period:
+        $ref: '#/definitions/ledger.BudgetOutputPeriod'
+      updatedAt:
+        type: string
+    type: object
+  ledger.BudgetOutputPeriod:
+    properties:
+      month:
+        type: integer
+      year:
+        type: integer
+    type: object
+  ledger.BudgetPatchHandlerInput:
+    properties:
+      amount:
+        type: string
+      categoryID:
+        type: integer
+      period:
+        $ref: '#/definitions/ledger.BudgetAddHandlerInputPeriod'
+    type: object
+  ledger.BudgetPatchHandlerOutput:
+    properties:
+      item:
+        $ref: '#/definitions/ledger.BudgetOutput'
+    type: object
+  ledger.CategoryListHandlerOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/ledger.CategoryOutput'
+        type: array
+    type: object
+  ledger.CategoryOutput:
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  ledger.ReportListHandlerOutput:
+    properties:
+      hitCache:
+        type: boolean
+      reports:
+        items:
+          $ref: '#/definitions/ledger.ReportOutput'
+        type: array
+    type: object
+  ledger.ReportOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/ledger.ReportOutputItem'
+        type: array
+      periodEnd:
+        type: string
+      periodStart:
+        type: string
+    type: object
+  ledger.ReportOutputItem:
+    properties:
+      categoryID:
+        type: integer
+      itemBudget:
+        type: string
+      spentBudget:
+        type: string
+      sum:
+        type: string
+    type: object
+  ledger.TransactionAddHandlerInput:
+    properties:
+      amount:
+        type: string
+      categoryID:
+        type: integer
+      description:
+        type: string
+      isIncome:
+        type: boolean
+      occurredOn:
+        type: string
+    type: object
+  ledger.TransactionAddHandlerOutput:
+    properties:
+      item:
+        $ref: '#/definitions/ledger.TransactionOutput'
+    type: object
+  ledger.TransactionOutput:
+    properties:
+      accountID:
+        type: string
+      amount:
+        type: string
+      categoryID:
+        type: integer
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      isIncome:
+        type: boolean
+      occurredOn:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  middleware.ErrorJSON:
+    properties:
+      code:
+        type: integer
+      details:
+        additionalProperties: {}
+        type: object
+      hints:
+        items:
+          type: string
+        type: array
+      textCode:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API документация для budget-app
+  title: Budget API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: JSON
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginHandlerIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.LoginHandlerOut'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      summary: Login
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Logout
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: JSON
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RefreshHandlerIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.TokensOutDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      summary: Refresh tokens
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: JSON
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterHandlerIn'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      summary: Register
+      tags:
+      - auth
+  /auth/whoiam:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.AccountOutDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Who i am
+      tags:
+      - auth
+  /ledger/budgets:
+    get:
+      parameters:
+      - description: Фильтр по дате ОТ в формате 2025-01 (год-месяц)
+        in: query
+        name: period_from
+        type: string
+      - description: Фильтр по дате ДО в формате 2025-01 (год-месяц)
+        in: query
+        name: period_to
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ledger.BudgetListHandlerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: List budgets
+      tags:
+      - ledger
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: JSON
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ledger.BudgetAddHandlerInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ledger.BudgetAddHandlerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Add budget
+      tags:
+      - ledger
+  /ledger/budgets/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Delete budget
+      tags:
+      - ledger
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ledger.BudgetGetHandlerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Get budget
+      tags:
+      - ledger
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: JSON
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ledger.BudgetPatchHandlerInput'
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ledger.BudgetPatchHandlerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Patch budget
+      tags:
+      - ledger
+  /ledger/categories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ledger.CategoryListHandlerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      summary: List categories
+      tags:
+      - ledger
+  /ledger/reports:
+    get:
+      parameters:
+      - description: Фильтр по дате ОТ в формате 2025-01-30 (год-месяц-день)
+        in: query
+        name: date_from
+        type: string
+      - description: Фильтр по дате ДО в формате 2025-01-30 (год-месяц-день)
+        in: query
+        name: date_to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ledger.ReportListHandlerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Reports
+      tags:
+      - ledger
+  /ledger/transactions:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: JSON
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ledger.TransactionAddHandlerInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ledger.TransactionAddHandlerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Add transaction
+      tags:
+      - ledger
+  /ledger/transactions/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Delete transaction
+      tags:
+      - ledger
+  /ledger/transactions/export:
+    get:
+      parameters:
+      - description: Фильтр по дате ОТ в формате 2025-01-30 (год-месяц-день)
+        in: query
+        name: date_from
+        type: string
+      - description: Фильтр по дате ДО в формате 2025-01-30 (год-месяц-день)
+        in: query
+        name: date_to
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - text/csv
+      responses:
+        "200":
+          description: CSV file
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.ErrorJSON'
+      security:
+      - BearerAuth: []
+      summary: Export list transactions
+      tags:
+      - ledger
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

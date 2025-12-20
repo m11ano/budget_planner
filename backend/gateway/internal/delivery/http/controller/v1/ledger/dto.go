@@ -13,7 +13,7 @@ type TransactionOutput struct {
 	AccountID   string     `json:"accountID"`
 	IsIncome    bool       `json:"isIncome"`
 	Amount      string     `json:"amount"`
-	OccurredOn  civil.Date `json:"occurredOn"`
+	OccurredOn  civil.Date `json:"occurredOn" swaggertype:"string"`
 	CategoryID  uint64     `json:"categoryID"`
 	Description string     `json:"description"`
 	CreatedAt   *time.Time `json:"createdAt"`
@@ -94,8 +94,8 @@ type ReportOutputItem struct {
 }
 
 type ReportOutput struct {
-	PeriodStart civil.Date          `json:"periodStart"`
-	PeriodEnd   civil.Date          `json:"periodEnd"`
+	PeriodStart civil.Date          `json:"periodStart" swaggertype:"string"`
+	PeriodEnd   civil.Date          `json:"periodEnd" swaggertype:"string"`
 	Items       []*ReportOutputItem `json:"items"`
 }
 

@@ -12,6 +12,15 @@ type BudgetGetHandlerOutput struct {
 	HitCache bool          `json:"hitCache"`
 }
 
+// BudgetGetHandler - get budget
+// @Summary Get budget
+// @Security BearerAuth
+// @Tags ledger
+// @Produce  json
+// @Param id path string true "ID"
+// @Success 200 {object} BudgetGetHandlerOutput
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/budgets/{id} [get]
 func (ctrl *Controller) BudgetGetHandler(c *fiber.Ctx) error {
 	const op = "BudgetGetHandler"
 

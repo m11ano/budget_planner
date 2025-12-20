@@ -15,6 +15,18 @@ type BudgetListHandlerOutput struct {
 	HitCache bool            `json:"hit_cache"`
 }
 
+// BudgetListHandler - list budgets
+// @Summary List budgets
+// @Security BearerAuth
+// @Tags ledger
+// @Produce  json
+// @Param period_from query string false "Фильтр по дате ОТ в формате 2025-01 (год-месяц)"
+// @Param period_to query string false "Фильтр по дате ДО в формате 2025-01 (год-месяц)"
+// @Param limit query int false "Limit"
+// @Param offset query int false "Offset"
+// @Success 200 {object} BudgetListHandlerOutput
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/budgets [get]
 func (ctrl *Controller) BudgetListHandler(c *fiber.Ctx) error {
 	const op = "BudgetListHandler"
 

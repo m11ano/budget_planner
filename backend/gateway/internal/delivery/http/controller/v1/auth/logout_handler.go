@@ -7,6 +7,13 @@ import (
 	auth_servicev1 "github.com/m11ano/budget_planner/backend/gateway/pkg/proto_pb/auth_service"
 )
 
+// LogoutHandler - logout
+// @Summary Logout
+// @Security BearerAuth
+// @Tags auth
+// @Success 200
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /auth/logout [post]
 func (ctrl *Controller) LogoutHandler(c *fiber.Ctx) error {
 	const op = "LogoutHandler"
 

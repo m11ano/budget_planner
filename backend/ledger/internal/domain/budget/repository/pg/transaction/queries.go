@@ -359,10 +359,10 @@ func (r *Repository) CountReportItems(
 		).
 		FromSelect(inner, "t").
 		LeftJoin(`budget b
-			ON b.deleted_at IS NULL
-			AND b.account_id = t.account_id
+			ON b.account_id = t.account_id
 			AND b.period = t.period
-			AND b.category_id = t.category_id`,
+			AND b.category_id = t.category_id
+			AND b.deleted_at IS NULL`,
 		).
 		OrderBy("t.period ASC", "t.category_id ASC")
 

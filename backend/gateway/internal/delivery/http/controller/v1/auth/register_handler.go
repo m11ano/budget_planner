@@ -15,6 +15,14 @@ type RegisterHandlerIn struct {
 	ProfileSurname string `json:"profileSurname" validate:"required"`
 }
 
+// RegisterHandler - Register
+// @Summary Register
+// @Tags auth
+// @Accept  json
+// @Param request body RegisterHandlerIn true "JSON"
+// @Success 200
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /auth/register [post]
 func (ctrl *Controller) RegisterHandler(c *fiber.Ctx) error {
 	const op = "RegisterHandler"
 

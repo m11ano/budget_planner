@@ -10,6 +10,13 @@ type CategoryListHandlerOutput struct {
 	Items []*CategoryOutput `json:"items"`
 }
 
+// CategoryListHandler - list categories
+// @Summary List categories
+// @Tags ledger
+// @Produce  json
+// @Success 200 {object} CategoryListHandlerOutput
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/categories [get]
 func (ctrl *Controller) CategoryListHandler(c *fiber.Ctx) error {
 	const op = "CategoryListHandler"
 

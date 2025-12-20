@@ -20,6 +20,17 @@ type BudgetPatchHandlerOutput struct {
 	Item *BudgetOutput `json:"item"`
 }
 
+// BudgetPatchHandler - patch budget
+// @Summary Patch budget
+// @Security BearerAuth
+// @Tags ledger
+// @Accept  json
+// @Produce  json
+// @Param request body BudgetPatchHandlerInput true "JSON"
+// @Param id path string true "ID"
+// @Success 200 {object} BudgetPatchHandlerOutput
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/budgets/{id} [patch]
 func (ctrl *Controller) BudgetPatchHandler(c *fiber.Ctx) error {
 	const op = "BudgetPatchHandler"
 

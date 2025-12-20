@@ -12,6 +12,16 @@ type ReportListHandlerOutput struct {
 	HitCache bool            `json:"hitCache"`
 }
 
+// ReportListHandler - reports
+// @Summary Reports
+// @Security BearerAuth
+// @Tags ledger
+// @Produce  json
+// @Param date_from query string false "Фильтр по дате ОТ в формате 2025-01-30 (год-месяц-день)"
+// @Param date_to query string false "Фильтр по дате ДО в формате 2025-01-30 (год-месяц-день)"
+// @Success 200 {object} ReportListHandlerOutput
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/reports [get]
 func (ctrl *Controller) ReportListHandler(c *fiber.Ctx) error {
 	const op = "ReportListHandler"
 

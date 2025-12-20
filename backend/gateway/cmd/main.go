@@ -7,6 +7,13 @@ import (
 	"go.uber.org/fx"
 )
 
+// @title Budget API
+// @version 1.0
+// @description API документация для budget-app
+// @BasePath /api/v1
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	cfg := config.LoadConfig("configs/base.yml", "configs/base.local.yml")
 

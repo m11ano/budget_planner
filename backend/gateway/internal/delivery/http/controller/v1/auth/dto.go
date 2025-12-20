@@ -1,6 +1,6 @@
 package auth
 
-type AccoutOutDTO struct {
+type AccountOutDTO struct {
 	ID             string `json:"id"`
 	Email          string `json:"email"`
 	ProfileName    string `json:"profileName"`

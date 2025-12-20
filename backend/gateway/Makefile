@@ -1,5 +1,5 @@
 
-.PHONY: update linter linter-fix goose-up goose-down
+.PHONY: update linter linter-fix goose-up goose-down swagger
 
 # Обновить зависимости
 update:
@@ -13,3 +13,6 @@ linter:
 linter-fix:
 	golangci-lint run --fix
 
+# swagger
+swagger:
+	swag init --generalInfo cmd/main.go

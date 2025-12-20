@@ -7,7 +7,7 @@ import (
 	appErrors "github.com/m11ano/budget_planner/backend/gateway/internal/app/errors"
 )
 
-type errorJSON struct {
+type ErrorJSON struct {
 	Code     int            `json:"code"`
 	TextCode string         `json:"textCode"`
 	Hints    []string       `json:"hints"`
@@ -17,7 +17,7 @@ type errorJSON struct {
 func ErrorHandler(appTitle string, logger *slog.Logger) func(*fiber.Ctx, error) error {
 	return func(c *fiber.Ctx, err error) error {
 		code := 500
-		jsonRes := errorJSON{
+		jsonRes := ErrorJSON{
 			TextCode: "INTERNAL_ERROR",
 			Hints:    []string{},
 			Details:  map[string]any{},

@@ -15,9 +15,18 @@ type LoginHandlerIn struct {
 
 type LoginHandlerOut struct {
 	Tokens TokensOutDTO `json:"tokens"`
-	Accout AccoutOutDTO `json:"accout"`
+	Accout AccountOutDTO `json:"accout"`
 }
 
+// LoginHandler - Login
+// @Summary Login
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param request body LoginHandlerIn true "JSON"
+// @Success 200 {object} LoginHandlerOut
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /auth/login [post]
 func (ctrl *Controller) LoginHandler(c *fiber.Ctx) error {
 	const op = "LoginHandler"
 
@@ -44,7 +53,7 @@ func (ctrl *Controller) LoginHandler(c *fiber.Ctx) error {
 			AccessJWT:  data.Tokens.AccessJwt,
 			RefreshJWT: data.Tokens.RefreshJwt,
 		},
-		Accout: AccoutOutDTO{
+		Accout: AccountOutDTO{
 			ID:             data.Account.Id,
 			Email:          data.Account.Email,
 			ProfileName:    data.Account.ProfileName,

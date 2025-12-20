@@ -4,6 +4,8 @@ import (
 	"log/slog"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/swagger"
+	_ "github.com/m11ano/budget_planner/backend/gateway/docs"
 	"github.com/m11ano/budget_planner/backend/gateway/internal/delivery/http/middleware"
 )
 
@@ -45,6 +47,8 @@ func NewHTTPFiber(httpCfg HTTPConfig, logger *slog.Logger) *fiber.App {
 	if httpCfg.UseLogger {
 		app.Use(middleware.Logger(logger))
 	}
+
+	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	return app
 }

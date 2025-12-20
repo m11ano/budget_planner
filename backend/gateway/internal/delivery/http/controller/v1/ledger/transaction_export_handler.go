@@ -7,6 +7,18 @@ import (
 	desc "github.com/m11ano/budget_planner/backend/gateway/pkg/proto_pb/ledger_service"
 )
 
+// TransactionExportHandler - export list transactions
+// @Summary Export list transactions
+// @Security BearerAuth
+// @Tags ledger
+// @Param date_from query string false "Фильтр по дате ОТ в формате 2025-01-30 (год-месяц-день)"
+// @Param date_to query string false "Фильтр по дате ДО в формате 2025-01-30 (год-месяц-день)"
+// @Param limit query int false "Limit"
+// @Param offset query int false "Offset"
+// @Produce text/csv
+// @Success 200 "CSV file"
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/transactions/export [get]
 func (ctrl *Controller) TransactionExportHandler(c *fiber.Ctx) error {
 	const op = "TransactionExportHandler"
 

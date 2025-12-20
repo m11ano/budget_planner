@@ -14,13 +14,23 @@ type TransactionAddHandlerInput struct {
 	CategoryID  uint64     `json:"categoryID"`
 	Description string     `json:"description"`
 	IsIncome    bool       `json:"isIncome"`
-	OccurredOn  civil.Date `json:"occurredOn"`
+	OccurredOn  civil.Date `json:"occurredOn" swaggertype:"string"`
 }
 
 type TransactionAddHandlerOutput struct {
 	Item *TransactionOutput `json:"item"`
 }
 
+// TransactionAddHandler - add transaction
+// @Summary Add transaction
+// @Security BearerAuth
+// @Tags ledger
+// @Accept  json
+// @Produce  json
+// @Param request body TransactionAddHandlerInput true "JSON"
+// @Success 200 {object} TransactionAddHandlerOutput
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/transactions [post]
 func (ctrl *Controller) TransactionAddHandler(c *fiber.Ctx) error {
 	const op = "TransactionAddHandler"
 
