@@ -24,6 +24,11 @@ export function getMenu(): IMenu[] {
                     to: `/${module.urlName}/reports`,
                     subMenuSel: 'reports',
                 },
+                {
+                    name: 'Импорт',
+                    to: `/${module.urlName}/import`,
+                    subMenuSel: 'import',
+                },
             ],
         },
     ];
