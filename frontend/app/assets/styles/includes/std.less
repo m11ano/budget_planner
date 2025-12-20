@@ -1,0 +1,9 @@
+.std-wrapper(@top-pad:0, @bot-pad: 0, @top-sm-pad:0, @bot-sm-pad: 0) {
+    padding: @top-pad @std-x-padding @bot-pad @std-x-padding;
+    max-width: @std-block-width;
+    margin: 0 auto;
+
+    .width-size-sm-less({
+        padding: @top-sm-pad @std-x-padding-sm @bot-sm-pad @std-x-padding-sm;
+    });
+}

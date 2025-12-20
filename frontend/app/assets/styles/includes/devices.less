@@ -1,0 +1,19 @@
+.pointer-mouse(@content) {
+    @media (pointer: fine) {
+        @content();
+    }
+}
+
+.pointer-touch(@content) {
+    @media (pointer: coarse) {
+        @content();
+    }
+}
+
+.hover(@content) {
+    @media (hover: hover) {
+        &:hover {
+            @content();
+        }
+    }
+}

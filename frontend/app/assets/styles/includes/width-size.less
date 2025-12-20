@@ -1,0 +1,63 @@
+@size-sm: 576px;
+@size-md: 768px;
+@size-lg: 992px;
+@size-xl: 1200px;
+@size-xxl: 1600px;
+
+.width-size-more(@size, @content) {
+    @media screen and (min-width: (@size)) {
+        @content();
+    }
+}
+
+.width-size-less(@size, @content) {
+    @media screen and (max-width: (@size - 1px)) {
+        @content();
+    }
+}
+
+.width-size-equal-or-less(@size, @content) {
+    @media screen and (max-width: @size) {
+        @content();
+    }
+}
+
+.width-size-sm-more(@content) {
+    .width-size-more(@size-sm, @content);
+}
+
+.width-size-sm-less(@content) {
+    .width-size-less(@size-sm, @content);
+}
+
+.width-size-md-more(@content) {
+    .width-size-more(@size-md, @content);
+}
+
+.width-size-md-less(@content) {
+    .width-size-less(@size-md, @content);
+}
+
+.width-size-lg-more(@content) {
+    .width-size-more(@size-lg, @content);
+}
+
+.width-size-lg-less(@content) {
+    .width-size-less(@size-lg, @content);
+}
+
+.width-size-xl-more(@content) {
+    .width-size-more(@size-xl, @content);
+}
+
+.width-size-xl-less(@content) {
+    .width-size-less(@size-xl, @content);
+}
+
+.width-size-xxl-more(@content) {
+    .width-size-more(@size-xxl, @content);
+}
+
+.width-size-xxl-less(@content) {
+    .width-size-less(@size-xxl, @content);
+}

@@ -3,6 +3,7 @@ package budget
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"time"
 
 	"github.com/google/uuid"
@@ -86,6 +87,16 @@ func (uc *UsecaseImpl) CreateBudgetByDTO(
 		return nil, appErrors.Chainf(appErrors.ErrInternal, "%s.%s", uc.pkg, op)
 	}
 
+	base := context.WithoutCancel(ctx)
+	clrCtx, cancel := context.WithTimeout(base, time.Second*10)
+	go func(ctx context.Context) {
+		defer cancel()
+		err := uc.budgetCacheRepo.ClearForPrefixes(ctx, "Budget::FindList::AccountID:"+budget.AccountID.String())
+		if err != nil {
+			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis clear err", slog.Any("error", err))
+		}
+	}(clrCtx)
+
 	return budgetDTO[0], nil
 }
 
@@ -97,6 +108,8 @@ func (uc *UsecaseImpl) PatchBudgetByDTO(
 ) error {
 	const op = "PatchBudgetByDTO"
 
+	var accountID uuid.UUID
+
 	err := uc.dbMasterClient.DoWithIsoLvl(ctx, pgclient.Serializable, func(ctx context.Context) error {
 		budget, err := uc.budgetRepo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
 			ForUpdate: true,
@@ -104,6 +117,8 @@ func (uc *UsecaseImpl) PatchBudgetByDTO(
 		if err != nil {
 			return err
 		}
+
+		accountID = budget.AccountID
 
 		if auth.IsNeedToCheckRights(ctx) {
 			authData := auth.GetAuthData(ctx)
@@ -179,11 +194,27 @@ func (uc *UsecaseImpl) PatchBudgetByDTO(
 		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
 
+	base := context.WithoutCancel(ctx)
+	clrCtx, cancel := context.WithTimeout(base, time.Second*10)
+	go func(ctx context.Context) {
+		defer cancel()
+		err := uc.budgetCacheRepo.ClearForPrefixes(
+			ctx,
+			buildKeyForFindOneByID(id),
+			"Budget::FindList::AccountID:"+accountID.String(),
+		)
+		if err != nil {
+			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis clear err", slog.Any("error", err))
+		}
+	}(clrCtx)
+
 	return nil
 }
 
 func (uc *UsecaseImpl) DeleteBudgetByID(ctx context.Context, id uuid.UUID) error {
 	const op = "DeleteBudgetByID"
+
+	var accountID uuid.UUID
 
 	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
 		budget, err := uc.budgetRepo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
@@ -192,6 +223,8 @@ func (uc *UsecaseImpl) DeleteBudgetByID(ctx context.Context, id uuid.UUID) error
 		if err != nil {
 			return err
 		}
+
+		accountID = budget.AccountID
 
 		if auth.IsNeedToCheckRights(ctx) {
 			authData := auth.GetAuthData(ctx)
@@ -212,6 +245,16 @@ func (uc *UsecaseImpl) DeleteBudgetByID(ctx context.Context, id uuid.UUID) error
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
+
+	base := context.WithoutCancel(ctx)
+	clrCtx, cancel := context.WithTimeout(base, time.Second*10)
+	go func(ctx context.Context) {
+		defer cancel()
+		err := uc.budgetCacheRepo.ClearForPrefixes(ctx, "Budget::FindList::AccountID:"+accountID.String())
+		if err != nil {
+			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis clear err", slog.Any("error", err))
+		}
+	}(clrCtx)
 
 	return nil
 }

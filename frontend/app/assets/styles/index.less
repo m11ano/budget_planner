@@ -1,0 +1,41 @@
+@import '../fonts/Strong/stylesheet.css';
+
+@import 'reset.less';
+@import '@styles/includes';
+
+@import './themes';
+@import 'blocks.less';
+
+body {
+    //font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    //background-color: var(--body-bg-color);
+    color: var(--font-color-1);
+    font-size: 0.875rem;
+}
+
+:root {
+    color-scheme: light only;
+}
+
+@import './layouts/auth-layout.less';
+@import './layouts/guest-layout.less';
+
+/* Стартовый загрузчик сессии */
+
+#pageLoader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    > div {
+        font-size: 18px;
+    }
+}
+
+/* Стандартные элементы */
+
+button {
+    cursor: pointer;
+}

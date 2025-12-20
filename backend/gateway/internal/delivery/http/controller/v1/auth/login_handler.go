@@ -14,8 +14,8 @@ type LoginHandlerIn struct {
 }
 
 type LoginHandlerOut struct {
-	Tokens TokensOutDTO `json:"tokens"`
-	Accout AccountOutDTO `json:"accout"`
+	Tokens  TokensOutDTO  `json:"tokens"`
+	Account AccountOutDTO `json:"account"`
 }
 
 // LoginHandler - Login
@@ -53,7 +53,7 @@ func (ctrl *Controller) LoginHandler(c *fiber.Ctx) error {
 			AccessJWT:  data.Tokens.AccessJwt,
 			RefreshJWT: data.Tokens.RefreshJwt,
 		},
-		Accout: AccountOutDTO{
+		Account: AccountOutDTO{
 			ID:             data.Account.Id,
 			Email:          data.Account.Email,
 			ProfileName:    data.Account.ProfileName,

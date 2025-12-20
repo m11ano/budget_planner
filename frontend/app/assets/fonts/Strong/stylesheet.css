@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Strong';
+    src: url('Strong-Regular.woff2') format('woff2'),
+        url('Strong-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

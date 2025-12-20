@@ -119,4 +119,6 @@ type BudgetCacheRepository interface {
 	GetBudgetsPagedList(ctx context.Context, key string) (items []*entity.Budget, total uint64, err error)
 
 	GetBudget(ctx context.Context, key string) (item *entity.Budget, err error)
+
+	ClearForPrefixes(ctx context.Context, prefixes ...string) (err error)
 }
