@@ -15,7 +15,7 @@ type TransactionPatchHandlerInput struct {
 	Amount      *string     `json:"amount"`
 	CategoryID  *uint64     `json:"categoryID"`
 	Description *string     `json:"description"`
-	OccurredOn  *civil.Date `json:"occurredOn"`
+	OccurredOn  *civil.Date `json:"occurredOn" swaggertype:"string" example:"2025-12-20"`
 }
 
 type TransactionPatchHandlerOutput struct {

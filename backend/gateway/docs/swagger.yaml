@@ -163,8 +163,10 @@ definitions:
           $ref: '#/definitions/ledger.ReportOutputItem'
         type: array
       periodEnd:
+        example: "2025-12-20"
         type: string
       periodStart:
+        example: "2025-01-01"
         type: string
     type: object
   ledger.ReportOutputItem:
@@ -189,6 +191,7 @@ definitions:
       isIncome:
         type: boolean
       occurredOn:
+        example: "2025-12-20"
         type: string
     type: object
   ledger.TransactionAddHandlerOutput:
@@ -227,11 +230,22 @@ definitions:
       isIncome:
         type: boolean
       occurredOn:
+        example: "2025-12-20"
         type: string
       updatedAt:
         type: string
     type: object
   ledger.TransactionPatchHandlerInput:
+    properties:
+      amount:
+        type: string
+      categoryID:
+        type: integer
+      description:
+        type: string
+      occurredOn:
+        example: "2025-12-20"
+        type: string
     type: object
   ledger.TransactionPatchHandlerOutput:
     properties:

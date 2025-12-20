@@ -49,7 +49,7 @@ func LoadConfig(files ...string) Config {
 		if _, err := os.Stat(file); err == nil {
 			err := cleanenv.ReadConfig(file, &Config)
 			if err != nil {
-				log.Fatal("config file error", err)
+				log.Fatal("config file error ", err)
 			}
 		}
 	}

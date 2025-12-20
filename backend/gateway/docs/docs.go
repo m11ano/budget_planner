@@ -1035,10 +1035,12 @@ const docTemplate = `{
                     }
                 },
                 "periodEnd": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-12-20"
                 },
                 "periodStart": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-01-01"
                 }
             }
         },
@@ -1075,7 +1077,8 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "occurredOn": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-12-20"
                 }
             }
         },
@@ -1134,7 +1137,8 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "occurredOn": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-12-20"
                 },
                 "updatedAt": {
                     "type": "string"
@@ -1142,7 +1146,22 @@ const docTemplate = `{
             }
         },
         "ledger.TransactionPatchHandlerInput": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "categoryID": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "occurredOn": {
+                    "type": "string",
+                    "example": "2025-12-20"
+                }
+            }
         },
         "ledger.TransactionPatchHandlerOutput": {
             "type": "object",

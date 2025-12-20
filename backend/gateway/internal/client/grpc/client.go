@@ -88,6 +88,11 @@ func HeaderUnaryClientInterceptor(headers map[string]string) grpc.UnaryClientInt
 			md = md.Copy()
 		}
 
+		requestIP, ok := ctx.Value("requestIP").(string)
+		if ok && requestIP != "" {
+			md.Set("x-forwarded-for", requestIP)
+		}
+
 		accessToken, ok := auth.AccessToken(ctx)
 		if ok {
 			md.Set("authorization", "Bearer "+accessToken)

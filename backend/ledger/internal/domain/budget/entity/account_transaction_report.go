@@ -29,12 +29,7 @@ func (item *AccountTransactionReportItem) SpentBudget() (*decimal.Decimal, error
 		return nil, err
 	}
 
-	spentBudgetPart, err := decimal.One.Sub(spentBudget)
-	if err != nil {
-		return nil, err
-	}
-
-	spentBudgetPercents, err := spentBudgetPart.Mul(decimal.Hundred)
+	spentBudgetPercents, err := spentBudget.Mul(decimal.Hundred)
 	if err != nil {
 		return nil, err
 	}

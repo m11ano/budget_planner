@@ -1,0 +1,127 @@
+services:
+    nginx:
+        image: nginx:1.25-alpine
+        depends_on:
+            # - frontend-client
+            - service-gateway-app
+        volumes:
+            - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        restart: always
+        ports:
+            - "${NGINX_PORT:-8090}:80"
+        networks:
+            - internal
+
+    service-auth-db:
+        image: postgres:17
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: service-db
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U postgres -d service-db" ]
+            interval: 5s
+            timeout: 10s
+            retries: 5
+            start_period: 10s
+        restart: always
+        volumes:
+            - auth-db-data:/var/lib/postgresql/data
+        networks:
+            - internal
+
+    service-auth-app:
+        build:
+            context: ./backend
+            dockerfile: auth/deployment/backend.Dockerfile
+        environment:
+            TZ: Europe/Moscow
+            GLOBAL_SERVER_IP: ${SERVER_IP}
+            AUTH_JWT_ACCESS_SECRET: ${AUTH_JWT_ACCESS_SECRET}
+            AUTH_JWT_REFRESH_SECRET: ${AUTH_JWT_REFRESH_SECRET}
+            BACKEND_APP_BASE_IS_PROD: true
+            BACKEND_APP_BASE_USE_FX_LOGGER: false
+            BACKEND_APP_BASE_USE_LOGGER: true
+            BACKEND_APP_BASE_LOG_SQL_QUERIES: false
+            POSTGRES_MASTER_DSN: postgres://postgres:password@service-auth-db:5432/service-db
+        depends_on:
+            - service-auth-db
+        restart: always
+        networks:
+            - internal
+    service-ledger-db:
+        image: postgres:17
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: service-db
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U postgres -d service-db" ]
+            interval: 5s
+            timeout: 10s
+            retries: 5
+            start_period: 10s
+        restart: always
+        volumes:
+            - ledger-db-data:/var/lib/postgresql/data
+        networks:
+            - internal
+
+    service-ledger-redis:
+        image: redis/redis-stack-server:latest
+        volumes:
+            - ledger_redis_data:/data
+        restart: unless-stopped
+        networks:
+            - internal
+
+    service-ledger-app:
+        build:
+            context: ./backend
+            dockerfile: ledger/deployment/backend.Dockerfile
+        environment:
+            TZ: Europe/Moscow
+            GLOBAL_SERVER_IP: ${SERVER_IP}
+            AUTH_JWT_ACCESS_SECRET: ${AUTH_JWT_ACCESS_SECRET}
+            BACKEND_APP_BASE_IS_PROD: true
+            BACKEND_APP_BASE_USE_FX_LOGGER: false
+            BACKEND_APP_BASE_USE_LOGGER: true
+            BACKEND_APP_BASE_LOG_SQL_QUERIES: false
+            POSTGRES_MASTER_DSN: postgres://postgres:password@service-ledger-db:5432/service-db
+            REDIS_ADDR: service-ledger-redis:6379
+        depends_on:
+            - service-ledger-db
+        restart: always
+        networks:
+            - internal
+
+    service-gateway-app:
+        build:
+            context: ./backend
+            dockerfile: gateway/deployment/backend.Dockerfile
+        environment:
+            TZ: Europe/Moscow
+            GLOBAL_SERVER_IP: ${SERVER_IP}
+            AUTH_JWT_ACCESS_SECRET: ${AUTH_JWT_ACCESS_SECRET}
+            BACKEND_APP_BASE_IS_PROD: true
+            BACKEND_APP_BASE_USE_FX_LOGGER: false
+            BACKEND_APP_BASE_USE_LOGGER: true
+            BACKEND_APP_BASE_LOG_SQL_QUERIES: false
+            BACKEND_APP_BASE_LOG_HTTP: true
+            GRPC_AUTH_ADDR: service-auth-app:50051
+            GRPC_LEDGER_ADDR: service-ledger-app:50052
+        depends_on:
+            - service-ledger-app
+            - service-auth-app
+        restart: always
+        networks:
+            - internal
+
+networks:
+    internal:
+
+
+volumes:
+    auth-db-data:
+    ledger-db-data:
+    ledger_redis_data:
