@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"time"
 
 	"cloud.google.com/go/civil"
 	"github.com/google/uuid"
@@ -99,7 +100,7 @@ type TransactionUsecase interface {
 	CountReportItems(
 		ctx context.Context,
 		queryFilter CountReportItemsQueryFilter,
-	) (items []*entity.ReportItem, err error)
+	) (items []*entity.ReportItem, cacheHit bool, err error)
 }
 
 type TransactionRepository interface {
@@ -128,5 +129,11 @@ type TransactionRepository interface {
 	CountReportItems(
 		ctx context.Context,
 		queryFilter CountReportItemsQueryFilter,
-	) (items []*entity.TransactionReportItem, err error)
+	) (items []*entity.AccountTransactionReportItem, err error)
+}
+
+type TransactionRedisRepository interface {
+	SaveReports(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) (err error)
+
+	GetReports(ctx context.Context, key string) (items []*entity.ReportItem, err error)
 }

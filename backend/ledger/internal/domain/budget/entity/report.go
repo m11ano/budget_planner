@@ -9,5 +9,5 @@ type ReportItem struct {
 	AccountID uuid.UUID
 	DateFrom  civil.Date
 	DateTo    civil.Date
-	Items     []*TransactionReportItem
+	Items     []*AccountTransactionReportItem
 }

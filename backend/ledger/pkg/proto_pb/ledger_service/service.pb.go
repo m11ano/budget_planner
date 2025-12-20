@@ -1681,6 +1681,7 @@ func (x *ListReportsRequest) GetDateTo() *Date {
 type ListReportsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Reports       []*PeriodReport        `protobuf:"bytes,1,rep,name=reports,proto3" json:"reports,omitempty"`
+	HitCache      bool                   `protobuf:"varint,2,opt,name=hit_cache,json=hitCache,proto3" json:"hit_cache,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1720,6 +1721,13 @@ func (x *ListReportsResponse) GetReports() []*PeriodReport {
 		return x.Reports
 	}
 	return nil
+}
+
+func (x *ListReportsResponse) GetHitCache() bool {
+	if x != nil {
+		return x.HitCache
+	}
+	return false
 }
 
 var File_ledger_service_service_proto protoreflect.FileDescriptor
@@ -1861,9 +1869,10 @@ const file_ledger_service_service_proto_rawDesc = "" +
 	"\x14DeleteBudgetResponse\"|\n" +
 	"\x12ListReportsRequest\x124\n" +
 	"\tdate_from\x18\x01 \x01(\v2\x17.ledger_service.v1.DateR\bdateFrom\x120\n" +
-	"\adate_to\x18\x02 \x01(\v2\x17.ledger_service.v1.DateR\x06dateTo\"P\n" +
+	"\adate_to\x18\x02 \x01(\v2\x17.ledger_service.v1.DateR\x06dateTo\"m\n" +
 	"\x13ListReportsResponse\x129\n" +
-	"\areports\x18\x01 \x03(\v2\x1f.ledger_service.v1.PeriodReportR\areports2\xb2\t\n" +
+	"\areports\x18\x01 \x03(\v2\x1f.ledger_service.v1.PeriodReportR\areports\x12\x1b\n" +
+	"\thit_cache\x18\x02 \x01(\bR\bhitCache2\xb2\t\n" +
 	"\x06Ledger\x12e\n" +
 	"\x0eListCategories\x12(.ledger_service.v1.ListCategoriesRequest\x1a).ledger_service.v1.ListCategoriesResponse\x12k\n" +
 	"\x10ListTransactions\x12*.ledger_service.v1.ListTransactionsRequest\x1a+.ledger_service.v1.ListTransactionsResponse\x12e\n" +

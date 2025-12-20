@@ -7,8 +7,7 @@ import (
 	"github.com/samber/lo"
 )
 
-type TransactionReportItem struct {
-	AccountID    uuid.UUID
+type AccountTransactionReportItem struct {
 	Sum          *decimal.Decimal
 	Period       civil.Date
 	CategoryID   uint64
@@ -16,7 +15,7 @@ type TransactionReportItem struct {
 	BudgetAmount *decimal.Decimal
 }
 
-func (item *TransactionReportItem) SpentBudget() (*decimal.Decimal, error) {
+func (item *AccountTransactionReportItem) SpentBudget() (*decimal.Decimal, error) {
 	if item.Sum == nil || item.BudgetAmount == nil || item.BudgetAmount.IsZero() {
 		return nil, nil
 	}

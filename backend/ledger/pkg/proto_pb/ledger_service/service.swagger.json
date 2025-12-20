@@ -191,6 +191,9 @@
             "type": "object",
             "$ref": "#/definitions/v1PeriodReport"
           }
+        },
+        "hitCache": {
+          "type": "boolean"
         }
       }
     },

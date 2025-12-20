@@ -14,6 +14,7 @@ import (
 	"github.com/m11ano/budget_planner/backend/ledger/internal/infra/db"
 	"github.com/m11ano/budget_planner/backend/ledger/pkg/backoff"
 	"github.com/m11ano/budget_planner/backend/ledger/pkg/pgclient"
+	"github.com/redis/go-redis/v9"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"google.golang.org/grpc"
@@ -53,6 +54,11 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 					)
 				},
 			),
+			ProvidingRedisClient: fx.Provide(
+				func(cfg config.Config) *redis.Client {
+					return providing.NewRedisClient(cfg)
+				},
+			),
 			ProvidingIDBackoff:      fx.Provide(providing.NewBackoff),
 			ProvidingGRPCServer:     providing.DeliveryGRPC,
 			ProvidingIDBudgetModule: budget.FxModule,
@@ -74,6 +80,7 @@ type BAckendInvokeInput struct {
 	DBMasterClient db.MasterClient
 	BackoffCtrl    *backoff.Controller
 	GRPCServer     *grpc.Server
+	RedisClient    *redis.Client
 }
 
 func BackendAppInitInvoke(
@@ -126,6 +133,13 @@ func BackendAppInitInvoke(
 					}
 				}
 			}
+
+			// Запускаем redis
+			if err := in.RedisClient.Ping(ctx).Err(); err != nil {
+				return err
+			}
+
+			in.Logger.InfoContext(ctx, "successfully connected to Redis")
 
 			// Запускаем grpc сервер
 			if in.Cfg.BackendApp.GRPC.Port > 0 {

@@ -40,6 +40,10 @@ type Config struct {
 		JwtAccessSecret         string `yaml:"jwt_access_secret" env:"AUTH_JWT_ACCESS_SECRET"`
 		JwtRefreshSecret        string `yaml:"jwt_refresh_secret" env:"AUTH_JWT_REFRESH_SECRET"`
 	}
+	Redis struct {
+		Addr     string `yaml:"addr" env:"REDIS_ADDR"`
+		Password string `yaml:"password" env:"REDIS_PASSWORD"`
+	}
 }
 
 func LoadConfig(files ...string) Config {

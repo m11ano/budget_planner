@@ -60,7 +60,7 @@ func (c *controller) ListReports(
 		queryFilter.DateTo = &date
 	}
 
-	items, err := c.budgetFacade.Transaction.CountReportItems(
+	items, hitCache, err := c.budgetFacade.Transaction.CountReportItems(
 		ctx,
 		queryFilter,
 	)
@@ -69,7 +69,8 @@ func (c *controller) ListReports(
 	}
 
 	out := &desc.ListReportsResponse{
-		Reports: make([]*desc.PeriodReport, 0, len(items)),
+		Reports:  make([]*desc.PeriodReport, 0, len(items)),
+		HitCache: hitCache,
 	}
 
 	for _, item := range items {

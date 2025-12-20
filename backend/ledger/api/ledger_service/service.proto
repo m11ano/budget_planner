@@ -193,4 +193,5 @@ message ListReportsRequest {
 
 message ListReportsResponse {
   repeated PeriodReport reports = 1;
+  bool hit_cache = 2;
 }

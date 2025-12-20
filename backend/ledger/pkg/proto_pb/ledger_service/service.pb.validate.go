@@ -4084,6 +4084,8 @@ func (m *ListReportsResponse) validate(all bool) error {
 
 	}
 
+	// no validation rules for HitCache
+
 	if len(errors) > 0 {
 		return ListReportsResponseMultiError(errors)
 	}

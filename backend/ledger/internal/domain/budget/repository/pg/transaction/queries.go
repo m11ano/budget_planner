@@ -304,7 +304,7 @@ func (r *Repository) FindOneByID(
 func (r *Repository) CountReportItems(
 	ctx context.Context,
 	queryFilter usecase.CountReportItemsQueryFilter,
-) ([]*entity.TransactionReportItem, error) {
+) ([]*entity.AccountTransactionReportItem, error) {
 	const op = "CountReportItems"
 
 	type reportRow struct {
@@ -391,10 +391,9 @@ func (r *Repository) CountReportItems(
 		return nil, appErrors.Chainf(convErr, "%s.%s", r.pkg, op)
 	}
 
-	result := make([]*entity.TransactionReportItem, 0, len(dbData))
+	result := make([]*entity.AccountTransactionReportItem, 0, len(dbData))
 	for _, it := range dbData {
-		result = append(result, &entity.TransactionReportItem{
-			AccountID:    it.AccountID,
+		result = append(result, &entity.AccountTransactionReportItem{
 			Sum:          &it.Sum,
 			Period:       it.Period,
 			CategoryID:   it.CategoryID,

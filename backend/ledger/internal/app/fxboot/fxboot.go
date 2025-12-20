@@ -25,6 +25,9 @@ const (
 	// ProvidingIDDBClients - db clients
 	ProvidingIDDBClients
 
+	// ProvidingIDRedisClient - redis
+	ProvidingRedisClient
+
 	// ProvidingIDBackoff - backoff
 	ProvidingIDBackoff
 

@@ -2,14 +2,17 @@ package transaction
 
 import (
 	"context"
-	"fmt"
+	"errors"
+	"log/slog"
 	"slices"
+	"time"
 
 	"cloud.google.com/go/civil"
 	"github.com/google/uuid"
 	"github.com/m11ano/budget_planner/backend/ledger/internal/common/uctypes"
 	"github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/entity"
 	"github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase"
+	"github.com/m11ano/budget_planner/backend/ledger/internal/infra/loghandler"
 	"github.com/m11ano/budget_planner/backend/ledger/pkg/pgclient"
 	"github.com/samber/lo"
 
@@ -104,7 +107,64 @@ func (uc *UsecaseImpl) FindListInMap(
 	return result, nil
 }
 
+type CountReportItemsSFResult struct {
+	Items    []*entity.ReportItem
+	HitCache bool
+}
+
+var reportsCacheTTL = time.Second * 30
+
 func (uc *UsecaseImpl) CountReportItems(
+	ctx context.Context,
+	queryFilter usecase.CountReportItemsQueryFilter,
+) ([]*entity.ReportItem, bool, error) {
+	const op = "CountReportItems"
+
+	key := buildKeyForCountReportItems(queryFilter)
+
+	result, err, _ := uc.sfGroup.Do(key, func() (any, error) {
+		cacheItems, err := uc.transactionRedisRepo.GetReports(ctx, key)
+		if err == nil {
+			uc.logger.InfoContext(ctx, "CountReportItems cache hit", slog.Any("key", key))
+
+			return CountReportItemsSFResult{
+				Items:    cacheItems,
+				HitCache: true,
+			}, nil
+		} else if !errors.Is(err, appErrors.ErrNotFound) {
+			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis get err", slog.Any("error", err))
+		}
+
+		uc.logger.InfoContext(ctx, "CountReportItems cache miss", slog.Any("key", key))
+
+		items, err := uc.countReportItems(ctx, queryFilter)
+		if err != nil {
+			return nil, err
+		}
+
+		err = uc.transactionRedisRepo.SaveReports(ctx, key, items, &reportsCacheTTL)
+		if err != nil {
+			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis save err", slog.Any("error", err))
+		}
+
+		return CountReportItemsSFResult{
+			Items:    items,
+			HitCache: false,
+		}, nil
+	})
+	if err != nil {
+		return nil, false, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	sfResult, ok := result.(CountReportItemsSFResult)
+	if !ok {
+		return nil, false, appErrors.Chainf(appErrors.ErrInternal, "%s.%s", uc.pkg, op)
+	}
+
+	return sfResult.Items, sfResult.HitCache, nil
+}
+
+func (uc *UsecaseImpl) countReportItems(
 	ctx context.Context,
 	queryFilter usecase.CountReportItemsQueryFilter,
 ) ([]*entity.ReportItem, error) {
@@ -138,7 +198,7 @@ func (uc *UsecaseImpl) CountReportItems(
 			return err
 		}
 
-		slices.SortFunc(txReportItems, func(a, b *entity.TransactionReportItem) int {
+		slices.SortFunc(txReportItems, func(a, b *entity.AccountTransactionReportItem) int {
 			return a.Period.Compare(b.Period)
 		})
 
@@ -179,12 +239,10 @@ func (uc *UsecaseImpl) CountReportItems(
 			return err
 		}
 
-		fmt.Printf("%#v\n", budgets)
-
 		for p := periodStart; p.Compare(periodEnd) <= 0; p = p.AddMonths(1) {
 			item := &entity.ReportItem{
 				AccountID: queryFilter.AccountID,
-				Items:     make([]*entity.TransactionReportItem, 0),
+				Items:     make([]*entity.AccountTransactionReportItem, 0),
 			}
 
 			if p.Compare(periodStart) == 0 {
@@ -200,14 +258,14 @@ func (uc *UsecaseImpl) CountReportItems(
 			}
 
 			for _, category := range categories {
-				itemInReports, ok := lo.Find(txReportItems, func(item *entity.TransactionReportItem) bool {
+				itemInReports, ok := lo.Find(txReportItems, func(item *entity.AccountTransactionReportItem) bool {
 					return item.Period.Compare(p) == 0 && item.CategoryID == category.ID
 				})
 
 				if ok {
 					item.Items = append(item.Items, itemInReports)
 				} else {
-					repItem := &entity.TransactionReportItem{
+					repItem := &entity.AccountTransactionReportItem{
 						Period:     p,
 						CategoryID: category.ID,
 					}
