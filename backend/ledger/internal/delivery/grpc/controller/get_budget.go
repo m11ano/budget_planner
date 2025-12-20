@@ -22,13 +22,14 @@ func (c *controller) GetBudget(ctx context.Context, req *desc.GetBudgetRequest) 
 		return nil, appErrors.Chainf(appErrors.ErrBadRequest.WithWrap(err).WithHints("invalid id"), "%s.%s", c.pkg, op)
 	}
 
-	itemDTO, err := c.budgetFacade.Budget.FindOneByID(ctx, budgetID, nil)
+	itemDTO, hitCache, err := c.budgetFacade.Budget.FindOneByID(ctx, budgetID, nil)
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", c.pkg, op)
 	}
 
 	out := &desc.GetBudgetResponse{
-		Item: BudgetToProto(itemDTO),
+		Item:     BudgetToProto(itemDTO),
+		HitCache: hitCache,
 	}
 
 	return out, nil

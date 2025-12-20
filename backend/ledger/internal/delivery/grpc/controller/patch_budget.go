@@ -9,6 +9,7 @@ import (
 	"github.com/govalues/decimal"
 	"github.com/m11ano/budget_planner/backend/auth/pkg/auth"
 	appErrors "github.com/m11ano/budget_planner/backend/ledger/internal/app/errors"
+	"github.com/m11ano/budget_planner/backend/ledger/internal/common/uctypes"
 	budgetUC "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase"
 	desc "github.com/m11ano/budget_planner/backend/ledger/pkg/proto_pb/ledger_service"
 	"github.com/samber/lo"
@@ -64,7 +65,9 @@ func (c *controller) PatchBudget(ctx context.Context, req *desc.PatchBudgetReque
 		return nil, appErrors.Chainf(err, "%s.%s", c.pkg, op)
 	}
 
-	itemDTO, err := c.budgetFacade.Budget.FindOneByID(ctx, budgetID, nil)
+	itemDTO, _, err := c.budgetFacade.Budget.FindOneByID(ctx, budgetID, &uctypes.QueryGetOneParams{
+		SkipCache: true,
+	})
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", c.pkg, op)
 	}

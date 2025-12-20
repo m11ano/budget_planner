@@ -1194,6 +1194,7 @@ type ListBudgetsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Items         []*Budget              `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
 	Total         int64                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	HitCache      bool                   `protobuf:"varint,3,opt,name=hit_cache,json=hitCache,proto3" json:"hit_cache,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1240,6 +1241,13 @@ func (x *ListBudgetsResponse) GetTotal() int64 {
 		return x.Total
 	}
 	return 0
+}
+
+func (x *ListBudgetsResponse) GetHitCache() bool {
+	if x != nil {
+		return x.HitCache
+	}
+	return false
 }
 
 type GetBudgetRequest struct {
@@ -1289,6 +1297,7 @@ func (x *GetBudgetRequest) GetId() string {
 type GetBudgetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Item          *Budget                `protobuf:"bytes,1,opt,name=item,proto3" json:"item,omitempty"`
+	HitCache      bool                   `protobuf:"varint,2,opt,name=hit_cache,json=hitCache,proto3" json:"hit_cache,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1328,6 +1337,13 @@ func (x *GetBudgetResponse) GetItem() *Budget {
 		return x.Item
 	}
 	return nil
+}
+
+func (x *GetBudgetResponse) GetHitCache() bool {
+	if x != nil {
+		return x.HitCache
+	}
+	return false
 }
 
 type AddBudgetRequest struct {
@@ -1838,14 +1854,16 @@ const file_ledger_service_service_proto_rawDesc = "" +
 	"\x12filter_period_from\x18\x03 \x01(\v2\x1c.ledger_service.v1.DateMonthH\x00R\x10filterPeriodFrom\x88\x01\x01\x12K\n" +
 	"\x10filter_period_to\x18\x04 \x01(\v2\x1c.ledger_service.v1.DateMonthH\x01R\x0efilterPeriodTo\x88\x01\x01B\x15\n" +
 	"\x13_filter_period_fromB\x13\n" +
-	"\x11_filter_period_to\"\\\n" +
+	"\x11_filter_period_to\"y\n" +
 	"\x13ListBudgetsResponse\x12/\n" +
 	"\x05items\x18\x01 \x03(\v2\x19.ledger_service.v1.BudgetR\x05items\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x03R\x05total\"\"\n" +
+	"\x05total\x18\x02 \x01(\x03R\x05total\x12\x1b\n" +
+	"\thit_cache\x18\x03 \x01(\bR\bhitCache\"\"\n" +
 	"\x10GetBudgetRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"B\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"_\n" +
 	"\x11GetBudgetResponse\x12-\n" +
-	"\x04item\x18\x01 \x01(\v2\x19.ledger_service.v1.BudgetR\x04item\"\x81\x01\n" +
+	"\x04item\x18\x01 \x01(\v2\x19.ledger_service.v1.BudgetR\x04item\x12\x1b\n" +
+	"\thit_cache\x18\x02 \x01(\bR\bhitCache\"\x81\x01\n" +
 	"\x10AddBudgetRequest\x124\n" +
 	"\x06period\x18\x01 \x01(\v2\x1c.ledger_service.v1.DateMonthR\x06period\x12\x1f\n" +
 	"\vcategory_id\x18\x02 \x01(\x03R\n" +

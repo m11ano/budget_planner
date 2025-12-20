@@ -75,7 +75,7 @@ func (c *controller) ListBudgets(
 		listOptions.FilterPeriodTo = &occuredOn
 	}
 
-	items, total, err := c.budgetFacade.Budget.FindPagedList(
+	items, total, hitCache, err := c.budgetFacade.Budget.FindPagedList(
 		ctx,
 		listOptions,
 		&uctypes.QueryGetListParams{
@@ -88,8 +88,9 @@ func (c *controller) ListBudgets(
 	}
 
 	out := &desc.ListBudgetsResponse{
-		Items: make([]*desc.Budget, 0, len(items)),
-		Total: int64(total),
+		Items:    make([]*desc.Budget, 0, len(items)),
+		Total:    int64(total),
+		HitCache: hitCache,
 	}
 
 	for _, item := range items {

@@ -1,6 +1,7 @@
 package uctypes
 
 type QueryGetListParams struct {
+	SkipCache           bool
 	WithDeleted         bool
 	ForShare            bool
 	ForUpdate           bool
@@ -11,6 +12,7 @@ type QueryGetListParams struct {
 }
 
 type QueryGetOneParams struct {
+	SkipCache           bool
 	WithDeleted         bool
 	ForShare            bool
 	ForUpdate           bool

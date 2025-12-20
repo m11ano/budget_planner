@@ -6,6 +6,7 @@ import (
 	budgetRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/pg/budget"
 	categoryRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/pg/category"
 	transactionRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/pg/transaction"
+	budgetRedisRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/redis/budget"
 	transactionRedisRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/redis/transaction"
 	"github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase"
 	budgetUC "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase/budget"
@@ -31,7 +32,11 @@ var FxModule = fx.Module(
 	),
 	fx.Provide(
 		fx.Private,
-		fx.Annotate(transactionRedisRepo.NewRepository, fx.As(new(usecase.TransactionRedisRepository))),
+		fx.Annotate(transactionRedisRepo.NewRepository, fx.As(new(usecase.TransactionCacheRepository))),
+	),
+	fx.Provide(
+		fx.Private,
+		fx.Annotate(budgetRedisRepo.NewRepository, fx.As(new(usecase.BudgetCacheRepository))),
 	),
 
 	// usecases

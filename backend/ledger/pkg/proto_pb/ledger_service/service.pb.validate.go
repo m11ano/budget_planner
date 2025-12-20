@@ -2809,6 +2809,8 @@ func (m *ListBudgetsResponse) validate(all bool) error {
 
 	// no validation rules for Total
 
+	// no validation rules for HitCache
+
 	if len(errors) > 0 {
 		return ListBudgetsResponseMultiError(errors)
 	}
@@ -3041,6 +3043,8 @@ func (m *GetBudgetResponse) validate(all bool) error {
 			}
 		}
 	}
+
+	// no validation rules for HitCache
 
 	if len(errors) > 0 {
 		return GetBudgetResponseMultiError(errors)

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"time"
 
 	"cloud.google.com/go/civil"
 	"github.com/google/uuid"
@@ -50,32 +51,19 @@ type BudgetUsecase interface {
 		ctx context.Context,
 		id uuid.UUID,
 		queryParams *uctypes.QueryGetOneParams,
-	) (resItem *BudgetDTO, resErr error)
-
-	FindOneByParams(
-		ctx context.Context,
-		accountID uuid.UUID,
-		period civil.Date,
-		categoryID uint64,
-	) (resItem *BudgetDTO, resErr error)
+	) (resItem *BudgetDTO, cacheHit bool, resErr error)
 
 	FindList(
 		ctx context.Context,
 		listOptions *BudgetListOptions,
 		queryParams *uctypes.QueryGetListParams,
-	) (resItems []*BudgetDTO, resErr error)
+	) (resItems []*BudgetDTO, cacheHit bool, resErr error)
 
 	FindPagedList(
 		ctx context.Context,
 		listOptions *BudgetListOptions,
 		queryParams *uctypes.QueryGetListParams,
-	) (resItems []*BudgetDTO, total uint64, resErr error)
-
-	FindListInMap(
-		ctx context.Context,
-		listOptions *BudgetListOptions,
-		queryParams *uctypes.QueryGetListParams,
-	) (resItems map[uuid.UUID]*BudgetDTO, resErr error)
+	) (resItems []*BudgetDTO, total uint64, cacheHit bool, resErr error)
 
 	CreateBudgetByDTO(
 		ctx context.Context,
@@ -117,4 +105,18 @@ type BudgetRepository interface {
 	Create(ctx context.Context, item *entity.Budget) (err error)
 
 	Update(ctx context.Context, item *entity.Budget) (err error)
+}
+
+type BudgetCacheRepository interface {
+	SaveBudgetsList(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration) (err error)
+
+	SaveBudgetsPagedList(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl *time.Duration) (err error)
+
+	SaveBudget(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration) (err error)
+
+	GetBudgetsList(ctx context.Context, key string) (items []*entity.Budget, err error)
+
+	GetBudgetsPagedList(ctx context.Context, key string) (items []*entity.Budget, total uint64, err error)
+
+	GetBudget(ctx context.Context, key string) (item *entity.Budget, err error)
 }

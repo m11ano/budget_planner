@@ -143,6 +143,9 @@
       "properties": {
         "item": {
           "$ref": "#/definitions/v1Budget"
+        },
+        "hitCache": {
+          "type": "boolean"
         }
       }
     },
@@ -167,6 +170,9 @@
         "total": {
           "type": "string",
           "format": "int64"
+        },
+        "hitCache": {
+          "type": "boolean"
         }
       }
     },

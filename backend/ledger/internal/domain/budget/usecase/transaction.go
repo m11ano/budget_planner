@@ -132,7 +132,7 @@ type TransactionRepository interface {
 	) (items []*entity.AccountTransactionReportItem, err error)
 }
 
-type TransactionRedisRepository interface {
+type TransactionCacheRepository interface {
 	SaveReports(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) (err error)
 
 	GetReports(ctx context.Context, key string) (items []*entity.ReportItem, err error)

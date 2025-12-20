@@ -29,7 +29,7 @@ func (uc *UsecaseImpl) entitiesToDTO(
 func buildKeyForCountReportItems(queryFilter usecase.CountReportItemsQueryFilter) string {
 	var strBuilder strings.Builder
 
-	strBuilder.WriteString("CountReportItems::")
+	strBuilder.WriteString("Transaction::CountReportItems::")
 
 	strBuilder.WriteString(queryFilter.AccountID.String())
 

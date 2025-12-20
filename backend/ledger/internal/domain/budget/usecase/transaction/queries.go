@@ -9,6 +9,7 @@ import (
 
 	"cloud.google.com/go/civil"
 	"github.com/google/uuid"
+	"github.com/m11ano/budget_planner/backend/auth/pkg/auth"
 	"github.com/m11ano/budget_planner/backend/ledger/internal/common/uctypes"
 	"github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/entity"
 	"github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase"
@@ -29,6 +30,13 @@ func (uc *UsecaseImpl) FindOneByID(
 	item, err := uc.transactionRepo.FindOneByID(ctx, id, queryParams)
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	if auth.IsNeedToCheckRights(ctx) {
+		authData := auth.GetAuthData(ctx)
+		if authData == nil || authData.AccountID != item.AccountID {
+			return nil, appErrors.ErrForbidden
+		}
 	}
 
 	dto, err := uc.entitiesToDTO(ctx, []*entity.Transaction{item})
@@ -123,7 +131,7 @@ func (uc *UsecaseImpl) CountReportItems(
 	key := buildKeyForCountReportItems(queryFilter)
 
 	result, err, _ := uc.sfGroup.Do(key, func() (any, error) {
-		cacheItems, err := uc.transactionRedisRepo.GetReports(ctx, key)
+		cacheItems, err := uc.transactionCacheRepo.GetReports(ctx, key)
 		if err == nil {
 			uc.logger.InfoContext(ctx, "CountReportItems cache hit", slog.Any("key", key))
 
@@ -142,7 +150,7 @@ func (uc *UsecaseImpl) CountReportItems(
 			return nil, err
 		}
 
-		err = uc.transactionRedisRepo.SaveReports(ctx, key, items, &reportsCacheTTL)
+		err = uc.transactionCacheRepo.SaveReports(ctx, key, items, &reportsCacheTTL)
 		if err != nil {
 			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis save err", slog.Any("error", err))
 		}
