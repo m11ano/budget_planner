@@ -11,6 +11,15 @@ type TransactionGetHandlerOutput struct {
 	Item *TransactionOutput `json:"item"`
 }
 
+// TransactionGetHandler - get transaction
+// @Summary Get transaction
+// @Security BearerAuth
+// @Tags ledger
+// @Produce  json
+// @Param id path string true "ID"
+// @Success 200 {object} TransactionGetHandlerOutput
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/transactions/{id} [get]
 func (ctrl *Controller) TransactionGetHandler(c *fiber.Ctx) error {
 	const op = "TransactionGetHandler"
 

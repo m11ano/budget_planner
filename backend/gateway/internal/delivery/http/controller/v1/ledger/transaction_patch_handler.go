@@ -22,6 +22,17 @@ type TransactionPatchHandlerOutput struct {
 	Item *TransactionOutput `json:"item"`
 }
 
+// TransactionPatchHandler - patch transaction
+// @Summary Patch transaction
+// @Security BearerAuth
+// @Tags ledger
+// @Accept  json
+// @Produce  json
+// @Param request body TransactionPatchHandlerInput true "JSON"
+// @Param id path string true "ID"
+// @Success 200 {object} TransactionPatchHandlerOutput
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/transactions/{id} [patch]
 func (ctrl *Controller) TransactionPatchHandler(c *fiber.Ctx) error {
 	const op = "TransactionPatchHandler"
 

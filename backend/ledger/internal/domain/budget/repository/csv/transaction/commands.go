@@ -22,7 +22,7 @@ func (r *Repository) ItemsToCSV(ctx context.Context, items []*usecase.Transactio
 	buf := &bytes.Buffer{}
 	writer := csv.NewWriter(buf)
 
-	buf.WriteString("\ufeff")
+	buf.Write([]byte{0xEF, 0xBB, 0xBF})
 
 	headers := []string{
 		"ID",

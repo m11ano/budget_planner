@@ -460,6 +460,60 @@
             }
         },
         "/ledger/transactions": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ledger"
+                ],
+                "summary": "List transactions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Фильтр по дате ОТ в формате 2025-01-30 (год-месяц-день)",
+                        "name": "date_from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Фильтр по дате ДО в формате 2025-01-30 (год-месяц-день)",
+                        "name": "date_to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ledger.TransactionListHandlerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/middleware.ErrorJSON"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -556,7 +610,90 @@
                 }
             }
         },
+        "/ledger/transactions/import": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upload CSV file with transactions for import",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ledger"
+                ],
+                "summary": "Import transactions from CSV",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "CSV file with transactions",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Import started / completed successfully"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/middleware.ErrorJSON"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/middleware.ErrorJSON"
+                        }
+                    }
+                }
+            }
+        },
         "/ledger/transactions/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ledger"
+                ],
+                "summary": "Get transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ledger.TransactionGetHandlerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/middleware.ErrorJSON"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -579,6 +716,55 @@
                 "responses": {
                     "200": {
                         "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/middleware.ErrorJSON"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ledger"
+                ],
+                "summary": "Patch transaction",
+                "parameters": [
+                    {
+                        "description": "JSON",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ledger.TransactionPatchHandlerInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ledger.TransactionPatchHandlerOutput"
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
@@ -894,6 +1080,28 @@
                 }
             }
         },
+        "ledger.TransactionGetHandlerOutput": {
+            "type": "object",
+            "properties": {
+                "item": {
+                    "$ref": "#/definitions/ledger.TransactionOutput"
+                }
+            }
+        },
+        "ledger.TransactionListHandlerOutput": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ledger.TransactionOutput"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "ledger.TransactionOutput": {
             "type": "object",
             "properties": {
@@ -923,6 +1131,17 @@
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "ledger.TransactionPatchHandlerInput": {
+            "type": "object"
+        },
+        "ledger.TransactionPatchHandlerOutput": {
+            "type": "object",
+            "properties": {
+                "item": {
+                    "$ref": "#/definitions/ledger.TransactionOutput"
                 }
             }
         },

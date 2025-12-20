@@ -69,8 +69,8 @@ func (ctrl *Controller) TransactionExportHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.FromGRPCError(err), "%s.%s", ctrl.pkg, op)
 	}
 
-	c.Set(fiber.HeaderContentType, "text/csv; charset=utf-8")
-	c.Set(fiber.HeaderContentDisposition, `attachment; filename="transactions.csv"`)
+	c.Set("Content-Type", "text/csv; charset=utf-8")
+	c.Attachment("transactions.csv")
 	c.Set("Cache-Control", "no-store")
 
 	return c.Send(data.Data)

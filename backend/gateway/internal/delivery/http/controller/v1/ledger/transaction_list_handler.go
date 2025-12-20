@@ -12,6 +12,18 @@ type TransactionListHandlerOutput struct {
 	Total int64                `json:"total"`
 }
 
+// TransactionListHandler - list transactions
+// @Summary List transactions
+// @Security BearerAuth
+// @Tags ledger
+// @Param date_from query string false "Фильтр по дате ОТ в формате 2025-01-30 (год-месяц-день)"
+// @Param date_to query string false "Фильтр по дате ДО в формате 2025-01-30 (год-месяц-день)"
+// @Param limit query int false "Limit"
+// @Param offset query int false "Offset"
+// @Produce json
+// @Success 200 {object} TransactionListHandlerOutput
+// @Failure 400 {object} middleware.ErrorJSON
+// @Router /ledger/transactions [get]
 func (ctrl *Controller) TransactionListHandler(c *fiber.Ctx) error {
 	const op = "TransactionListHandler"
 

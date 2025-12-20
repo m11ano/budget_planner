@@ -17,6 +17,8 @@ backend_app:
         prefix: "api"
         under_proxy: false
         stop_timeout_sec: 3
+        cors_allow_origins:
+            - "*"
 
 auth:
     jwt_access_secret:
