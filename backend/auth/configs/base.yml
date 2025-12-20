@@ -21,7 +21,7 @@ postgres:
         dsn:
 
 auth:
-    access_token_lifetime_sec: 900
+    access_token_lifetime_sec: 3600
     refresh_token_lifetime_hours: 720
     jwt_access_secret:
     jwt_refresh_secret:

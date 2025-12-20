@@ -7,8 +7,13 @@ import (
 	desc "github.com/m11ano/budget_planner/backend/gateway/pkg/proto_pb/ledger_service"
 )
 
-func (ctrl *Controller) TransactionExportHandler(c *fiber.Ctx) error {
-	const op = "TransactionExportHandler"
+type TransactionListHandlerOutput struct {
+	Items []*TransactionOutput `json:"items"`
+	Total int64                `json:"total"`
+}
+
+func (ctrl *Controller) TransactionListHandler(c *fiber.Ctx) error {
+	const op = "TransactionListHandler"
 
 	limit := c.QueryInt("limit", 100)
 	offset := c.QueryInt("offset", 0)
@@ -52,14 +57,19 @@ func (ctrl *Controller) TransactionExportHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	data, err := ctrl.ledgerAdapter.Api().CSVExportTransactions(c.Context(), request)
+	data, err := ctrl.ledgerAdapter.Api().ListTransactions(c.Context(), request)
 	if err != nil {
 		return appErrors.Chainf(appErrors.FromGRPCError(err), "%s.%s", ctrl.pkg, op)
 	}
 
-	c.Set(fiber.HeaderContentType, "text/csv; charset=utf-8")
-	c.Set(fiber.HeaderContentDisposition, `attachment; filename="transactions.csv"`)
-	c.Set("Cache-Control", "no-store")
+	out := TransactionListHandlerOutput{
+		Items: make([]*TransactionOutput, 0, len(data.Items)),
+		Total: data.Total,
+	}
 
-	return c.Send(data.Data)
+	for _, data := range data.Items {
+		out.Items = append(out.Items, NewTransactionOutput(data))
+	}
+
+	return c.JSON(out)
 }

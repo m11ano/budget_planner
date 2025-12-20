@@ -1,4 +1,4 @@
-package controller
+package ledger
 
 import (
 	"time"
@@ -11,4 +11,12 @@ func toProtoTimestamp(t *time.Time) *timestamppb.Timestamp {
 		return nil
 	}
 	return timestamppb.New(*t)
+}
+
+func fromProtoTimestamp(ts *timestamppb.Timestamp) *time.Time {
+	if ts == nil {
+		return nil
+	}
+	t := ts.AsTime()
+	return &t
 }

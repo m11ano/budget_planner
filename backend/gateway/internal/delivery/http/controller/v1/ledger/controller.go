@@ -39,4 +39,26 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, mdwr *middleware.Contro
 	routeGroup.Get("/transactions/export", ctrl.TransactionExportHandler)
 
 	routeGroup.Post("/transactions/import", ctrl.TransactionImportHandler)
+
+	routeGroup.Get("/transactions", ctrl.TransactionListHandler)
+
+	routeGroup.Get("/transactions/:id<guid>", ctrl.TransactionGetHandler)
+
+	routeGroup.Post("/transactions", ctrl.TransactionAddHandler)
+
+	routeGroup.Patch("/transactions/:id<guid>", ctrl.TransactionPatchHandler)
+
+	routeGroup.Delete("/transactions/:id<guid>", ctrl.TransactionDeleteHandler)
+
+	routeGroup.Get("/budgets", ctrl.BudgetListHandler)
+
+	routeGroup.Get("/budgets/:id<guid>", ctrl.BudgetGetHandler)
+
+	routeGroup.Post("/budgets", ctrl.BudgetAddHandler)
+
+	routeGroup.Patch("/budgets/:id<guid>", ctrl.BudgetPatchHandler)
+
+	routeGroup.Delete("/budgets/:id<guid>", ctrl.BudgetDeleteHandler)
+
+	routeGroup.Get("/categories", ctrl.CategoryListHandler)
 }
