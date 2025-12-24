@@ -29,7 +29,7 @@ goose-down:
 	goose -dir $(CURDIR)/migrations/sql postgres "$(DB_DSN)" down
 
 test:
-	go test -covermode=atomic -coverprofile=coverage.out ./... && go tool cover -html=coverage.out -o coverage.html
+	go test -covermode=atomic -coverpkg=./internal/domain/auth/usecase/account,./internal/domain/auth/usecase/auth,./internal/domain/auth/usecase/session -coverprofile=coverage.out ./... && go tool cover -html=coverage.out -o coverage.html
 
 test-cov:
 	$(MAKE) test && go tool cover -func=coverage.out
