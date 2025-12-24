@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/google/uuid"
+	appErrors "github.com/m11ano/budget_planner/backend/ledger/internal/app/errors"
 	"github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/entity"
 	"github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase"
 	"github.com/samber/lo"
@@ -44,6 +46,22 @@ func (uc *UsecaseImpl) entitiesToDTO(
 	}
 
 	return out, nil
+}
+
+func (uc *UsecaseImpl) clearCacheForAccoutID(ctx context.Context, accountID uuid.UUID) error {
+	const op = "clearCacheForAccoutID"
+
+	err := uc.transactionCacheRepo.ClearForPrefixes(
+		ctx,
+		buildKeyForCountReportItems(usecase.CountReportItemsQueryFilter{
+			AccountID: accountID,
+		}),
+	)
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	return nil
 }
 
 func buildKeyForCountReportItems(queryFilter usecase.CountReportItemsQueryFilter) string {

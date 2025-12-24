@@ -85,6 +85,7 @@ type TransactionUsecase interface {
 	CreateTransactionByDTO(
 		ctx context.Context,
 		in CreateTransactionDataInput,
+		skipCacheClear bool,
 	) (resTransactionDTO *TransactionDTO, resErr error)
 
 	PatchTransactionByDTO(
@@ -149,9 +150,11 @@ type TransactionRepository interface {
 
 //go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.TransactionCacheRepository -o mocks/transaction_cache_repository.go
 type TransactionCacheRepository interface {
-	SaveReports(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) (err error)
+	SaveReports(ctx context.Context, key string, items []*entity.ReportItem, ttl time.Duration) (err error)
 
 	GetReports(ctx context.Context, key string) (items []*entity.ReportItem, err error)
+
+	ClearForPrefixes(ctx context.Context, prefixes ...string) (err error)
 }
 
 //go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.TransactionCSVRepository -o mocks/transaction_csv_repository.go

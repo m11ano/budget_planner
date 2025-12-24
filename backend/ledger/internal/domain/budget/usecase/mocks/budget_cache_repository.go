@@ -48,23 +48,23 @@ type BudgetCacheRepositoryMock struct {
 	beforeGetBudgetsPagedListCounter uint64
 	GetBudgetsPagedListMock          mBudgetCacheRepositoryMockGetBudgetsPagedList
 
-	funcSaveBudget          func(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration) (err error)
+	funcSaveBudget          func(ctx context.Context, key string, item *entity.Budget, ttl time.Duration) (err error)
 	funcSaveBudgetOrigin    string
-	inspectFuncSaveBudget   func(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration)
+	inspectFuncSaveBudget   func(ctx context.Context, key string, item *entity.Budget, ttl time.Duration)
 	afterSaveBudgetCounter  uint64
 	beforeSaveBudgetCounter uint64
 	SaveBudgetMock          mBudgetCacheRepositoryMockSaveBudget
 
-	funcSaveBudgetsList          func(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration) (err error)
+	funcSaveBudgetsList          func(ctx context.Context, key string, items []*entity.Budget, ttl time.Duration) (err error)
 	funcSaveBudgetsListOrigin    string
-	inspectFuncSaveBudgetsList   func(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration)
+	inspectFuncSaveBudgetsList   func(ctx context.Context, key string, items []*entity.Budget, ttl time.Duration)
 	afterSaveBudgetsListCounter  uint64
 	beforeSaveBudgetsListCounter uint64
 	SaveBudgetsListMock          mBudgetCacheRepositoryMockSaveBudgetsList
 
-	funcSaveBudgetsPagedList          func(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl *time.Duration) (err error)
+	funcSaveBudgetsPagedList          func(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl time.Duration) (err error)
 	funcSaveBudgetsPagedListOrigin    string
-	inspectFuncSaveBudgetsPagedList   func(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl *time.Duration)
+	inspectFuncSaveBudgetsPagedList   func(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl time.Duration)
 	afterSaveBudgetsPagedListCounter  uint64
 	beforeSaveBudgetsPagedListCounter uint64
 	SaveBudgetsPagedListMock          mBudgetCacheRepositoryMockSaveBudgetsPagedList
@@ -1505,7 +1505,7 @@ type BudgetCacheRepositoryMockSaveBudgetParams struct {
 	ctx  context.Context
 	key  string
 	item *entity.Budget
-	ttl  *time.Duration
+	ttl  time.Duration
 }
 
 // BudgetCacheRepositoryMockSaveBudgetParamPtrs contains pointers to parameters of the BudgetCacheRepository.SaveBudget
@@ -1513,7 +1513,7 @@ type BudgetCacheRepositoryMockSaveBudgetParamPtrs struct {
 	ctx  *context.Context
 	key  *string
 	item **entity.Budget
-	ttl  **time.Duration
+	ttl  *time.Duration
 }
 
 // BudgetCacheRepositoryMockSaveBudgetResults contains results of the BudgetCacheRepository.SaveBudget
@@ -1541,7 +1541,7 @@ func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) Optional() *mBudgetCac
 }
 
 // Expect sets up expected params for BudgetCacheRepository.SaveBudget
-func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) Expect(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration) *mBudgetCacheRepositoryMockSaveBudget {
+func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) Expect(ctx context.Context, key string, item *entity.Budget, ttl time.Duration) *mBudgetCacheRepositoryMockSaveBudget {
 	if mmSaveBudget.mock.funcSaveBudget != nil {
 		mmSaveBudget.mock.t.Fatalf("BudgetCacheRepositoryMock.SaveBudget mock is already set by Set")
 	}
@@ -1635,7 +1635,7 @@ func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) ExpectItemParam3(item 
 }
 
 // ExpectTtlParam4 sets up expected param ttl for BudgetCacheRepository.SaveBudget
-func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) ExpectTtlParam4(ttl *time.Duration) *mBudgetCacheRepositoryMockSaveBudget {
+func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) ExpectTtlParam4(ttl time.Duration) *mBudgetCacheRepositoryMockSaveBudget {
 	if mmSaveBudget.mock.funcSaveBudget != nil {
 		mmSaveBudget.mock.t.Fatalf("BudgetCacheRepositoryMock.SaveBudget mock is already set by Set")
 	}
@@ -1658,7 +1658,7 @@ func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) ExpectTtlParam4(ttl *t
 }
 
 // Inspect accepts an inspector function that has same arguments as the BudgetCacheRepository.SaveBudget
-func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) Inspect(f func(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration)) *mBudgetCacheRepositoryMockSaveBudget {
+func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) Inspect(f func(ctx context.Context, key string, item *entity.Budget, ttl time.Duration)) *mBudgetCacheRepositoryMockSaveBudget {
 	if mmSaveBudget.mock.inspectFuncSaveBudget != nil {
 		mmSaveBudget.mock.t.Fatalf("Inspect function is already set for BudgetCacheRepositoryMock.SaveBudget")
 	}
@@ -1683,7 +1683,7 @@ func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) Return(err error) *Bud
 }
 
 // Set uses given function f to mock the BudgetCacheRepository.SaveBudget method
-func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) Set(f func(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration) (err error)) *BudgetCacheRepositoryMock {
+func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) Set(f func(ctx context.Context, key string, item *entity.Budget, ttl time.Duration) (err error)) *BudgetCacheRepositoryMock {
 	if mmSaveBudget.defaultExpectation != nil {
 		mmSaveBudget.mock.t.Fatalf("Default expectation is already set for the BudgetCacheRepository.SaveBudget method")
 	}
@@ -1699,7 +1699,7 @@ func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) Set(f func(ctx context
 
 // When sets expectation for the BudgetCacheRepository.SaveBudget which will trigger the result defined by the following
 // Then helper
-func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) When(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration) *BudgetCacheRepositoryMockSaveBudgetExpectation {
+func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) When(ctx context.Context, key string, item *entity.Budget, ttl time.Duration) *BudgetCacheRepositoryMockSaveBudgetExpectation {
 	if mmSaveBudget.mock.funcSaveBudget != nil {
 		mmSaveBudget.mock.t.Fatalf("BudgetCacheRepositoryMock.SaveBudget mock is already set by Set")
 	}
@@ -1741,7 +1741,7 @@ func (mmSaveBudget *mBudgetCacheRepositoryMockSaveBudget) invocationsDone() bool
 }
 
 // SaveBudget implements mm_usecase.BudgetCacheRepository
-func (mmSaveBudget *BudgetCacheRepositoryMock) SaveBudget(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration) (err error) {
+func (mmSaveBudget *BudgetCacheRepositoryMock) SaveBudget(ctx context.Context, key string, item *entity.Budget, ttl time.Duration) (err error) {
 	mm_atomic.AddUint64(&mmSaveBudget.beforeSaveBudgetCounter, 1)
 	defer mm_atomic.AddUint64(&mmSaveBudget.afterSaveBudgetCounter, 1)
 
@@ -1909,7 +1909,7 @@ type BudgetCacheRepositoryMockSaveBudgetsListParams struct {
 	ctx   context.Context
 	key   string
 	items []*entity.Budget
-	ttl   *time.Duration
+	ttl   time.Duration
 }
 
 // BudgetCacheRepositoryMockSaveBudgetsListParamPtrs contains pointers to parameters of the BudgetCacheRepository.SaveBudgetsList
@@ -1917,7 +1917,7 @@ type BudgetCacheRepositoryMockSaveBudgetsListParamPtrs struct {
 	ctx   *context.Context
 	key   *string
 	items *[]*entity.Budget
-	ttl   **time.Duration
+	ttl   *time.Duration
 }
 
 // BudgetCacheRepositoryMockSaveBudgetsListResults contains results of the BudgetCacheRepository.SaveBudgetsList
@@ -1945,7 +1945,7 @@ func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) Optional() *
 }
 
 // Expect sets up expected params for BudgetCacheRepository.SaveBudgetsList
-func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) Expect(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration) *mBudgetCacheRepositoryMockSaveBudgetsList {
+func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) Expect(ctx context.Context, key string, items []*entity.Budget, ttl time.Duration) *mBudgetCacheRepositoryMockSaveBudgetsList {
 	if mmSaveBudgetsList.mock.funcSaveBudgetsList != nil {
 		mmSaveBudgetsList.mock.t.Fatalf("BudgetCacheRepositoryMock.SaveBudgetsList mock is already set by Set")
 	}
@@ -2039,7 +2039,7 @@ func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) ExpectItemsP
 }
 
 // ExpectTtlParam4 sets up expected param ttl for BudgetCacheRepository.SaveBudgetsList
-func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) ExpectTtlParam4(ttl *time.Duration) *mBudgetCacheRepositoryMockSaveBudgetsList {
+func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) ExpectTtlParam4(ttl time.Duration) *mBudgetCacheRepositoryMockSaveBudgetsList {
 	if mmSaveBudgetsList.mock.funcSaveBudgetsList != nil {
 		mmSaveBudgetsList.mock.t.Fatalf("BudgetCacheRepositoryMock.SaveBudgetsList mock is already set by Set")
 	}
@@ -2062,7 +2062,7 @@ func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) ExpectTtlPar
 }
 
 // Inspect accepts an inspector function that has same arguments as the BudgetCacheRepository.SaveBudgetsList
-func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) Inspect(f func(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration)) *mBudgetCacheRepositoryMockSaveBudgetsList {
+func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) Inspect(f func(ctx context.Context, key string, items []*entity.Budget, ttl time.Duration)) *mBudgetCacheRepositoryMockSaveBudgetsList {
 	if mmSaveBudgetsList.mock.inspectFuncSaveBudgetsList != nil {
 		mmSaveBudgetsList.mock.t.Fatalf("Inspect function is already set for BudgetCacheRepositoryMock.SaveBudgetsList")
 	}
@@ -2087,7 +2087,7 @@ func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) Return(err e
 }
 
 // Set uses given function f to mock the BudgetCacheRepository.SaveBudgetsList method
-func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) Set(f func(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration) (err error)) *BudgetCacheRepositoryMock {
+func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) Set(f func(ctx context.Context, key string, items []*entity.Budget, ttl time.Duration) (err error)) *BudgetCacheRepositoryMock {
 	if mmSaveBudgetsList.defaultExpectation != nil {
 		mmSaveBudgetsList.mock.t.Fatalf("Default expectation is already set for the BudgetCacheRepository.SaveBudgetsList method")
 	}
@@ -2103,7 +2103,7 @@ func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) Set(f func(c
 
 // When sets expectation for the BudgetCacheRepository.SaveBudgetsList which will trigger the result defined by the following
 // Then helper
-func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) When(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration) *BudgetCacheRepositoryMockSaveBudgetsListExpectation {
+func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) When(ctx context.Context, key string, items []*entity.Budget, ttl time.Duration) *BudgetCacheRepositoryMockSaveBudgetsListExpectation {
 	if mmSaveBudgetsList.mock.funcSaveBudgetsList != nil {
 		mmSaveBudgetsList.mock.t.Fatalf("BudgetCacheRepositoryMock.SaveBudgetsList mock is already set by Set")
 	}
@@ -2145,7 +2145,7 @@ func (mmSaveBudgetsList *mBudgetCacheRepositoryMockSaveBudgetsList) invocationsD
 }
 
 // SaveBudgetsList implements mm_usecase.BudgetCacheRepository
-func (mmSaveBudgetsList *BudgetCacheRepositoryMock) SaveBudgetsList(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration) (err error) {
+func (mmSaveBudgetsList *BudgetCacheRepositoryMock) SaveBudgetsList(ctx context.Context, key string, items []*entity.Budget, ttl time.Duration) (err error) {
 	mm_atomic.AddUint64(&mmSaveBudgetsList.beforeSaveBudgetsListCounter, 1)
 	defer mm_atomic.AddUint64(&mmSaveBudgetsList.afterSaveBudgetsListCounter, 1)
 
@@ -2314,7 +2314,7 @@ type BudgetCacheRepositoryMockSaveBudgetsPagedListParams struct {
 	key   string
 	items []*entity.Budget
 	total uint64
-	ttl   *time.Duration
+	ttl   time.Duration
 }
 
 // BudgetCacheRepositoryMockSaveBudgetsPagedListParamPtrs contains pointers to parameters of the BudgetCacheRepository.SaveBudgetsPagedList
@@ -2323,7 +2323,7 @@ type BudgetCacheRepositoryMockSaveBudgetsPagedListParamPtrs struct {
 	key   *string
 	items *[]*entity.Budget
 	total *uint64
-	ttl   **time.Duration
+	ttl   *time.Duration
 }
 
 // BudgetCacheRepositoryMockSaveBudgetsPagedListResults contains results of the BudgetCacheRepository.SaveBudgetsPagedList
@@ -2352,7 +2352,7 @@ func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Op
 }
 
 // Expect sets up expected params for BudgetCacheRepository.SaveBudgetsPagedList
-func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Expect(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl *time.Duration) *mBudgetCacheRepositoryMockSaveBudgetsPagedList {
+func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Expect(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl time.Duration) *mBudgetCacheRepositoryMockSaveBudgetsPagedList {
 	if mmSaveBudgetsPagedList.mock.funcSaveBudgetsPagedList != nil {
 		mmSaveBudgetsPagedList.mock.t.Fatalf("BudgetCacheRepositoryMock.SaveBudgetsPagedList mock is already set by Set")
 	}
@@ -2469,7 +2469,7 @@ func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Ex
 }
 
 // ExpectTtlParam5 sets up expected param ttl for BudgetCacheRepository.SaveBudgetsPagedList
-func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) ExpectTtlParam5(ttl *time.Duration) *mBudgetCacheRepositoryMockSaveBudgetsPagedList {
+func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) ExpectTtlParam5(ttl time.Duration) *mBudgetCacheRepositoryMockSaveBudgetsPagedList {
 	if mmSaveBudgetsPagedList.mock.funcSaveBudgetsPagedList != nil {
 		mmSaveBudgetsPagedList.mock.t.Fatalf("BudgetCacheRepositoryMock.SaveBudgetsPagedList mock is already set by Set")
 	}
@@ -2492,7 +2492,7 @@ func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Ex
 }
 
 // Inspect accepts an inspector function that has same arguments as the BudgetCacheRepository.SaveBudgetsPagedList
-func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Inspect(f func(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl *time.Duration)) *mBudgetCacheRepositoryMockSaveBudgetsPagedList {
+func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Inspect(f func(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl time.Duration)) *mBudgetCacheRepositoryMockSaveBudgetsPagedList {
 	if mmSaveBudgetsPagedList.mock.inspectFuncSaveBudgetsPagedList != nil {
 		mmSaveBudgetsPagedList.mock.t.Fatalf("Inspect function is already set for BudgetCacheRepositoryMock.SaveBudgetsPagedList")
 	}
@@ -2517,7 +2517,7 @@ func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Re
 }
 
 // Set uses given function f to mock the BudgetCacheRepository.SaveBudgetsPagedList method
-func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Set(f func(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl *time.Duration) (err error)) *BudgetCacheRepositoryMock {
+func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Set(f func(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl time.Duration) (err error)) *BudgetCacheRepositoryMock {
 	if mmSaveBudgetsPagedList.defaultExpectation != nil {
 		mmSaveBudgetsPagedList.mock.t.Fatalf("Default expectation is already set for the BudgetCacheRepository.SaveBudgetsPagedList method")
 	}
@@ -2533,7 +2533,7 @@ func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) Se
 
 // When sets expectation for the BudgetCacheRepository.SaveBudgetsPagedList which will trigger the result defined by the following
 // Then helper
-func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) When(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl *time.Duration) *BudgetCacheRepositoryMockSaveBudgetsPagedListExpectation {
+func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) When(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl time.Duration) *BudgetCacheRepositoryMockSaveBudgetsPagedListExpectation {
 	if mmSaveBudgetsPagedList.mock.funcSaveBudgetsPagedList != nil {
 		mmSaveBudgetsPagedList.mock.t.Fatalf("BudgetCacheRepositoryMock.SaveBudgetsPagedList mock is already set by Set")
 	}
@@ -2575,7 +2575,7 @@ func (mmSaveBudgetsPagedList *mBudgetCacheRepositoryMockSaveBudgetsPagedList) in
 }
 
 // SaveBudgetsPagedList implements mm_usecase.BudgetCacheRepository
-func (mmSaveBudgetsPagedList *BudgetCacheRepositoryMock) SaveBudgetsPagedList(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl *time.Duration) (err error) {
+func (mmSaveBudgetsPagedList *BudgetCacheRepositoryMock) SaveBudgetsPagedList(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl time.Duration) (err error) {
 	mm_atomic.AddUint64(&mmSaveBudgetsPagedList.beforeSaveBudgetsPagedListCounter, 1)
 	defer mm_atomic.AddUint64(&mmSaveBudgetsPagedList.afterSaveBudgetsPagedListCounter, 1)
 

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"log/slog"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/m11ano/budget_planner/backend/auth/pkg/auth"
@@ -20,8 +19,6 @@ type FindOneByIDSFResult struct {
 	Item     *entity.Budget
 	HitCache bool
 }
-
-var budgetCacheTTL = time.Second * 30
 
 func (uc *UsecaseImpl) FindOneByID(
 	ctx context.Context,
@@ -54,7 +51,7 @@ func (uc *UsecaseImpl) FindOneByID(
 			return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 		}
 
-		err = uc.budgetCacheRepo.SaveBudget(ctx, key, item, &budgetCacheTTL)
+		err = uc.budgetCacheRepo.SaveBudget(ctx, key, item, uc.cfg.Budget.BudgetsCacheTTL)
 		if err != nil {
 			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis save err", slog.Any("error", err))
 		}
@@ -128,7 +125,7 @@ func (uc *UsecaseImpl) FindList(
 			return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 		}
 
-		err = uc.budgetCacheRepo.SaveBudgetsList(ctx, key, items, &budgetCacheTTL)
+		err = uc.budgetCacheRepo.SaveBudgetsList(ctx, key, items, uc.cfg.Budget.BudgetsCacheTTL)
 		if err != nil {
 			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis save err", slog.Any("error", err))
 		}
@@ -193,7 +190,7 @@ func (uc *UsecaseImpl) FindPagedList(
 			return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 		}
 
-		err = uc.budgetCacheRepo.SaveBudgetsPagedList(ctx, key, items, total, &budgetCacheTTL)
+		err = uc.budgetCacheRepo.SaveBudgetsPagedList(ctx, key, items, total, uc.cfg.Budget.BudgetsCacheTTL)
 		if err != nil {
 			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis save err", slog.Any("error", err))
 		}

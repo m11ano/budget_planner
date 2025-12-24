@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
@@ -41,9 +42,19 @@ type Config struct {
 		JwtRefreshSecret        string `yaml:"jwt_refresh_secret" env:"AUTH_JWT_REFRESH_SECRET"`
 	}
 	Redis struct {
-		Addr     string `yaml:"addr" env:"REDIS_ADDR"`
-		Password string `yaml:"password" env:"REDIS_PASSWORD"`
-	}
+		Addr         string        `yaml:"addr" env:"REDIS_ADDR"`
+		Password     string        `yaml:"password" env:"REDIS_PASSWORD"`
+		DialTimeout  time.Duration `yaml:"dial_timeout" env:"REDIS_DIAL_TIMEOUT" env-default:"5s"`
+		ReadTimeout  time.Duration `yaml:"read_timeout" env:"REDIS_READ_TIMEOUT" env-default:"3s"`
+		WriteTimeout time.Duration `yaml:"write_timeout" env:"REDIS_WRITE_TIMEOUT" env-default:"3s"`
+		PoolSize     int           `yaml:"pool_size" env:"REDIS_POOL_SIZE"`
+		MinIdleConns int           `yaml:"min_idle_conns" env:"REDIS_MIN_IDLE_CONNS"`
+		MaxRetries   int           `yaml:"max_retries" env:"REDIS_MAX_RETRIES"`
+	} `yaml:"redis"`
+	Budget struct {
+		BudgetsCacheTTL time.Duration `yaml:"budgets_cache_ttl" env:"BUDGETS_CACHE_TTL"`
+		ReportsCacheTTL time.Duration `yaml:"reports_cache_ttl" env:"REPORTS_CACHE_TTL"`
+	} `yaml:"budget"`
 }
 
 func LoadConfig(files ...string) Config {

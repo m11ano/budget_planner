@@ -2,6 +2,8 @@ package transaction
 
 import (
 	"context"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -50,7 +52,7 @@ func TestTransactionUsecase_CreateTransactionByDTO_OK_income(t *testing.T) {
 		OccurredOn:  civil.Date{Year: 2025, Month: 12, Day: 15},
 		CategoryID:  catID,
 		Description: "   hello   ",
-	})
+	}, true)
 	require.NoError(t, err)
 	require.NotNil(t, got)
 	require.NotNil(t, got.Transaction)
@@ -111,7 +113,7 @@ func TestTransactionUsecase_CreateTransactionByDTO_OK_outcome_no_budget(t *testi
 		OccurredOn:  civil.Date{Year: 2025, Month: 12, Day: 20},
 		CategoryID:  catID,
 		Description: " coffee ",
-	})
+	}, true)
 	require.NoError(t, err)
 	require.NotNil(t, got)
 	require.NotNil(t, got.Transaction)
@@ -124,6 +126,14 @@ func TestTransactionUsecase_PatchTransactionByDTO_OK(t *testing.T) {
 
 	s := newDependencies(t)
 	defer finishDependencies(s)
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	s.transactionCacheRepo.ClearForPrefixesMock.Set(func(ctx context.Context, prefixes ...string) error {
+		defer wg.Done()
+		return nil
+	})
 
 	id := uuid.New()
 	accID := uuid.New()
@@ -145,8 +155,16 @@ func TestTransactionUsecase_PatchTransactionByDTO_OK(t *testing.T) {
 	newAmount := decimal.MustParse("55.559")
 	newDesc := "   new desc   "
 
+	var call int32
 	s.transactionRepo.FindOneByIDMock.Set(func(ctx context.Context, gotID uuid.UUID, qp *uctypes.QueryGetOneParams) (*entity.Transaction, error) {
 		require.Equal(t, id, gotID)
+
+		n := atomic.AddInt32(&call, 1)
+		if n == 1 {
+			require.Nil(t, qp)
+			return tx, nil
+		}
+
 		require.NotNil(t, qp)
 		require.True(t, qp.ForUpdate)
 		return tx, nil
@@ -164,6 +182,8 @@ func TestTransactionUsecase_PatchTransactionByDTO_OK(t *testing.T) {
 		Description: &newDesc,
 	}, true)
 	require.NoError(t, err)
+
+	wg.Wait()
 }
 
 func TestTransactionUsecase_DeleteTransactionByID_OK(t *testing.T) {
@@ -171,6 +191,14 @@ func TestTransactionUsecase_DeleteTransactionByID_OK(t *testing.T) {
 
 	s := newDependencies(t)
 	defer finishDependencies(s)
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	s.transactionCacheRepo.ClearForPrefixesMock.Set(func(ctx context.Context, prefixes ...string) error {
+		defer wg.Done()
+		return nil
+	})
 
 	id := uuid.New()
 	accID := uuid.New()
@@ -184,8 +212,16 @@ func TestTransactionUsecase_DeleteTransactionByID_OK(t *testing.T) {
 		CategoryID: 2,
 	}
 
+	var call int32
 	s.transactionRepo.FindOneByIDMock.Set(func(ctx context.Context, gotID uuid.UUID, qp *uctypes.QueryGetOneParams) (*entity.Transaction, error) {
 		require.Equal(t, id, gotID)
+
+		n := atomic.AddInt32(&call, 1)
+		if n == 1 {
+			require.Nil(t, qp)
+			return tx, nil
+		}
+
 		require.NotNil(t, qp)
 		require.True(t, qp.ForUpdate)
 		return tx, nil
@@ -198,6 +234,8 @@ func TestTransactionUsecase_DeleteTransactionByID_OK(t *testing.T) {
 
 	err := s.uc.DeleteTransactionByID(testCtx(), id)
 	require.NoError(t, err)
+
+	wg.Wait()
 }
 
 func TestTransactionUsecase_ImportTransactionsFromCSV_OK_empty(t *testing.T) {
@@ -205,6 +243,14 @@ func TestTransactionUsecase_ImportTransactionsFromCSV_OK_empty(t *testing.T) {
 
 	s := newDependencies(t)
 	defer finishDependencies(s)
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	s.transactionCacheRepo.ClearForPrefixesMock.Set(func(ctx context.Context, prefixes ...string) error {
+		defer wg.Done()
+		return nil
+	})
 
 	accID := uuid.New()
 
@@ -216,4 +262,6 @@ func TestTransactionUsecase_ImportTransactionsFromCSV_OK_empty(t *testing.T) {
 
 	err := s.uc.ImportTransactionsFromCSV(testCtx(), []byte("csv-data"), accID)
 	require.NoError(t, err)
+
+	wg.Wait()
 }

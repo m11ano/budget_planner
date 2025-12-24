@@ -8,7 +8,13 @@ import (
 
 func NewRedisClient(cfg config.Config) *redis.Client {
 	return redisClient.NewRedisClient(redisClient.ClientConfig{
-		Addr:     cfg.Redis.Addr,
-		Password: cfg.Redis.Password,
+		Addr:         cfg.Redis.Addr,
+		Password:     cfg.Redis.Password,
+		DialTimeout:  cfg.Redis.DialTimeout,
+		ReadTimeout:  cfg.Redis.ReadTimeout,
+		WriteTimeout: cfg.Redis.WriteTimeout,
+		PoolSize:     cfg.Redis.PoolSize,
+		MinIdleConns: cfg.Redis.MinIdleConns,
+		MaxRetries:   cfg.Redis.MaxRetries,
 	})
 }

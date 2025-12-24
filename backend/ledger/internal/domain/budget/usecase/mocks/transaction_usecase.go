@@ -29,9 +29,9 @@ type TransactionUsecaseMock struct {
 	beforeCountReportItemsCounter uint64
 	CountReportItemsMock          mTransactionUsecaseMockCountReportItems
 
-	funcCreateTransactionByDTO          func(ctx context.Context, in mm_usecase.CreateTransactionDataInput) (resTransactionDTO *mm_usecase.TransactionDTO, err error)
+	funcCreateTransactionByDTO          func(ctx context.Context, in mm_usecase.CreateTransactionDataInput, skipCacheClear bool) (resTransactionDTO *mm_usecase.TransactionDTO, err error)
 	funcCreateTransactionByDTOOrigin    string
-	inspectFuncCreateTransactionByDTO   func(ctx context.Context, in mm_usecase.CreateTransactionDataInput)
+	inspectFuncCreateTransactionByDTO   func(ctx context.Context, in mm_usecase.CreateTransactionDataInput, skipCacheClear bool)
 	afterCreateTransactionByDTOCounter  uint64
 	beforeCreateTransactionByDTOCounter uint64
 	CreateTransactionByDTOMock          mTransactionUsecaseMockCreateTransactionByDTO
@@ -506,14 +506,16 @@ type TransactionUsecaseMockCreateTransactionByDTOExpectation struct {
 
 // TransactionUsecaseMockCreateTransactionByDTOParams contains parameters of the TransactionUsecase.CreateTransactionByDTO
 type TransactionUsecaseMockCreateTransactionByDTOParams struct {
-	ctx context.Context
-	in  mm_usecase.CreateTransactionDataInput
+	ctx            context.Context
+	in             mm_usecase.CreateTransactionDataInput
+	skipCacheClear bool
 }
 
 // TransactionUsecaseMockCreateTransactionByDTOParamPtrs contains pointers to parameters of the TransactionUsecase.CreateTransactionByDTO
 type TransactionUsecaseMockCreateTransactionByDTOParamPtrs struct {
-	ctx *context.Context
-	in  *mm_usecase.CreateTransactionDataInput
+	ctx            *context.Context
+	in             *mm_usecase.CreateTransactionDataInput
+	skipCacheClear *bool
 }
 
 // TransactionUsecaseMockCreateTransactionByDTOResults contains results of the TransactionUsecase.CreateTransactionByDTO
@@ -524,9 +526,10 @@ type TransactionUsecaseMockCreateTransactionByDTOResults struct {
 
 // TransactionUsecaseMockCreateTransactionByDTOOrigins contains origins of expectations of the TransactionUsecase.CreateTransactionByDTO
 type TransactionUsecaseMockCreateTransactionByDTOExpectationOrigins struct {
-	origin    string
-	originCtx string
-	originIn  string
+	origin               string
+	originCtx            string
+	originIn             string
+	originSkipCacheClear string
 }
 
 // Marks this method to be optional. The default behavior of any method with Return() is '1 or more', meaning
@@ -540,7 +543,7 @@ func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) O
 }
 
 // Expect sets up expected params for TransactionUsecase.CreateTransactionByDTO
-func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) Expect(ctx context.Context, in mm_usecase.CreateTransactionDataInput) *mTransactionUsecaseMockCreateTransactionByDTO {
+func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) Expect(ctx context.Context, in mm_usecase.CreateTransactionDataInput, skipCacheClear bool) *mTransactionUsecaseMockCreateTransactionByDTO {
 	if mmCreateTransactionByDTO.mock.funcCreateTransactionByDTO != nil {
 		mmCreateTransactionByDTO.mock.t.Fatalf("TransactionUsecaseMock.CreateTransactionByDTO mock is already set by Set")
 	}
@@ -553,7 +556,7 @@ func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) E
 		mmCreateTransactionByDTO.mock.t.Fatalf("TransactionUsecaseMock.CreateTransactionByDTO mock is already set by ExpectParams functions")
 	}
 
-	mmCreateTransactionByDTO.defaultExpectation.params = &TransactionUsecaseMockCreateTransactionByDTOParams{ctx, in}
+	mmCreateTransactionByDTO.defaultExpectation.params = &TransactionUsecaseMockCreateTransactionByDTOParams{ctx, in, skipCacheClear}
 	mmCreateTransactionByDTO.defaultExpectation.expectationOrigins.origin = minimock.CallerInfo(1)
 	for _, e := range mmCreateTransactionByDTO.expectations {
 		if minimock.Equal(e.params, mmCreateTransactionByDTO.defaultExpectation.params) {
@@ -610,8 +613,31 @@ func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) E
 	return mmCreateTransactionByDTO
 }
 
+// ExpectSkipCacheClearParam3 sets up expected param skipCacheClear for TransactionUsecase.CreateTransactionByDTO
+func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) ExpectSkipCacheClearParam3(skipCacheClear bool) *mTransactionUsecaseMockCreateTransactionByDTO {
+	if mmCreateTransactionByDTO.mock.funcCreateTransactionByDTO != nil {
+		mmCreateTransactionByDTO.mock.t.Fatalf("TransactionUsecaseMock.CreateTransactionByDTO mock is already set by Set")
+	}
+
+	if mmCreateTransactionByDTO.defaultExpectation == nil {
+		mmCreateTransactionByDTO.defaultExpectation = &TransactionUsecaseMockCreateTransactionByDTOExpectation{}
+	}
+
+	if mmCreateTransactionByDTO.defaultExpectation.params != nil {
+		mmCreateTransactionByDTO.mock.t.Fatalf("TransactionUsecaseMock.CreateTransactionByDTO mock is already set by Expect")
+	}
+
+	if mmCreateTransactionByDTO.defaultExpectation.paramPtrs == nil {
+		mmCreateTransactionByDTO.defaultExpectation.paramPtrs = &TransactionUsecaseMockCreateTransactionByDTOParamPtrs{}
+	}
+	mmCreateTransactionByDTO.defaultExpectation.paramPtrs.skipCacheClear = &skipCacheClear
+	mmCreateTransactionByDTO.defaultExpectation.expectationOrigins.originSkipCacheClear = minimock.CallerInfo(1)
+
+	return mmCreateTransactionByDTO
+}
+
 // Inspect accepts an inspector function that has same arguments as the TransactionUsecase.CreateTransactionByDTO
-func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) Inspect(f func(ctx context.Context, in mm_usecase.CreateTransactionDataInput)) *mTransactionUsecaseMockCreateTransactionByDTO {
+func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) Inspect(f func(ctx context.Context, in mm_usecase.CreateTransactionDataInput, skipCacheClear bool)) *mTransactionUsecaseMockCreateTransactionByDTO {
 	if mmCreateTransactionByDTO.mock.inspectFuncCreateTransactionByDTO != nil {
 		mmCreateTransactionByDTO.mock.t.Fatalf("Inspect function is already set for TransactionUsecaseMock.CreateTransactionByDTO")
 	}
@@ -636,7 +662,7 @@ func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) R
 }
 
 // Set uses given function f to mock the TransactionUsecase.CreateTransactionByDTO method
-func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) Set(f func(ctx context.Context, in mm_usecase.CreateTransactionDataInput) (resTransactionDTO *mm_usecase.TransactionDTO, err error)) *TransactionUsecaseMock {
+func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) Set(f func(ctx context.Context, in mm_usecase.CreateTransactionDataInput, skipCacheClear bool) (resTransactionDTO *mm_usecase.TransactionDTO, err error)) *TransactionUsecaseMock {
 	if mmCreateTransactionByDTO.defaultExpectation != nil {
 		mmCreateTransactionByDTO.mock.t.Fatalf("Default expectation is already set for the TransactionUsecase.CreateTransactionByDTO method")
 	}
@@ -652,14 +678,14 @@ func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) S
 
 // When sets expectation for the TransactionUsecase.CreateTransactionByDTO which will trigger the result defined by the following
 // Then helper
-func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) When(ctx context.Context, in mm_usecase.CreateTransactionDataInput) *TransactionUsecaseMockCreateTransactionByDTOExpectation {
+func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) When(ctx context.Context, in mm_usecase.CreateTransactionDataInput, skipCacheClear bool) *TransactionUsecaseMockCreateTransactionByDTOExpectation {
 	if mmCreateTransactionByDTO.mock.funcCreateTransactionByDTO != nil {
 		mmCreateTransactionByDTO.mock.t.Fatalf("TransactionUsecaseMock.CreateTransactionByDTO mock is already set by Set")
 	}
 
 	expectation := &TransactionUsecaseMockCreateTransactionByDTOExpectation{
 		mock:               mmCreateTransactionByDTO.mock,
-		params:             &TransactionUsecaseMockCreateTransactionByDTOParams{ctx, in},
+		params:             &TransactionUsecaseMockCreateTransactionByDTOParams{ctx, in, skipCacheClear},
 		expectationOrigins: TransactionUsecaseMockCreateTransactionByDTOExpectationOrigins{origin: minimock.CallerInfo(1)},
 	}
 	mmCreateTransactionByDTO.expectations = append(mmCreateTransactionByDTO.expectations, expectation)
@@ -694,17 +720,17 @@ func (mmCreateTransactionByDTO *mTransactionUsecaseMockCreateTransactionByDTO) i
 }
 
 // CreateTransactionByDTO implements mm_usecase.TransactionUsecase
-func (mmCreateTransactionByDTO *TransactionUsecaseMock) CreateTransactionByDTO(ctx context.Context, in mm_usecase.CreateTransactionDataInput) (resTransactionDTO *mm_usecase.TransactionDTO, err error) {
+func (mmCreateTransactionByDTO *TransactionUsecaseMock) CreateTransactionByDTO(ctx context.Context, in mm_usecase.CreateTransactionDataInput, skipCacheClear bool) (resTransactionDTO *mm_usecase.TransactionDTO, err error) {
 	mm_atomic.AddUint64(&mmCreateTransactionByDTO.beforeCreateTransactionByDTOCounter, 1)
 	defer mm_atomic.AddUint64(&mmCreateTransactionByDTO.afterCreateTransactionByDTOCounter, 1)
 
 	mmCreateTransactionByDTO.t.Helper()
 
 	if mmCreateTransactionByDTO.inspectFuncCreateTransactionByDTO != nil {
-		mmCreateTransactionByDTO.inspectFuncCreateTransactionByDTO(ctx, in)
+		mmCreateTransactionByDTO.inspectFuncCreateTransactionByDTO(ctx, in, skipCacheClear)
 	}
 
-	mm_params := TransactionUsecaseMockCreateTransactionByDTOParams{ctx, in}
+	mm_params := TransactionUsecaseMockCreateTransactionByDTOParams{ctx, in, skipCacheClear}
 
 	// Record call args
 	mmCreateTransactionByDTO.CreateTransactionByDTOMock.mutex.Lock()
@@ -723,7 +749,7 @@ func (mmCreateTransactionByDTO *TransactionUsecaseMock) CreateTransactionByDTO(c
 		mm_want := mmCreateTransactionByDTO.CreateTransactionByDTOMock.defaultExpectation.params
 		mm_want_ptrs := mmCreateTransactionByDTO.CreateTransactionByDTOMock.defaultExpectation.paramPtrs
 
-		mm_got := TransactionUsecaseMockCreateTransactionByDTOParams{ctx, in}
+		mm_got := TransactionUsecaseMockCreateTransactionByDTOParams{ctx, in, skipCacheClear}
 
 		if mm_want_ptrs != nil {
 
@@ -735,6 +761,11 @@ func (mmCreateTransactionByDTO *TransactionUsecaseMock) CreateTransactionByDTO(c
 			if mm_want_ptrs.in != nil && !minimock.Equal(*mm_want_ptrs.in, mm_got.in) {
 				mmCreateTransactionByDTO.t.Errorf("TransactionUsecaseMock.CreateTransactionByDTO got unexpected parameter in, expected at\n%s:\nwant: %#v\n got: %#v%s\n",
 					mmCreateTransactionByDTO.CreateTransactionByDTOMock.defaultExpectation.expectationOrigins.originIn, *mm_want_ptrs.in, mm_got.in, minimock.Diff(*mm_want_ptrs.in, mm_got.in))
+			}
+
+			if mm_want_ptrs.skipCacheClear != nil && !minimock.Equal(*mm_want_ptrs.skipCacheClear, mm_got.skipCacheClear) {
+				mmCreateTransactionByDTO.t.Errorf("TransactionUsecaseMock.CreateTransactionByDTO got unexpected parameter skipCacheClear, expected at\n%s:\nwant: %#v\n got: %#v%s\n",
+					mmCreateTransactionByDTO.CreateTransactionByDTOMock.defaultExpectation.expectationOrigins.originSkipCacheClear, *mm_want_ptrs.skipCacheClear, mm_got.skipCacheClear, minimock.Diff(*mm_want_ptrs.skipCacheClear, mm_got.skipCacheClear))
 			}
 
 		} else if mm_want != nil && !minimock.Equal(*mm_want, mm_got) {
@@ -749,9 +780,9 @@ func (mmCreateTransactionByDTO *TransactionUsecaseMock) CreateTransactionByDTO(c
 		return (*mm_results).resTransactionDTO, (*mm_results).err
 	}
 	if mmCreateTransactionByDTO.funcCreateTransactionByDTO != nil {
-		return mmCreateTransactionByDTO.funcCreateTransactionByDTO(ctx, in)
+		return mmCreateTransactionByDTO.funcCreateTransactionByDTO(ctx, in, skipCacheClear)
 	}
-	mmCreateTransactionByDTO.t.Fatalf("Unexpected call to TransactionUsecaseMock.CreateTransactionByDTO. %v %v", ctx, in)
+	mmCreateTransactionByDTO.t.Fatalf("Unexpected call to TransactionUsecaseMock.CreateTransactionByDTO. %v %v %v", ctx, in, skipCacheClear)
 	return
 }
 

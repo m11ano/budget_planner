@@ -5,7 +5,6 @@ import (
 	"errors"
 	"log/slog"
 	"slices"
-	"time"
 
 	"cloud.google.com/go/civil"
 	"github.com/google/uuid"
@@ -120,8 +119,6 @@ type CountReportItemsSFResult struct {
 	HitCache bool
 }
 
-var reportsCacheTTL = time.Second * 30
-
 func (uc *UsecaseImpl) CountReportItems(
 	ctx context.Context,
 	queryFilter usecase.CountReportItemsQueryFilter,
@@ -150,7 +147,7 @@ func (uc *UsecaseImpl) CountReportItems(
 			return nil, err
 		}
 
-		err = uc.transactionCacheRepo.SaveReports(ctx, key, items, &reportsCacheTTL)
+		err = uc.transactionCacheRepo.SaveReports(ctx, key, items, uc.cfg.Budget.ReportsCacheTTL)
 		if err != nil {
 			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis save err", slog.Any("error", err))
 		}

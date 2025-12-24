@@ -124,7 +124,7 @@ func TestBudgetUsecase_FindOneByID_Table(t *testing.T) {
 				})
 
 				if tt.repoErr == nil {
-					s.budgetCacheRepo.SaveBudgetMock.Set(func(ctx context.Context, gotKey string, gotItem *entity.Budget, _ *time.Duration) error {
+					s.budgetCacheRepo.SaveBudgetMock.Set(func(ctx context.Context, gotKey string, gotItem *entity.Budget, _ time.Duration) error {
 						require.Equal(t, key, gotKey)
 						require.Equal(t, item, gotItem)
 						return nil
@@ -207,7 +207,7 @@ func TestBudgetUsecase_FindList_Table(t *testing.T) {
 					return items, nil
 				})
 
-				s.budgetCacheRepo.SaveBudgetsListMock.Set(func(ctx context.Context, gotKey string, gotItems []*entity.Budget, _ *time.Duration) error {
+				s.budgetCacheRepo.SaveBudgetsListMock.Set(func(ctx context.Context, gotKey string, gotItems []*entity.Budget, _ time.Duration) error {
 					require.Equal(t, key, gotKey)
 					require.Equal(t, items, gotItems)
 					return nil
@@ -281,7 +281,7 @@ func TestBudgetUsecase_FindPagedList_Table(t *testing.T) {
 					return items, total, nil
 				})
 
-				s.budgetCacheRepo.SaveBudgetsPagedListMock.Set(func(ctx context.Context, gotKey string, gotItems []*entity.Budget, gotTotal uint64, _ *time.Duration) error {
+				s.budgetCacheRepo.SaveBudgetsPagedListMock.Set(func(ctx context.Context, gotKey string, gotItems []*entity.Budget, gotTotal uint64, _ time.Duration) error {
 					require.Equal(t, key, gotKey)
 					require.Equal(t, items, gotItems)
 					require.Equal(t, total, gotTotal)

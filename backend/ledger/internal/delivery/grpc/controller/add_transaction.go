@@ -42,6 +42,7 @@ func (c *controller) AddTransaction(ctx context.Context, req *desc.AddTransactio
 			CategoryID:  uint64(req.CategoryId),
 			Description: req.Description,
 		},
+		false,
 	)
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", c.pkg, op)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 	"time"
 
 	"cloud.google.com/go/civil"
@@ -21,6 +22,7 @@ import (
 func (uc *UsecaseImpl) CreateTransactionByDTO(
 	ctx context.Context,
 	in usecase.CreateTransactionDataInput,
+	skipCacheClear bool,
 ) (*usecase.TransactionDTO, error) {
 	const op = "CreateTransactionByDTO"
 
@@ -45,6 +47,18 @@ func (uc *UsecaseImpl) CreateTransactionByDTO(
 	err = transaction.SetDescription(in.Description)
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	if !skipCacheClear {
+		base := context.WithoutCancel(ctx)
+		clrCtx, cancel := context.WithTimeout(base, time.Second*10)
+		go func(ctx context.Context) {
+			defer cancel()
+			err := uc.clearCacheForAccoutID(ctx, transaction.AccountID)
+			if err != nil {
+				uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis clear err", slog.Any("error", err))
+			}
+		}(clrCtx)
 	}
 
 	err = uc.dbMasterClient.DoWithIsoLvl(ctx, pgclient.Serializable, func(ctx context.Context) error {
@@ -137,7 +151,22 @@ func (uc *UsecaseImpl) PatchTransactionByDTO(
 ) error {
 	const op = "PatchTransactionByDTO"
 
-	err := uc.dbMasterClient.DoWithIsoLvl(ctx, pgclient.Serializable, func(ctx context.Context) error {
+	transaction, err := uc.transactionRepo.FindOneByID(ctx, id, nil)
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	base := context.WithoutCancel(ctx)
+	clrCtx, cancel := context.WithTimeout(base, time.Second*10)
+	go func(ctx context.Context) {
+		defer cancel()
+		err := uc.clearCacheForAccoutID(ctx, transaction.AccountID)
+		if err != nil {
+			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis clear err", slog.Any("error", err))
+		}
+	}(clrCtx)
+
+	err = uc.dbMasterClient.DoWithIsoLvl(ctx, pgclient.Serializable, func(ctx context.Context) error {
 		transaction, err := uc.transactionRepo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
 			ForUpdate: true,
 		})
@@ -258,7 +287,22 @@ func (uc *UsecaseImpl) PatchTransactionByDTO(
 func (uc *UsecaseImpl) DeleteTransactionByID(ctx context.Context, id uuid.UUID) error {
 	const op = "DeleteTransactionByID"
 
-	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
+	transaction, err := uc.transactionRepo.FindOneByID(ctx, id, nil)
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	base := context.WithoutCancel(ctx)
+	clrCtx, cancel := context.WithTimeout(base, time.Second*10)
+	go func(ctx context.Context) {
+		defer cancel()
+		err := uc.clearCacheForAccoutID(ctx, transaction.AccountID)
+		if err != nil {
+			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis clear err", slog.Any("error", err))
+		}
+	}(clrCtx)
+
+	err = uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
 		transaction, err := uc.transactionRepo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
 			ForUpdate: true,
 		})
@@ -301,6 +345,16 @@ func (uc *UsecaseImpl) ImportTransactionsFromCSV(
 		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
 
+	base := context.WithoutCancel(ctx)
+	clrCtx, cancel := context.WithTimeout(base, time.Second*10)
+	go func(ctx context.Context) {
+		defer cancel()
+		err := uc.clearCacheForAccoutID(ctx, accountID)
+		if err != nil {
+			uc.logger.ErrorContext(loghandler.WithSource(ctx), "redis clear err", slog.Any("error", err))
+		}
+	}(clrCtx)
+
 	err = uc.dbMasterClient.DoWithIsoLvl(ctx, pgclient.Serializable, func(ctx context.Context) error {
 		for idx, item := range items {
 			_, err := uc.CreateTransactionByDTO(ctx, usecase.CreateTransactionDataInput{
@@ -310,7 +364,7 @@ func (uc *UsecaseImpl) ImportTransactionsFromCSV(
 				OccurredOn:  item.OccurredOn,
 				CategoryID:  item.CategoryID,
 				Description: item.Description,
-			})
+			}, false)
 			if err != nil {
 				appErr, ok := appErrors.ExtractError(err)
 				if ok {

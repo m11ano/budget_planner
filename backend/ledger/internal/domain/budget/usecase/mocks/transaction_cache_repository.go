@@ -20,6 +20,13 @@ type TransactionCacheRepositoryMock struct {
 	t          minimock.Tester
 	finishOnce sync.Once
 
+	funcClearForPrefixes          func(ctx context.Context, prefixes ...string) (err error)
+	funcClearForPrefixesOrigin    string
+	inspectFuncClearForPrefixes   func(ctx context.Context, prefixes ...string)
+	afterClearForPrefixesCounter  uint64
+	beforeClearForPrefixesCounter uint64
+	ClearForPrefixesMock          mTransactionCacheRepositoryMockClearForPrefixes
+
 	funcGetReports          func(ctx context.Context, key string) (items []*entity.ReportItem, err error)
 	funcGetReportsOrigin    string
 	inspectFuncGetReports   func(ctx context.Context, key string)
@@ -27,9 +34,9 @@ type TransactionCacheRepositoryMock struct {
 	beforeGetReportsCounter uint64
 	GetReportsMock          mTransactionCacheRepositoryMockGetReports
 
-	funcSaveReports          func(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) (err error)
+	funcSaveReports          func(ctx context.Context, key string, items []*entity.ReportItem, ttl time.Duration) (err error)
 	funcSaveReportsOrigin    string
-	inspectFuncSaveReports   func(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration)
+	inspectFuncSaveReports   func(ctx context.Context, key string, items []*entity.ReportItem, ttl time.Duration)
 	afterSaveReportsCounter  uint64
 	beforeSaveReportsCounter uint64
 	SaveReportsMock          mTransactionCacheRepositoryMockSaveReports
@@ -43,6 +50,9 @@ func NewTransactionCacheRepositoryMock(t minimock.Tester) *TransactionCacheRepos
 		controller.RegisterMocker(m)
 	}
 
+	m.ClearForPrefixesMock = mTransactionCacheRepositoryMockClearForPrefixes{mock: m}
+	m.ClearForPrefixesMock.callArgs = []*TransactionCacheRepositoryMockClearForPrefixesParams{}
+
 	m.GetReportsMock = mTransactionCacheRepositoryMockGetReports{mock: m}
 	m.GetReportsMock.callArgs = []*TransactionCacheRepositoryMockGetReportsParams{}
 
@@ -52,6 +62,348 @@ func NewTransactionCacheRepositoryMock(t minimock.Tester) *TransactionCacheRepos
 	t.Cleanup(m.MinimockFinish)
 
 	return m
+}
+
+type mTransactionCacheRepositoryMockClearForPrefixes struct {
+	optional           bool
+	mock               *TransactionCacheRepositoryMock
+	defaultExpectation *TransactionCacheRepositoryMockClearForPrefixesExpectation
+	expectations       []*TransactionCacheRepositoryMockClearForPrefixesExpectation
+
+	callArgs []*TransactionCacheRepositoryMockClearForPrefixesParams
+	mutex    sync.RWMutex
+
+	expectedInvocations       uint64
+	expectedInvocationsOrigin string
+}
+
+// TransactionCacheRepositoryMockClearForPrefixesExpectation specifies expectation struct of the TransactionCacheRepository.ClearForPrefixes
+type TransactionCacheRepositoryMockClearForPrefixesExpectation struct {
+	mock               *TransactionCacheRepositoryMock
+	params             *TransactionCacheRepositoryMockClearForPrefixesParams
+	paramPtrs          *TransactionCacheRepositoryMockClearForPrefixesParamPtrs
+	expectationOrigins TransactionCacheRepositoryMockClearForPrefixesExpectationOrigins
+	results            *TransactionCacheRepositoryMockClearForPrefixesResults
+	returnOrigin       string
+	Counter            uint64
+}
+
+// TransactionCacheRepositoryMockClearForPrefixesParams contains parameters of the TransactionCacheRepository.ClearForPrefixes
+type TransactionCacheRepositoryMockClearForPrefixesParams struct {
+	ctx      context.Context
+	prefixes []string
+}
+
+// TransactionCacheRepositoryMockClearForPrefixesParamPtrs contains pointers to parameters of the TransactionCacheRepository.ClearForPrefixes
+type TransactionCacheRepositoryMockClearForPrefixesParamPtrs struct {
+	ctx      *context.Context
+	prefixes *[]string
+}
+
+// TransactionCacheRepositoryMockClearForPrefixesResults contains results of the TransactionCacheRepository.ClearForPrefixes
+type TransactionCacheRepositoryMockClearForPrefixesResults struct {
+	err error
+}
+
+// TransactionCacheRepositoryMockClearForPrefixesOrigins contains origins of expectations of the TransactionCacheRepository.ClearForPrefixes
+type TransactionCacheRepositoryMockClearForPrefixesExpectationOrigins struct {
+	origin         string
+	originCtx      string
+	originPrefixes string
+}
+
+// Marks this method to be optional. The default behavior of any method with Return() is '1 or more', meaning
+// the test will fail minimock's automatic final call check if the mocked method was not called at least once.
+// Optional() makes method check to work in '0 or more' mode.
+// It is NOT RECOMMENDED to use this option unless you really need it, as default behaviour helps to
+// catch the problems when the expected method call is totally skipped during test run.
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) Optional() *mTransactionCacheRepositoryMockClearForPrefixes {
+	mmClearForPrefixes.optional = true
+	return mmClearForPrefixes
+}
+
+// Expect sets up expected params for TransactionCacheRepository.ClearForPrefixes
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) Expect(ctx context.Context, prefixes ...string) *mTransactionCacheRepositoryMockClearForPrefixes {
+	if mmClearForPrefixes.mock.funcClearForPrefixes != nil {
+		mmClearForPrefixes.mock.t.Fatalf("TransactionCacheRepositoryMock.ClearForPrefixes mock is already set by Set")
+	}
+
+	if mmClearForPrefixes.defaultExpectation == nil {
+		mmClearForPrefixes.defaultExpectation = &TransactionCacheRepositoryMockClearForPrefixesExpectation{}
+	}
+
+	if mmClearForPrefixes.defaultExpectation.paramPtrs != nil {
+		mmClearForPrefixes.mock.t.Fatalf("TransactionCacheRepositoryMock.ClearForPrefixes mock is already set by ExpectParams functions")
+	}
+
+	mmClearForPrefixes.defaultExpectation.params = &TransactionCacheRepositoryMockClearForPrefixesParams{ctx, prefixes}
+	mmClearForPrefixes.defaultExpectation.expectationOrigins.origin = minimock.CallerInfo(1)
+	for _, e := range mmClearForPrefixes.expectations {
+		if minimock.Equal(e.params, mmClearForPrefixes.defaultExpectation.params) {
+			mmClearForPrefixes.mock.t.Fatalf("Expectation set by When has same params: %#v", *mmClearForPrefixes.defaultExpectation.params)
+		}
+	}
+
+	return mmClearForPrefixes
+}
+
+// ExpectCtxParam1 sets up expected param ctx for TransactionCacheRepository.ClearForPrefixes
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) ExpectCtxParam1(ctx context.Context) *mTransactionCacheRepositoryMockClearForPrefixes {
+	if mmClearForPrefixes.mock.funcClearForPrefixes != nil {
+		mmClearForPrefixes.mock.t.Fatalf("TransactionCacheRepositoryMock.ClearForPrefixes mock is already set by Set")
+	}
+
+	if mmClearForPrefixes.defaultExpectation == nil {
+		mmClearForPrefixes.defaultExpectation = &TransactionCacheRepositoryMockClearForPrefixesExpectation{}
+	}
+
+	if mmClearForPrefixes.defaultExpectation.params != nil {
+		mmClearForPrefixes.mock.t.Fatalf("TransactionCacheRepositoryMock.ClearForPrefixes mock is already set by Expect")
+	}
+
+	if mmClearForPrefixes.defaultExpectation.paramPtrs == nil {
+		mmClearForPrefixes.defaultExpectation.paramPtrs = &TransactionCacheRepositoryMockClearForPrefixesParamPtrs{}
+	}
+	mmClearForPrefixes.defaultExpectation.paramPtrs.ctx = &ctx
+	mmClearForPrefixes.defaultExpectation.expectationOrigins.originCtx = minimock.CallerInfo(1)
+
+	return mmClearForPrefixes
+}
+
+// ExpectPrefixesParam2 sets up expected param prefixes for TransactionCacheRepository.ClearForPrefixes
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) ExpectPrefixesParam2(prefixes ...string) *mTransactionCacheRepositoryMockClearForPrefixes {
+	if mmClearForPrefixes.mock.funcClearForPrefixes != nil {
+		mmClearForPrefixes.mock.t.Fatalf("TransactionCacheRepositoryMock.ClearForPrefixes mock is already set by Set")
+	}
+
+	if mmClearForPrefixes.defaultExpectation == nil {
+		mmClearForPrefixes.defaultExpectation = &TransactionCacheRepositoryMockClearForPrefixesExpectation{}
+	}
+
+	if mmClearForPrefixes.defaultExpectation.params != nil {
+		mmClearForPrefixes.mock.t.Fatalf("TransactionCacheRepositoryMock.ClearForPrefixes mock is already set by Expect")
+	}
+
+	if mmClearForPrefixes.defaultExpectation.paramPtrs == nil {
+		mmClearForPrefixes.defaultExpectation.paramPtrs = &TransactionCacheRepositoryMockClearForPrefixesParamPtrs{}
+	}
+	mmClearForPrefixes.defaultExpectation.paramPtrs.prefixes = &prefixes
+	mmClearForPrefixes.defaultExpectation.expectationOrigins.originPrefixes = minimock.CallerInfo(1)
+
+	return mmClearForPrefixes
+}
+
+// Inspect accepts an inspector function that has same arguments as the TransactionCacheRepository.ClearForPrefixes
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) Inspect(f func(ctx context.Context, prefixes ...string)) *mTransactionCacheRepositoryMockClearForPrefixes {
+	if mmClearForPrefixes.mock.inspectFuncClearForPrefixes != nil {
+		mmClearForPrefixes.mock.t.Fatalf("Inspect function is already set for TransactionCacheRepositoryMock.ClearForPrefixes")
+	}
+
+	mmClearForPrefixes.mock.inspectFuncClearForPrefixes = f
+
+	return mmClearForPrefixes
+}
+
+// Return sets up results that will be returned by TransactionCacheRepository.ClearForPrefixes
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) Return(err error) *TransactionCacheRepositoryMock {
+	if mmClearForPrefixes.mock.funcClearForPrefixes != nil {
+		mmClearForPrefixes.mock.t.Fatalf("TransactionCacheRepositoryMock.ClearForPrefixes mock is already set by Set")
+	}
+
+	if mmClearForPrefixes.defaultExpectation == nil {
+		mmClearForPrefixes.defaultExpectation = &TransactionCacheRepositoryMockClearForPrefixesExpectation{mock: mmClearForPrefixes.mock}
+	}
+	mmClearForPrefixes.defaultExpectation.results = &TransactionCacheRepositoryMockClearForPrefixesResults{err}
+	mmClearForPrefixes.defaultExpectation.returnOrigin = minimock.CallerInfo(1)
+	return mmClearForPrefixes.mock
+}
+
+// Set uses given function f to mock the TransactionCacheRepository.ClearForPrefixes method
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) Set(f func(ctx context.Context, prefixes ...string) (err error)) *TransactionCacheRepositoryMock {
+	if mmClearForPrefixes.defaultExpectation != nil {
+		mmClearForPrefixes.mock.t.Fatalf("Default expectation is already set for the TransactionCacheRepository.ClearForPrefixes method")
+	}
+
+	if len(mmClearForPrefixes.expectations) > 0 {
+		mmClearForPrefixes.mock.t.Fatalf("Some expectations are already set for the TransactionCacheRepository.ClearForPrefixes method")
+	}
+
+	mmClearForPrefixes.mock.funcClearForPrefixes = f
+	mmClearForPrefixes.mock.funcClearForPrefixesOrigin = minimock.CallerInfo(1)
+	return mmClearForPrefixes.mock
+}
+
+// When sets expectation for the TransactionCacheRepository.ClearForPrefixes which will trigger the result defined by the following
+// Then helper
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) When(ctx context.Context, prefixes ...string) *TransactionCacheRepositoryMockClearForPrefixesExpectation {
+	if mmClearForPrefixes.mock.funcClearForPrefixes != nil {
+		mmClearForPrefixes.mock.t.Fatalf("TransactionCacheRepositoryMock.ClearForPrefixes mock is already set by Set")
+	}
+
+	expectation := &TransactionCacheRepositoryMockClearForPrefixesExpectation{
+		mock:               mmClearForPrefixes.mock,
+		params:             &TransactionCacheRepositoryMockClearForPrefixesParams{ctx, prefixes},
+		expectationOrigins: TransactionCacheRepositoryMockClearForPrefixesExpectationOrigins{origin: minimock.CallerInfo(1)},
+	}
+	mmClearForPrefixes.expectations = append(mmClearForPrefixes.expectations, expectation)
+	return expectation
+}
+
+// Then sets up TransactionCacheRepository.ClearForPrefixes return parameters for the expectation previously defined by the When method
+func (e *TransactionCacheRepositoryMockClearForPrefixesExpectation) Then(err error) *TransactionCacheRepositoryMock {
+	e.results = &TransactionCacheRepositoryMockClearForPrefixesResults{err}
+	return e.mock
+}
+
+// Times sets number of times TransactionCacheRepository.ClearForPrefixes should be invoked
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) Times(n uint64) *mTransactionCacheRepositoryMockClearForPrefixes {
+	if n == 0 {
+		mmClearForPrefixes.mock.t.Fatalf("Times of TransactionCacheRepositoryMock.ClearForPrefixes mock can not be zero")
+	}
+	mm_atomic.StoreUint64(&mmClearForPrefixes.expectedInvocations, n)
+	mmClearForPrefixes.expectedInvocationsOrigin = minimock.CallerInfo(1)
+	return mmClearForPrefixes
+}
+
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) invocationsDone() bool {
+	if len(mmClearForPrefixes.expectations) == 0 && mmClearForPrefixes.defaultExpectation == nil && mmClearForPrefixes.mock.funcClearForPrefixes == nil {
+		return true
+	}
+
+	totalInvocations := mm_atomic.LoadUint64(&mmClearForPrefixes.mock.afterClearForPrefixesCounter)
+	expectedInvocations := mm_atomic.LoadUint64(&mmClearForPrefixes.expectedInvocations)
+
+	return totalInvocations > 0 && (expectedInvocations == 0 || expectedInvocations == totalInvocations)
+}
+
+// ClearForPrefixes implements mm_usecase.TransactionCacheRepository
+func (mmClearForPrefixes *TransactionCacheRepositoryMock) ClearForPrefixes(ctx context.Context, prefixes ...string) (err error) {
+	mm_atomic.AddUint64(&mmClearForPrefixes.beforeClearForPrefixesCounter, 1)
+	defer mm_atomic.AddUint64(&mmClearForPrefixes.afterClearForPrefixesCounter, 1)
+
+	mmClearForPrefixes.t.Helper()
+
+	if mmClearForPrefixes.inspectFuncClearForPrefixes != nil {
+		mmClearForPrefixes.inspectFuncClearForPrefixes(ctx, prefixes...)
+	}
+
+	mm_params := TransactionCacheRepositoryMockClearForPrefixesParams{ctx, prefixes}
+
+	// Record call args
+	mmClearForPrefixes.ClearForPrefixesMock.mutex.Lock()
+	mmClearForPrefixes.ClearForPrefixesMock.callArgs = append(mmClearForPrefixes.ClearForPrefixesMock.callArgs, &mm_params)
+	mmClearForPrefixes.ClearForPrefixesMock.mutex.Unlock()
+
+	for _, e := range mmClearForPrefixes.ClearForPrefixesMock.expectations {
+		if minimock.Equal(*e.params, mm_params) {
+			mm_atomic.AddUint64(&e.Counter, 1)
+			return e.results.err
+		}
+	}
+
+	if mmClearForPrefixes.ClearForPrefixesMock.defaultExpectation != nil {
+		mm_atomic.AddUint64(&mmClearForPrefixes.ClearForPrefixesMock.defaultExpectation.Counter, 1)
+		mm_want := mmClearForPrefixes.ClearForPrefixesMock.defaultExpectation.params
+		mm_want_ptrs := mmClearForPrefixes.ClearForPrefixesMock.defaultExpectation.paramPtrs
+
+		mm_got := TransactionCacheRepositoryMockClearForPrefixesParams{ctx, prefixes}
+
+		if mm_want_ptrs != nil {
+
+			if mm_want_ptrs.ctx != nil && !minimock.Equal(*mm_want_ptrs.ctx, mm_got.ctx) {
+				mmClearForPrefixes.t.Errorf("TransactionCacheRepositoryMock.ClearForPrefixes got unexpected parameter ctx, expected at\n%s:\nwant: %#v\n got: %#v%s\n",
+					mmClearForPrefixes.ClearForPrefixesMock.defaultExpectation.expectationOrigins.originCtx, *mm_want_ptrs.ctx, mm_got.ctx, minimock.Diff(*mm_want_ptrs.ctx, mm_got.ctx))
+			}
+
+			if mm_want_ptrs.prefixes != nil && !minimock.Equal(*mm_want_ptrs.prefixes, mm_got.prefixes) {
+				mmClearForPrefixes.t.Errorf("TransactionCacheRepositoryMock.ClearForPrefixes got unexpected parameter prefixes, expected at\n%s:\nwant: %#v\n got: %#v%s\n",
+					mmClearForPrefixes.ClearForPrefixesMock.defaultExpectation.expectationOrigins.originPrefixes, *mm_want_ptrs.prefixes, mm_got.prefixes, minimock.Diff(*mm_want_ptrs.prefixes, mm_got.prefixes))
+			}
+
+		} else if mm_want != nil && !minimock.Equal(*mm_want, mm_got) {
+			mmClearForPrefixes.t.Errorf("TransactionCacheRepositoryMock.ClearForPrefixes got unexpected parameters, expected at\n%s:\nwant: %#v\n got: %#v%s\n",
+				mmClearForPrefixes.ClearForPrefixesMock.defaultExpectation.expectationOrigins.origin, *mm_want, mm_got, minimock.Diff(*mm_want, mm_got))
+		}
+
+		mm_results := mmClearForPrefixes.ClearForPrefixesMock.defaultExpectation.results
+		if mm_results == nil {
+			mmClearForPrefixes.t.Fatal("No results are set for the TransactionCacheRepositoryMock.ClearForPrefixes")
+		}
+		return (*mm_results).err
+	}
+	if mmClearForPrefixes.funcClearForPrefixes != nil {
+		return mmClearForPrefixes.funcClearForPrefixes(ctx, prefixes...)
+	}
+	mmClearForPrefixes.t.Fatalf("Unexpected call to TransactionCacheRepositoryMock.ClearForPrefixes. %v %v", ctx, prefixes)
+	return
+}
+
+// ClearForPrefixesAfterCounter returns a count of finished TransactionCacheRepositoryMock.ClearForPrefixes invocations
+func (mmClearForPrefixes *TransactionCacheRepositoryMock) ClearForPrefixesAfterCounter() uint64 {
+	return mm_atomic.LoadUint64(&mmClearForPrefixes.afterClearForPrefixesCounter)
+}
+
+// ClearForPrefixesBeforeCounter returns a count of TransactionCacheRepositoryMock.ClearForPrefixes invocations
+func (mmClearForPrefixes *TransactionCacheRepositoryMock) ClearForPrefixesBeforeCounter() uint64 {
+	return mm_atomic.LoadUint64(&mmClearForPrefixes.beforeClearForPrefixesCounter)
+}
+
+// Calls returns a list of arguments used in each call to TransactionCacheRepositoryMock.ClearForPrefixes.
+// The list is in the same order as the calls were made (i.e. recent calls have a higher index)
+func (mmClearForPrefixes *mTransactionCacheRepositoryMockClearForPrefixes) Calls() []*TransactionCacheRepositoryMockClearForPrefixesParams {
+	mmClearForPrefixes.mutex.RLock()
+
+	argCopy := make([]*TransactionCacheRepositoryMockClearForPrefixesParams, len(mmClearForPrefixes.callArgs))
+	copy(argCopy, mmClearForPrefixes.callArgs)
+
+	mmClearForPrefixes.mutex.RUnlock()
+
+	return argCopy
+}
+
+// MinimockClearForPrefixesDone returns true if the count of the ClearForPrefixes invocations corresponds
+// the number of defined expectations
+func (m *TransactionCacheRepositoryMock) MinimockClearForPrefixesDone() bool {
+	if m.ClearForPrefixesMock.optional {
+		// Optional methods provide '0 or more' call count restriction.
+		return true
+	}
+
+	for _, e := range m.ClearForPrefixesMock.expectations {
+		if mm_atomic.LoadUint64(&e.Counter) < 1 {
+			return false
+		}
+	}
+
+	return m.ClearForPrefixesMock.invocationsDone()
+}
+
+// MinimockClearForPrefixesInspect logs each unmet expectation
+func (m *TransactionCacheRepositoryMock) MinimockClearForPrefixesInspect() {
+	for _, e := range m.ClearForPrefixesMock.expectations {
+		if mm_atomic.LoadUint64(&e.Counter) < 1 {
+			m.t.Errorf("Expected call to TransactionCacheRepositoryMock.ClearForPrefixes at\n%s with params: %#v", e.expectationOrigins.origin, *e.params)
+		}
+	}
+
+	afterClearForPrefixesCounter := mm_atomic.LoadUint64(&m.afterClearForPrefixesCounter)
+	// if default expectation was set then invocations count should be greater than zero
+	if m.ClearForPrefixesMock.defaultExpectation != nil && afterClearForPrefixesCounter < 1 {
+		if m.ClearForPrefixesMock.defaultExpectation.params == nil {
+			m.t.Errorf("Expected call to TransactionCacheRepositoryMock.ClearForPrefixes at\n%s", m.ClearForPrefixesMock.defaultExpectation.returnOrigin)
+		} else {
+			m.t.Errorf("Expected call to TransactionCacheRepositoryMock.ClearForPrefixes at\n%s with params: %#v", m.ClearForPrefixesMock.defaultExpectation.expectationOrigins.origin, *m.ClearForPrefixesMock.defaultExpectation.params)
+		}
+	}
+	// if func was set then invocations count should be greater than zero
+	if m.funcClearForPrefixes != nil && afterClearForPrefixesCounter < 1 {
+		m.t.Errorf("Expected call to TransactionCacheRepositoryMock.ClearForPrefixes at\n%s", m.funcClearForPrefixesOrigin)
+	}
+
+	if !m.ClearForPrefixesMock.invocationsDone() && afterClearForPrefixesCounter > 0 {
+		m.t.Errorf("Expected %d calls to TransactionCacheRepositoryMock.ClearForPrefixes at\n%s but found %d calls",
+			mm_atomic.LoadUint64(&m.ClearForPrefixesMock.expectedInvocations), m.ClearForPrefixesMock.expectedInvocationsOrigin, afterClearForPrefixesCounter)
+	}
 }
 
 type mTransactionCacheRepositoryMockGetReports struct {
@@ -426,7 +778,7 @@ type TransactionCacheRepositoryMockSaveReportsParams struct {
 	ctx   context.Context
 	key   string
 	items []*entity.ReportItem
-	ttl   *time.Duration
+	ttl   time.Duration
 }
 
 // TransactionCacheRepositoryMockSaveReportsParamPtrs contains pointers to parameters of the TransactionCacheRepository.SaveReports
@@ -434,7 +786,7 @@ type TransactionCacheRepositoryMockSaveReportsParamPtrs struct {
 	ctx   *context.Context
 	key   *string
 	items *[]*entity.ReportItem
-	ttl   **time.Duration
+	ttl   *time.Duration
 }
 
 // TransactionCacheRepositoryMockSaveReportsResults contains results of the TransactionCacheRepository.SaveReports
@@ -462,7 +814,7 @@ func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) Optional() *mTr
 }
 
 // Expect sets up expected params for TransactionCacheRepository.SaveReports
-func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) Expect(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) *mTransactionCacheRepositoryMockSaveReports {
+func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) Expect(ctx context.Context, key string, items []*entity.ReportItem, ttl time.Duration) *mTransactionCacheRepositoryMockSaveReports {
 	if mmSaveReports.mock.funcSaveReports != nil {
 		mmSaveReports.mock.t.Fatalf("TransactionCacheRepositoryMock.SaveReports mock is already set by Set")
 	}
@@ -556,7 +908,7 @@ func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) ExpectItemsPara
 }
 
 // ExpectTtlParam4 sets up expected param ttl for TransactionCacheRepository.SaveReports
-func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) ExpectTtlParam4(ttl *time.Duration) *mTransactionCacheRepositoryMockSaveReports {
+func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) ExpectTtlParam4(ttl time.Duration) *mTransactionCacheRepositoryMockSaveReports {
 	if mmSaveReports.mock.funcSaveReports != nil {
 		mmSaveReports.mock.t.Fatalf("TransactionCacheRepositoryMock.SaveReports mock is already set by Set")
 	}
@@ -579,7 +931,7 @@ func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) ExpectTtlParam4
 }
 
 // Inspect accepts an inspector function that has same arguments as the TransactionCacheRepository.SaveReports
-func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) Inspect(f func(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration)) *mTransactionCacheRepositoryMockSaveReports {
+func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) Inspect(f func(ctx context.Context, key string, items []*entity.ReportItem, ttl time.Duration)) *mTransactionCacheRepositoryMockSaveReports {
 	if mmSaveReports.mock.inspectFuncSaveReports != nil {
 		mmSaveReports.mock.t.Fatalf("Inspect function is already set for TransactionCacheRepositoryMock.SaveReports")
 	}
@@ -604,7 +956,7 @@ func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) Return(err erro
 }
 
 // Set uses given function f to mock the TransactionCacheRepository.SaveReports method
-func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) Set(f func(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) (err error)) *TransactionCacheRepositoryMock {
+func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) Set(f func(ctx context.Context, key string, items []*entity.ReportItem, ttl time.Duration) (err error)) *TransactionCacheRepositoryMock {
 	if mmSaveReports.defaultExpectation != nil {
 		mmSaveReports.mock.t.Fatalf("Default expectation is already set for the TransactionCacheRepository.SaveReports method")
 	}
@@ -620,7 +972,7 @@ func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) Set(f func(ctx 
 
 // When sets expectation for the TransactionCacheRepository.SaveReports which will trigger the result defined by the following
 // Then helper
-func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) When(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) *TransactionCacheRepositoryMockSaveReportsExpectation {
+func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) When(ctx context.Context, key string, items []*entity.ReportItem, ttl time.Duration) *TransactionCacheRepositoryMockSaveReportsExpectation {
 	if mmSaveReports.mock.funcSaveReports != nil {
 		mmSaveReports.mock.t.Fatalf("TransactionCacheRepositoryMock.SaveReports mock is already set by Set")
 	}
@@ -662,7 +1014,7 @@ func (mmSaveReports *mTransactionCacheRepositoryMockSaveReports) invocationsDone
 }
 
 // SaveReports implements mm_usecase.TransactionCacheRepository
-func (mmSaveReports *TransactionCacheRepositoryMock) SaveReports(ctx context.Context, key string, items []*entity.ReportItem, ttl *time.Duration) (err error) {
+func (mmSaveReports *TransactionCacheRepositoryMock) SaveReports(ctx context.Context, key string, items []*entity.ReportItem, ttl time.Duration) (err error) {
 	mm_atomic.AddUint64(&mmSaveReports.beforeSaveReportsCounter, 1)
 	defer mm_atomic.AddUint64(&mmSaveReports.afterSaveReportsCounter, 1)
 
@@ -805,6 +1157,8 @@ func (m *TransactionCacheRepositoryMock) MinimockSaveReportsInspect() {
 func (m *TransactionCacheRepositoryMock) MinimockFinish() {
 	m.finishOnce.Do(func() {
 		if !m.minimockDone() {
+			m.MinimockClearForPrefixesInspect()
+
 			m.MinimockGetReportsInspect()
 
 			m.MinimockSaveReportsInspect()
@@ -831,6 +1185,7 @@ func (m *TransactionCacheRepositoryMock) MinimockWait(timeout mm_time.Duration) 
 func (m *TransactionCacheRepositoryMock) minimockDone() bool {
 	done := true
 	return done &&
+		m.MinimockClearForPrefixesDone() &&
 		m.MinimockGetReportsDone() &&
 		m.MinimockSaveReportsDone()
 }
