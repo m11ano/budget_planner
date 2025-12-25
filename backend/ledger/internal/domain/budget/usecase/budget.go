@@ -111,11 +111,11 @@ type BudgetRepository interface {
 
 //go:generate minimock -i github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/usecase.BudgetCacheRepository -o mocks/budget_cache_repository.go
 type BudgetCacheRepository interface {
-	SaveBudgetsList(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration) (err error)
+	SaveBudgetsList(ctx context.Context, key string, items []*entity.Budget, ttl time.Duration) (err error)
 
-	SaveBudgetsPagedList(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl *time.Duration) (err error)
+	SaveBudgetsPagedList(ctx context.Context, key string, items []*entity.Budget, total uint64, ttl time.Duration) (err error)
 
-	SaveBudget(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration) (err error)
+	SaveBudget(ctx context.Context, key string, item *entity.Budget, ttl time.Duration) (err error)
 
 	GetBudgetsList(ctx context.Context, key string) (items []*entity.Budget, err error)
 

@@ -25,3 +25,13 @@ postgres:
 redis:
     addr: 127.0.0.1:6379
     password:
+    dial_timeout: 5s
+    read_timeout: 3s
+    write_timeout: 3s
+    pool_size: 0
+    min_idle_conns: 0
+    max_retries: 3
+
+budget:
+    budgets_cache_ttl: 30s
+    reports_cache_ttl: 30s

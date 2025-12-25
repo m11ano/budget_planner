@@ -142,7 +142,11 @@ func TestBudgetUsecase_PatchBudgetByDTO_OK(t *testing.T) {
 
 	s.budgetRepo.FindOneByIDMock.Set(func(ctx context.Context, gotID uuid.UUID, qp *uctypes.QueryGetOneParams) (*entity.Budget, error) {
 		require.Equal(t, id, gotID)
-		require.NotNil(t, qp)
+
+		if qp == nil {
+			return b, nil
+		}
+
 		require.True(t, qp.ForUpdate)
 		return b, nil
 	})
@@ -193,7 +197,11 @@ func TestBudgetUsecase_DeleteBudgetByID_OK(t *testing.T) {
 
 	s.budgetRepo.FindOneByIDMock.Set(func(ctx context.Context, gotID uuid.UUID, qp *uctypes.QueryGetOneParams) (*entity.Budget, error) {
 		require.Equal(t, id, gotID)
-		require.NotNil(t, qp)
+
+		if qp == nil {
+			return b, nil
+		}
+
 		require.True(t, qp.ForUpdate)
 		return b, nil
 	})

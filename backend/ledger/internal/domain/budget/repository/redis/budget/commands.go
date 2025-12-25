@@ -10,7 +10,7 @@ import (
 	redisRepo "github.com/m11ano/budget_planner/backend/ledger/internal/domain/budget/repository/redis"
 )
 
-func (r *Repository) SaveBudgetsList(ctx context.Context, key string, items []*entity.Budget, ttl *time.Duration) error {
+func (r *Repository) SaveBudgetsList(ctx context.Context, key string, items []*entity.Budget, ttl time.Duration) error {
 	const op = "SaveBudgetsList"
 
 	dbItems := make([]*redisRepo.BudgetModel, 0, len(items))
@@ -23,12 +23,7 @@ func (r *Repository) SaveBudgetsList(ctx context.Context, key string, items []*e
 		return appErrors.Chainf(err, "%s.%s", r.pkg, op)
 	}
 
-	var payloadTTL time.Duration
-	if ttl != nil {
-		payloadTTL = *ttl
-	}
-
-	cmd := r.redisClient.Set(ctx, key, payload, payloadTTL)
+	cmd := r.redisClient.Set(ctx, key, payload, ttl)
 	if cmd.Err() != nil {
 		return appErrors.Chainf(appErrors.ErrInternal.WithWrap(cmd.Err()), "%s.%s", r.pkg, op)
 	}
@@ -41,7 +36,7 @@ func (r *Repository) SaveBudgetsPagedList(
 	key string,
 	items []*entity.Budget,
 	total uint64,
-	ttl *time.Duration,
+	ttl time.Duration,
 ) error {
 	const op = "SaveBudgetsPagedList"
 
@@ -58,12 +53,7 @@ func (r *Repository) SaveBudgetsPagedList(
 		return appErrors.Chainf(err, "%s.%s", r.pkg, op)
 	}
 
-	var payloadTTL time.Duration
-	if ttl != nil {
-		payloadTTL = *ttl
-	}
-
-	cmd := r.redisClient.Set(ctx, key, payload, payloadTTL)
+	cmd := r.redisClient.Set(ctx, key, payload, ttl)
 	if cmd.Err() != nil {
 		return appErrors.Chainf(appErrors.ErrInternal.WithWrap(cmd.Err()), "%s.%s", r.pkg, op)
 	}
@@ -71,7 +61,7 @@ func (r *Repository) SaveBudgetsPagedList(
 	return nil
 }
 
-func (r *Repository) SaveBudget(ctx context.Context, key string, item *entity.Budget, ttl *time.Duration) error {
+func (r *Repository) SaveBudget(ctx context.Context, key string, item *entity.Budget, ttl time.Duration) error {
 	const op = "SaveBudget"
 
 	dbItem := redisRepo.MapBudgetEntityToDBModel(item)
@@ -81,12 +71,7 @@ func (r *Repository) SaveBudget(ctx context.Context, key string, item *entity.Bu
 		return appErrors.Chainf(err, "%s.%s", r.pkg, op)
 	}
 
-	var payloadTTL time.Duration
-	if ttl != nil {
-		payloadTTL = *ttl
-	}
-
-	cmd := r.redisClient.Set(ctx, key, payload, payloadTTL)
+	cmd := r.redisClient.Set(ctx, key, payload, ttl)
 	if cmd.Err() != nil {
 		return appErrors.Chainf(appErrors.ErrInternal.WithWrap(cmd.Err()), "%s.%s", r.pkg, op)
 	}
